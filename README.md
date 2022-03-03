@@ -17,7 +17,7 @@ bash run_table2.sh
 ```
 
 In the output of the script, lines starting with `***` indicate the numbers used in Table 2. We expect the numbers to
-differ a little from the numbers in the submission because of floating-point errors.
+differ a little from the numbers in the submission due to floating-point errors.
 
 ## Characteristics and the Number of Transformations for the Three Gate Sets
 
@@ -29,7 +29,8 @@ bash gen_ecc_set.sh
 
 In the output, `*** ch(...) = ...` denotes the characteristics for each gate set.
 
-`*** Number of transformations of ... = ...` denotes the number of transformations for each gate set.
+`*** Number of transformations of ... = ...` denotes the number of transformations for each gate set. We expect the
+numbers of transformations to differ a little from the numbers in the submission due to floating-point errors.
 
 The generated ECC Sets are stored in Json files with file name formatted like
 this: `{Gate set name}_{number of gates}_{number_of qubits}_complete_ECC_set.json`.
