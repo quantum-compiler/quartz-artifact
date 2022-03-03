@@ -22,6 +22,7 @@ include_directories("..")
 
 link_directories("../..")
 
+file(GLOB_RECURSE GEN_ECC_SET "gen_ecc_set.cpp")
 file(GLOB_RECURSE TEST_ALL "test_all.cpp")
 file(GLOB_RECURSE TEST_BFS "test_bfs.cpp")
 file(GLOB_RECURSE TEST_CONTEXT_SHIFT "test_context_shift.cpp")
@@ -45,6 +46,7 @@ endif()
 # add_library(libquartz_runtime SHARED IMPORTED)
 # set_property(TARGET libquartz_runtime PROPERTY IMPORTED_LOCATION "../libquartz_runtime.so")
 
+add_executable(gen_ecc_set ${GEN_ECC_SET})
 add_executable(test_all ${TEST_ALL} )
 add_executable(test_bfs ${TEST_BFS} )
 add_executable(test_context_shift ${TEST_CONTEXT_SHIFT} )

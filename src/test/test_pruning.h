@@ -138,7 +138,7 @@ void test_pruning(const std::vector<GateType> &supported_gates,
               << equiv_set.num_total_dags() << " ("
               << equiv_set.num_equivalence_classes() << ")" << std::endl;
 
-    std::cout << "*** " << file_prefix.substr(0, file_prefix.size() - 1) << " Running Time: "
+    std::cout << "*** " << file_prefix.substr(0, file_prefix.size() - 1) << " Running Time (s): "
               << (double)std::chrono::duration_cast<std::chrono::milliseconds>(
                   running_time_with_all_pruning_techniques)
                   .count() /
@@ -238,21 +238,6 @@ void test_pruning(const std::vector<GateType> &supported_gates,
       std::cout << "*** " << file_prefix.substr(0, file_prefix.size() - 1) << " ECC Simplification (Unverified): "
                 << equiv_set.num_total_dags() << " ("
                 << equiv_set.num_equivalence_classes() << ")" << std::endl;
-
-      start = std::chrono::steady_clock::now();
-      equiv_set.simplify(&ctx, /*normalize_to_minimal_circuit_representation=*/false);
-      equiv_set.save_json(file_prefix + "original_simplified.json");
-      end = std::chrono::steady_clock::now();
-      std::cout
-          << std::dec << "Original unverified: there are "
-          << equiv_set.num_total_dags() << " circuits in "
-          << equiv_set.num_equivalence_classes()
-          << " equivalence classes after all simplification in "
-          << (double)std::chrono::duration_cast<std::chrono::milliseconds>(
-              end - start)
-              .count() /
-              1000.0
-          << " seconds." << std::endl;
     }
 
     if (run_original_verified) {
@@ -301,21 +286,6 @@ void test_pruning(const std::vector<GateType> &supported_gates,
       std::cout << "*** " << file_prefix.substr(0, file_prefix.size() - 1) << " ECC Simplification: "
                 << equiv_set.num_total_dags() << " ("
                 << equiv_set.num_equivalence_classes() << ")" << std::endl;
-
-      start = std::chrono::steady_clock::now();
-      equiv_set.simplify(&ctx, /*normalize_to_minimal_circuit_representation=*/false);
-      equiv_set.save_json(file_prefix + "original_verified_simplified.json");
-      end = std::chrono::steady_clock::now();
-      std::cout
-          << std::dec << "Original verified: there are "
-          << equiv_set.num_total_dags() << " circuits in "
-          << equiv_set.num_equivalence_classes()
-          << " equivalence classes after all simplification in "
-          << (double)std::chrono::duration_cast<std::chrono::milliseconds>(
-              end - start)
-              .count() /
-              1000.0
-          << " seconds." << std::endl;
     }
   }
 }

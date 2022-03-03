@@ -1,6 +1,6 @@
 mkdir -p build
 cd build
 cmake ..
-make test_pruning
+make gen_ecc_set
 cd ..
-./build/test_pruning
+./build/gen_ecc_set
