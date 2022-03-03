@@ -28,6 +28,8 @@ bash gen_ecc_set.sh
 ```
 
 In the output, `*** ch(...) = ...` denotes the characteristics for each gate set.
+
 `*** Number of transformations of ... = ...` denotes the number of transformations for each gate set.
 
-The generated ECC Set is stored in `{Gate set name}_{number of gates}_{number_of qubits}_complete_ECC_set.json`.
+The generated ECC Sets are stored in Json files with file name formatted like
+this: `{Gate set name}_{number of gates}_{number_of qubits}_complete_ECC_set.json`.
