@@ -15,26 +15,8 @@ endif()
 # Put the binary files in the same folder as dll files
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
-set(USE_ARBLIB TRUE)
+set(USE_ARBLIB FALSE)
 
-if(USE_ARBLIB)
-    macro (add_executable _name)
-        # invoke built-in add_executable
-        _add_executable(${ARGV})
-        if (TARGET ${_name})
-            target_link_libraries(${_name} flint flint-arb gmp quartz_runtime)
-        endif()
-    endmacro()
-    add_compile_definitions(USE_ARBLIB)
-else()
-    macro (add_executable _name)
-        # invoke built-in add_executable
-        _add_executable(${ARGV})
-        if (TARGET ${_name})
-            target_link_libraries(${_name} quartz_runtime)
-        endif()
-    endmacro()
-endif()
 
 include_directories(${CMAKE_INCLUDE_PATH})
 include_directories("src/quartz/")

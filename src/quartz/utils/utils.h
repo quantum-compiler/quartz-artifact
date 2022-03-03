@@ -4,7 +4,7 @@
 using ParamType = double;
 #ifdef USE_ARBLIB
 #include "arb_complex.h"
-using ComplexType = ArbComplex;
+using ComplexType = quartz::ArbComplex;
 #else
 using ComplexType = std::complex< double >;
 #endif
