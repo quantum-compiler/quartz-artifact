@@ -22,7 +22,7 @@ void gen_ecc_set(const std::vector<GateType> &supported_gates,
                &dataset1,        /*verify_equivalences=*/
                true, &equiv_set, /*verbose=*/
                false);
-  std::cout << "*** ch(" << file_prefix.substr(0, file_prefix.size() - 3) << ") = "
+  std::cout << "*** ch(" << file_prefix.substr(0, file_prefix.size() - 5) << ") = "
             << dataset1.num_total_dags() - 1/*exclude the empty circuit*/
             << std::endl;
   dataset1.clear();
@@ -41,7 +41,7 @@ void gen_ecc_set(const std::vector<GateType> &supported_gates,
              .c_str());
   equiv_set.load_json(&ctx, file_prefix + "pruning.json");
   equiv_set.simplify(&ctx, /*normalize_to_minimal_circuit_representation=*/false);
-  equiv_set.save_json(file_prefix + "pruning_simplified.json");
+  equiv_set.save_json(file_prefix + "complete_ECC_set.json");
   auto end = std::chrono::steady_clock::now();
 
   std::cout << file_prefix.substr(0, file_prefix.size() - 1) << " generated. Running Time (s): "
@@ -56,12 +56,12 @@ void gen_ecc_set(const std::vector<GateType> &supported_gates,
 
 int main() {
   gen_ecc_set({GateType::u1, GateType::u2, GateType::u3,
-               GateType::add}, "IBM_with_U3_2_", 1, 3, 2);
+               GateType::add}, "IBM_with_U3_2_1_", 1, 3, 2);
   gen_ecc_set({GateType::rz, GateType::h, GateType::cx, GateType::x,
-               GateType::add}, "Nam_5_", 3, 2, 5);
+               GateType::add}, "Nam_5_3_", 3, 2, 5);
   gen_ecc_set({GateType::u1, GateType::u2, GateType::cx,
-               GateType::add}, "IBM_4_", 2, 2, 4);
+               GateType::add}, "IBM_4_2_", 2, 2, 4);
   gen_ecc_set({GateType::rx, GateType::rz, GateType::cz,
-               GateType::add}, "Rigetti_5_", 3, 2, 5);
+               GateType::add}, "Rigetti_5_3_", 3, 2, 5);
   return 0;
 }
