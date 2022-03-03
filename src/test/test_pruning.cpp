@@ -16,7 +16,7 @@ int main() {
 //  test_pruning({GateType::rz, GateType::h, GateType::cx, GateType::x,
 //                GateType::add}, "nam_circuit_323_", 3, 2, 3, 1, true, true);
   test_pruning({GateType::rz, GateType::h, GateType::cx, GateType::x,
-                GateType::add}, "nam_circuit_324_", 3, 2, 4, 1, true, false);
+                GateType::add}, "nam_circuit_324_", 3, 2, 4, false, 1, true, false);
 //  test_pruning({GateType::rz, GateType::h, GateType::cx, GateType::x,
 //                GateType::add}, "nam_circuit_325_", 3, 2, 5, 1, true, true);
 //  test_pruning({GateType::rx, GateType::rz, GateType::cz,
