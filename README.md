@@ -35,7 +35,7 @@ numbers of transformations to differ a little from the numbers in the submission
 The generated ECC Sets are stored in Json files with file name formatted like
 this: `{Gate set name}_{number of gates}_{number_of qubits}_complete_ECC_set.json`.
 
-## Table 3: Comparing Quartz with existing quantum circuit optimizers on the Nam gate set {𝑅𝑧(𝜆),𝑋,𝐻,𝐶𝑁𝑂𝑇}
+## Table 3: Comparing Quartz with existing quantum circuit optimizers on Nam's gate set {𝑅𝑧(𝜆),𝑋,𝐻,𝐶𝑁𝑂𝑇}
 
 ### The results of Qiskit
 
@@ -58,6 +58,16 @@ It is worth noting that optimizations in Qiskit involves some non-determinism, w
 We refer the results of Nam on Nam's gate set to the paper "A verified optimizer for Quantum circuits" (https://dl.acm.org/doi/10.1145/3434318). Specifically, the results can be found at Table 2, column "Nam(H)" in this paper.
 
 ### The results of VOQC
+
+To reproduce the results of VOQC on Nam's gate set, run the following script:
+
+``` shell
+python VOQC_nam.py
+```
+
+The results will be shown in the console. The figure below shows part of the results as an example:
+
+![](figures/VOQC_nam_example.png)
 
 ### The results of Quartz
 
@@ -83,6 +93,16 @@ It is worth noting that optimizations in Qiskit involves some non-determinism, w
 ### The results of tket
 
 ### The results of VOQC
+
+To reproduce the results of VOQC on IBMQ gate set, run the following script:
+
+``` shell
+python VOQC_ibmq.py
+```
+
+The results will be shown in the console. The figure below shows part of the results as an example:
+
+![](figures/VOQC_ibmq_example.png)
 
 ### The results of Quartz
 
