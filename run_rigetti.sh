@@ -1,0 +1,27 @@
+cd build
+./test_rigetti ~/quartz-artifact/nam-benchmarks/adder_8.qasm --output ~/quartz-artifact/nam-benchmarks/adder_8.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/adder_8.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/barenco_tof_3.qasm --output ~/quartz-artifact/nam-benchmarks/barenco_tof_3.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/barenco_tof_3.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/barenco_tof_4.qasm --output ~/quartz-artifact/nam-benchmarks/barenco_tof_4.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/barenco_tof_4.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/barenco_tof_5.qasm --output ~/quartz-artifact/nam-benchmarks/barenco_tof_5.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/barenco_tof_5.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/barenco_tof_10.qasm --output ~/quartz-artifact/nam-benchmarks/barenco_tof_10.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/barenco_tof_10.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/csla_mux_3.qasm --output ~/quartz-artifact/nam-benchmarks/csla_mux_3.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/csla_mux_3.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/csum_mux_9.qasm --output ~/quartz-artifact/nam-benchmarks/csum_mux_9.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/csum_mux_9.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/gf2^4_mult.qasm --output ~/quartz-artifact/nam-benchmarks/gf2^4_mult.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/gf2^4_mult.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/gf2^5_mult.qasm --output ~/quartz-artifact/nam-benchmarks/gf2^5_mult.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/gf2^5_mult.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/gf2^6_mult.qasm --output ~/quartz-artifact/nam-benchmarks/gf2^6_mult.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/gf2^6_mult.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/gf2^7_mult.qasm --output ~/quartz-artifact/nam-benchmarks/gf2^7_mult.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/gf2^7_mult.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/gf2^8_mult.qasm --output ~/quartz-artifact/nam-benchmarks/gf2^8_mult.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/gf2^8_mult.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/gf2^9_mult.qasm --output ~/quartz-artifact/nam-benchmarks/gf2^9_mult.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/gf2^9_mult.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/gf2^10_mult.qasm --output ~/quartz-artifact/nam-benchmarks/gf2^10_mult.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/gf2^10_mult.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/mod5_4.qasm --output ~/quartz-artifact/nam-benchmarks/mod5_4.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/mod5_4.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/mod_mult_55.qasm --output ~/quartz-artifact/nam-benchmarks/mod_mult_55.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/mod_mult_55.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/mod_red_21.qasm --output ~/quartz-artifact/nam-benchmarks/mod_red_21.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/mod_red_21.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/qcla_adder_10.qasm --output ~/quartz-artifact/nam-benchmarks/qcla_adder_10.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/qcla_adder_10.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/qcla_com_7.qasm --output ~/quartz-artifact/nam-benchmarks/qcla_com_7.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/qcla_com_7.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/qcla_mod_7.qasm --output ~/quartz-artifact/nam-benchmarks/qcla_mod_7.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/qcla_mod_7.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/rc_adder_6.qasm --output ~/quartz-artifact/nam-benchmarks/rc_adder_6.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/rc_adder_6.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/tof_3.qasm --output ~/quartz-artifact/nam-benchmarks/tof_3.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/tof_3.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/tof_4.qasm --output ~/quartz-artifact/nam-benchmarks/tof_4.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/tof_4.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/tof_5.qasm --output ~/quartz-artifact/nam-benchmarks/tof_5.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/tof_5.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/tof_10.qasm --output ~/quartz-artifact/nam-benchmarks/tof_10.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/tof_10.log.rigetti &
+./test_rigetti ~/quartz-artifact/nam-benchmarks/vbe_adder_3.qasm --output ~/quartz-artifact/nam-benchmarks/vbe_adder_3.qasm.output.rigetti --early-stop > ~/quartz-artifact/nam-benchmarks/vbe_adder_3.log.rigetti &
