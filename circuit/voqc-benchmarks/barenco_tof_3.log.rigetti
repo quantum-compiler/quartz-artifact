@@ -1,0 +1,104 @@
+merging op rz(16446) and rz(16394)
+merging op rz(16441) and rz(16389)
+merging op rz(16448) and rz(16396)
+merging op rz(16459) and rz(16394)
+eliminating op rz(16459)
+merging op rz(16461) and rz(16396)
+eliminating op rz(16461)
+merging op rz(16454) and rz(16389)
+eliminating op rz(16454)
+merging op rz(16420) and rz(16472)
+merging op rz(16418) and rz(16470)
+merging op rz(16421) and rz(16473)
+merging op rz(16420) and rz(16485)
+eliminating op rz(16420)
+merging op rz(16418) and rz(16483)
+eliminating op rz(16418)
+merging op rz(16421) and rz(16486)
+eliminating op rz(16421)
+gate count after toffoli flip: 46
+2 classes of equivalences with 6 DAGs are loaded in 0 seconds.
+Number of different transfers is 5.
+
+        ===== Start Cost-Based Backtracking Search =====
+0 seconds.
+0.052 seconds.
+0.102 seconds.
+0.148 seconds.
+0.191 seconds.
+0.231 seconds.
+0.268 seconds.
+0.303 seconds.
+0.336 seconds.
+0.366 seconds.
+0.394 seconds.
+0.421 seconds.
+0.445 seconds.
+0.467 seconds.
+0.487 seconds.
+0.509 seconds.
+0.534 seconds.
+0.561 seconds.
+0.59 seconds.
+0.618 seconds.
+0.648 seconds.
+0.679 seconds.
+0.708 seconds.
+0.74 seconds.
+0.772 seconds.
+0.804 seconds.
+0.838 seconds.
+0.871 seconds.
+0.905 seconds.
+0.939 seconds.
+0.975 seconds.
+1.01 seconds.
+1.046 seconds.
+1.082 seconds.
+1.117 seconds.
+1.155 seconds.
+1.193 seconds.
+1.23 seconds.
+1.268 seconds.
+1.306 seconds.
+1.343 seconds.
+1.383 seconds.
+1.422 seconds.
+1.462 seconds.
+1.502 seconds.
+1.541 seconds.
+1.581 seconds.
+1.621 seconds.
+1.662 seconds.
+1.705 seconds.
+1.746 seconds.
+1.788 seconds.
+1.83 seconds.
+1.872 seconds.
+1.913 seconds.
+        ===== Finish Cost-Based Backtracking Search =====
+
+560 classes of equivalences with 1153 DAGs are loaded in 0.064 seconds.
+Number of different transfers is 1183.
+
+        ===== Start Cost-Based Backtracking Search =====
+0 seconds.
+0.112 seconds.
+0.284 seconds.
+0.515 seconds.
+0.805 seconds.
+1.153 seconds.
+1.559 seconds.
+2.024 seconds.
+2.548 seconds.
+3.13 seconds.
+3.772 seconds.
+4.472 seconds.
+5.229 seconds.
+6.048 seconds.
+6.925 seconds.
+7.865 seconds.
+8.866 seconds.
+        ===== Finish Cost-Based Backtracking Search =====
+
+gate count after optimization: 148
