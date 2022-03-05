@@ -144,7 +144,11 @@ If you would like to run the experiments for different circuits separately, you 
 
 ### The results of Quilc
 
-To reproduce the results of Quilc on Rigetti gate set, run the following script:
+We use a docker image of Quilc (available at https://hub.docker.com/r/rigetti/quilc) for optimizing our quantum circuit benchmarks on the Quilc compiler. First, to get the latest stable version of Quilc, run `docker pull rigetti/quilc`. Second, start a Quilc server on a seperate process by running 
+```shell
+docker run --rm -it -p 5555:5555 rigetti/quilc -R
+```
+This spawn an RPCQ-mode Quilc server that Quilc's compiler can communication with over TCP. To reproduce the results of Quilc on Rigetti gate set, run the following script:
 
 ``` shell
 python pyQuil_rigetti.py
