@@ -6,7 +6,7 @@ We provide the following two approaches to install the artifact.
 
 ### 1. Install from AMI
 
-(TODO)
+To facilitate the artifact evaluation of our submission, we provide an Amazon Machine Image (AMI) of Quartz with all dependencies pre-installed. Our AMI instance ID is ami-09ac48ad04d42cb72. To log in to the instance, the username and password are both `pldi22ae`.
 
 ### 2. Install from source code
 
