@@ -1,4 +1,4 @@
-# Artifacts for Quartz
+# Artifact for Quartz
 
 ## Getting Started
 
@@ -23,7 +23,7 @@ We provide the following two approaches to install the artifact.
   bash run_cmake.sh
   ```
 
-Note that it is not necessary to install Quartz beforehand to run the artifacts.
+Note that it is not necessary to install Quartz beforehand to run the artifact.
 
 ## Table 2: Evaluating the Quartz Generator and Verifier
 
