@@ -88,7 +88,7 @@ The results will be shown in the console. The figure below shows part of the res
 
 ![](figures/Qiskit_nam_example.png)
 
-As the figures shows, for each circuit, we run Qiskit with optimization 1, 2, 3, respectively. We choose the minimum gate count among the 3 optimization levels as the final result.
+As the figures shows, for each circuit, we run Qiskit with optimization levels 1, 2, 3, respectively. We choose the minimum gate count among the 3 optimization levels as the final result.
 
 It is worth noting that optimizations in Qiskit involves some non-determinism, which means that the results may vary among different runs of the optimizations.
 
@@ -141,7 +141,7 @@ The results will be shown in the console. The figure below shows part of the res
 
 ![](figures/Qiskit_ibmq_example.png)
 
-As the figures shows, for each circuit, we run Qiskit with optimization 1, 2, 3, respectively. We choose the minimum gate count among the 3 optimization levels as the final result.
+As the figures shows, for each circuit, we run Qiskit with optimization levels 1, 2, 3, respectively. We choose the minimum gate count among the 3 optimization levels as the final result.
 
 It is worth noting that optimizations in Qiskit involves some non-determinism, which means that the results may vary among different runs of the optimizations.
 

@@ -93,7 +93,7 @@ Optimization results of Qiskit for qcla_mod_7.qasm on Nam's gate set
 853 gates after level 3 optimization after 0.330 seconds
 ```
 
-As the above shows, for each circuit, we run Qiskit with optimization 1, 2, 3, respectively. We choose the minimum gate count among the 3 optimization levels as the final result.
+As the above shows, for each circuit, we run Qiskit with optimization levels 1, 2, 3, respectively. We choose the minimum gate count among the 3 optimization levels as the final result.
 
 It is worth noting that optimizations in Qiskit involves some non-determinism, which means that the results may vary among different runs of the optimizations.
 
@@ -157,7 +157,7 @@ Optimization results of Qiskit for qcla_mod_7.qasm on IBMQ gate set
 795 gates after level 3 optimization after 0.389 seconds
 ```
 
-As the above shows, for each circuit, we run Qiskit with optimization 1, 2, 3, respectively. We choose the minimum gate count among the 3 optimization levels as the final result.
+As the above shows, for each circuit, we run Qiskit with optimization levels 1, 2, 3, respectively. We choose the minimum gate count among the 3 optimization levels as the final result.
 
 It is worth noting that optimizations in Qiskit involves some non-determinism, which means that the results may vary among different runs of the optimizations.
 
