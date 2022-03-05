@@ -10,7 +10,7 @@ pip install z3-solver
 
 ## Table 2: Evaluating the Quartz Generator and Verifier
 
-Run the following script:
+To reproduce the numbers in Table 2, run the following script:
 
 ```shell
 bash run_table2.sh
@@ -21,7 +21,7 @@ differ a little from the numbers in the submission due to floating-point errors.
 
 ## Characteristics and the Number of Transformations for the Three Gate Sets
 
-Run the following script:
+To reproduce the characteristics at the end of section 4 in the submission, run the following script:
 
 ```shell
 bash gen_ecc_set.sh
@@ -30,7 +30,7 @@ bash gen_ecc_set.sh
 In the output, `*** ch(...) = ...` denotes the characteristics for each gate set.
 
 `*** Number of transformations of ... = ...` denotes the number of transformations for each gate set. We expect the
-numbers of transformations to differ a little from the numbers in the submission due to floating-point errors.
+numbers of transformations to differ from the numbers in the submission due to floating-point errors.
 
 The generated ECC Sets are stored in Json files with file name formatted like
 this: `{Gate set name}_{number of gates}_{number_of qubits}_complete_ECC_set.json`.
