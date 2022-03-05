@@ -2,11 +2,23 @@
 
 ## Getting Started
 
-Install dependencies:
+We provide the following two approaches to install the artifact.
 
-```shell
-pip install z3-solver
-```
+### 1. Install from AMI
+
+(TODO)
+
+### 2. Install from source code
+
+- Install dependencies:
+  ```shell
+  pip install z3-solver
+  ```
+  
+- Run CMake:
+  ```shell
+  bash run_cmake.sh
+  ```
 
 Note that it is not necessary to install Quartz beforehand to run the artifacts.
 
