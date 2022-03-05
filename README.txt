@@ -12,26 +12,36 @@ We recommend running the artifact on an m6i.32xlarge AWS instance. Although it c
 
 We provide the following two approaches to install the artifact.
 
-### 1. Install from AMI
+#### 1. Install from AMI
 
 To facilitate the artifact evaluation of our submission, we provide an Amazon Machine Image (AMI) of Quartz with all dependencies pre-installed. Our AMI instance ID is ami-09ac48ad04d42cb72. To log in to the instance, the username and password are both `pldi22ae`.
 
-### 2. Install from source code
+#### 2. Install from source code
 
 - Make sure you have CMake (https://cmake.org/) with version >= 3.16.
-  
-- Install the Z3 Theorem Prover (https://github.com/Z3Prover/z3) and Qiskit (https://qiskit.org/):
+
+- Install the Z3 Theorem Prover (https://github.com/Z3Prover/z3):
   ```shell
-  pip install z3-solver qiskit
+  pip install z3-solver
   ```
-  Our evaluation uses Z3 4.8.14 and Qiskit 0.34.2.
-  
+  Our evaluation uses Z3 4.8.14.
+
 - Run CMake:
   ```shell
   bash run_cmake.sh
   ```
 
 Note that it is not necessary to install Quartz beforehand to run the artifact.
+
+### Install External Packages
+In order to run the experiments related to external packages, you need to install them:
+- Qiskit (https://qiskit.org/):
+  ```shell
+  pip install qiskit
+  ```
+  Our evaluation uses Qiskit 0.34.2.
+
+- pyvoqc (please follow the instructions on https://github.com/inQWIRE/pyvoqc).
 
 ## Table 2: Evaluating the Quartz Generator and Verifier
 
@@ -83,7 +93,7 @@ Optimization results of Qiskit for qcla_mod_7.qasm on Nam's gate set
 853 gates after level 3 optimization after 0.330 seconds
 ```
 
-As the above shows, for each circuit, we run Qiskit with optimization 1, 2, 3, respectively. We choose the minimum gate count among the 3 optimization levels as the final result.
+As the above shows, for each circuit, we run Qiskit with optimization levels 1, 2, 3, respectively. We choose the minimum gate count among the 3 optimization levels as the final result.
 
 It is worth noting that optimizations in Qiskit involves some non-determinism, which means that the results may vary among different runs of the optimizations.
 
@@ -147,7 +157,7 @@ Optimization results of Qiskit for qcla_mod_7.qasm on IBMQ gate set
 795 gates after level 3 optimization after 0.389 seconds
 ```
 
-As the above shows, for each circuit, we run Qiskit with optimization 1, 2, 3, respectively. We choose the minimum gate count among the 3 optimization levels as the final result.
+As the above shows, for each circuit, we run Qiskit with optimization levels 1, 2, 3, respectively. We choose the minimum gate count among the 3 optimization levels as the final result.
 
 It is worth noting that optimizations in Qiskit involves some non-determinism, which means that the results may vary among different runs of the optimizations.
 
@@ -211,6 +221,8 @@ The results will be shown in the console. Following shows part of the results as
 Optimization results of pyQuil for qcla_mod_7.qasm on Rigetti gate set
 3294 gates after 4.989 seconds
 ```
+
+It is worth noting that optimizations in pyQuil involves some non-determinism, which means that the results may vary among different runs of the optimizations.
 
 ### The results of t|ket⟩
 

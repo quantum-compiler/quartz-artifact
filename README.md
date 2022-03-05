@@ -20,20 +20,28 @@ To facilitate the artifact evaluation of our submission, we provide an Amazon Ma
 
 - Make sure you have CMake (https://cmake.org/) with version >= 3.16.
   
-- Install the Z3 Theorem Prover (https://github.com/Z3Prover/z3) and Qiskit (https://qiskit.org/):
+- Install the Z3 Theorem Prover (https://github.com/Z3Prover/z3):
   ```shell
-  pip install z3-solver qiskit
+  pip install z3-solver
   ```
-  Our evaluation uses Z3 4.8.14 and Qiskit 0.34.2.
+  Our evaluation uses Z3 4.8.14.
 
-- Install pyvoqc (https://github.com/inQWIRE/pyvoqc).
-  
 - Run CMake:
   ```shell
   bash run_cmake.sh
   ```
 
 Note that it is not necessary to install Quartz beforehand to run the artifact.
+
+### Install External Packages
+In order to run the experiments related to external packages, you need to install them:
+- Qiskit (https://qiskit.org/):
+  ```shell
+  pip install qiskit
+  ```
+  Our evaluation uses Qiskit 0.34.2.
+
+- pyvoqc (please follow the instructions on https://github.com/inQWIRE/pyvoqc).
 
 ## Table 2: Evaluating the Quartz Generator and Verifier
 
@@ -80,7 +88,7 @@ The results will be shown in the console. The figure below shows part of the res
 
 ![](figures/Qiskit_nam_example.png)
 
-As the figures shows, for each circuit, we run Qiskit with optimization 1, 2, 3, respectively. We choose the minimum gate count among the 3 optimization levels as the final result.
+As the figures shows, for each circuit, we run Qiskit with optimization levels 1, 2, 3, respectively. We choose the minimum gate count among the 3 optimization levels as the final result.
 
 It is worth noting that optimizations in Qiskit involves some non-determinism, which means that the results may vary among different runs of the optimizations.
 
@@ -133,7 +141,7 @@ The results will be shown in the console. The figure below shows part of the res
 
 ![](figures/Qiskit_ibmq_example.png)
 
-As the figures shows, for each circuit, we run Qiskit with optimization 1, 2, 3, respectively. We choose the minimum gate count among the 3 optimization levels as the final result.
+As the figures shows, for each circuit, we run Qiskit with optimization levels 1, 2, 3, respectively. We choose the minimum gate count among the 3 optimization levels as the final result.
 
 It is worth noting that optimizations in Qiskit involves some non-determinism, which means that the results may vary among different runs of the optimizations.
 
