@@ -189,6 +189,8 @@ The results will be shown in the console. The figure below shows part of the res
 
 ![](figures/pyquil_rigetti_example.png)
 
+It is worth noting that optimizations in pyQuil involves some non-determinism, which means that the results may vary among different runs of the optimizations.
+
 ### The results of t|ket⟩
 
 To reproduce the results of t|ket⟩ on Rigetti gate set, run the following script:
