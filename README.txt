@@ -72,11 +72,16 @@ To reproduce the results of Qiskit on Nam's gate set, run the following script:
 python Qiskit_nam.py
 ```
 
-The results will be shown in the console. The figure below shows part of the results as an example:
+The results will be shown in the console. Following shows part of the results as an example:
 
-![](figures/Qiskit_nam_example.png)
+```
+Optimization results of Qiskit for qcla_mod_7.qasm on Nam's gate set
+884 gates after level 1 optimization after 0.063 seconds
+884 gates after level 2 optimization after 0.135 seconds
+853 gates after level 3 optimization after 0.330 seconds
+```
 
-As the figures shows, for each circuit, we run Qiskit with optimization 1, 2, 3, respectively. We choose the minimum gate count among the 3 optimization levels as the final result.
+As the above shows, for each circuit, we run Qiskit with optimization 1, 2, 3, respectively. We choose the minimum gate count among the 3 optimization levels as the final result.
 
 It is worth noting that optimizations in Qiskit involves some non-determinism, which means that the results may vary among different runs of the optimizations.
 
@@ -92,9 +97,12 @@ To reproduce the results of VOQC on Nam's gate set, run the following script:
 python VOQC_nam.py
 ```
 
-The results will be shown in the console. The figure below shows part of the results as an example:
+The results will be shown in the console. Following shows part of the results as an example:
 
-![](figures/VOQC_nam_example.png)
+```
+Optimization results of VOQC for qcla_mod_7.qasm on Nam's gate set
+723 gates after pass 'optimize_nam' after 0.048 seconds
+```
 
 ### The results of Quartz
 
@@ -104,9 +112,12 @@ To reproduce the results of Quartz on Nam's gate set, run the following script:
 ./run_nam.sh
 ```
 
-The results will be shown in the console. The figure below shows part of the results as an example:
+The results will be shown in the console. Following shows part of the results as an example:
 
-![](figures/quartz_nam_example.png)
+```
+Optimization results of Quartz for tof_3.qasm on Nam's gate set.
+Gate count after optimization: 35, 7.818 seconds.
+```
 
 If you would like to run the experiments for different circuits separately, you can use the following script (assuming you are currently in the `build/` directory):
 
@@ -125,11 +136,16 @@ To reproduce the results of Qiskit on IBMQ gate set, run the following script:
 python Qiskit_ibmq.py
 ```
 
-The results will be shown in the console. The figure below shows part of the results as an example:
+The results will be shown in the console. Following shows part of the results as an example:
 
-![](figures/Qiskit_ibmq_example.png)
+```
+Optimization results of Qiskit for qcla_mod_7.qasm on IBMQ gate set
+884 gates after level 1 optimization after 0.064 seconds
+818 gates after level 2 optimization after 0.311 seconds
+795 gates after level 3 optimization after 0.389 seconds
+```
 
-As the figures shows, for each circuit, we run Qiskit with optimization 1, 2, 3, respectively. We choose the minimum gate count among the 3 optimization levels as the final result.
+As the above shows, for each circuit, we run Qiskit with optimization 1, 2, 3, respectively. We choose the minimum gate count among the 3 optimization levels as the final result.
 
 It is worth noting that optimizations in Qiskit involves some non-determinism, which means that the results may vary among different runs of the optimizations.
 
@@ -145,9 +161,12 @@ To reproduce the results of VOQC on IBMQ gate set, run the following script:
 python VOQC_ibmq.py
 ```
 
-The results will be shown in the console. The figure below shows part of the results as an example:
+The results will be shown in the console. Following shows part of the results as an example:
 
-![](figures/VOQC_ibmq_example.png)
+```
+Optimization results of VOQC for qcla_mod_7.qasm on IBMQ gate set
+666 gates after pass 'optimize_nam' and pass 'optimize_ibm' after 0.048 seconds
+```
 
 ### The results of Quartz
 
@@ -157,9 +176,12 @@ To reproduce the results of Quartz on IBMQ gate set, run the following script:
 ./run_ibmq.sh
 ```
 
-The results will be shown in the console. The figure below shows part of the results as an example:
+The results will be shown in the console. Following shows part of the results as an example:
 
-![](figures/quartz_ibmq_example.png)
+```
+Optimization results of Quartz for mod5_4.qasm on IBMQ gate set.
+Gate count after optimization: 52, 121.69 seconds.
+```
 
 If you would like to run the experiments for different circuits separately, you can use the following script (assuming you are currently in the `build/` directory):
 
@@ -181,9 +203,12 @@ This spawn an RPCQ-mode Quilc server that Quilc's compiler can communication wit
 python pyQuil_rigetti.py
 ```
 
-The results will be shown in the console. The figure below shows part of the results as an example:
+The results will be shown in the console. Following shows part of the results as an example:
 
-![](figures/pyquil_rigetti_example.png)
+```
+Optimization results of pyQuil for qcla_mod_7.qasm on Rigetti gate set
+3294 gates after 4.989 seconds
+```
 
 ### The results of t|ket⟩
 
@@ -193,9 +218,12 @@ To reproduce the results of t|ket⟩ on Rigetti gate set, run the following scri
 python tket_rigetti.py
 ```
 
-The results will be shown in the console. The figure below shows part of the results as an example:
+The results will be shown in the console. Following shows part of the results as an example:
 
-![](figures/tket_rigetti_example.png)
+```
+Optimization results of tket for qcla_mod_7.qasm on Rigetti gate set
+3202 gates after 0.536 seconds
+```
 
 ### The results of Quartz
 
@@ -205,9 +233,12 @@ To reproduce the results of Quartz on Rigetti gate set, run the following script
 ./run_rigetti.sh
 ```
 
-The results will be shown in the console. The figure below shows part of the results as an example:
+The results will be shown in the console. Following shows part of the results as an example:
 
-![](figures/quartz_rigetti_example.png)
+```
+Optimization results of Quartz for barenco_tof_3.qasm on Rigetti gate set.
+Gate count after optimization: 148, 12.682 seconds.
+```
 
 If you would like to run the experiments for different circuits separately, you can use the following script (assuming you are currently in the `build/` directory):
 
