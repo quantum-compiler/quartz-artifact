@@ -2,11 +2,13 @@
 
 [![DOI](https://zenodo.org/badge/464661620.svg)](https://zenodo.org/badge/latestdoi/464661620)
 
-## Hardware Requirements
+## Getting Started
+
+### Hardware Requirements
 
 We recommend running the artifact on an m6i.32xlarge AWS instance. Although it can also run on laptops with >= 256 GB memory, it will take a significantly longer time to run.
 
-## Getting Started
+### Installation
 
 We provide the following two approaches to install the artifact.
 
