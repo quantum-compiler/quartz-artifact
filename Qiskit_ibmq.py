@@ -59,6 +59,6 @@ if __name__ == "__main__":
     for r in results:
         fn = qasm_fns[i]
         i += 1
-        print(f"Optimization results for {fn} on IBMQ gate set")
+        print(f"Optimization results of Qiskit for {fn} on IBMQ gate set")
         for j in range(3):
             print(f"{r[0][j]} gates after level {j + 1} optimization after {r[1][j]:.3f} seconds")

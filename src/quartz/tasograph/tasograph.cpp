@@ -834,10 +834,10 @@ void Graph::rotation_merging(GateType target_rotation) {
             is_first = false;
           } else {
             merge_2_rotation_op(first.op, pos.op);
-            std::cout << "merging op " << gate_type_name(first.op.ptr->tp)
-                      << "(" << first.op.guid << ")"
-                      << " and " << gate_type_name(pos.op.ptr->tp) << "("
-                      << pos.op.guid << ")" << std::endl;
+            // std::cout << "merging op " << gate_type_name(first.op.ptr->tp)
+            //           << "(" << first.op.guid << ")"
+            //           << " and " << gate_type_name(pos.op.ptr->tp) << "("
+            //           << pos.op.guid << ")" << std::endl;
           }
         }
 
@@ -862,8 +862,9 @@ void Graph::rotation_merging(GateType target_rotation) {
             }
           }
           remove_node(op);
-          std::cout << "eliminating op " << gate_type_name(op.ptr->tp) << "("
-                    << op.guid << ")" << std::endl;
+          //   std::cout << "eliminating op " << gate_type_name(op.ptr->tp) <<
+          //   "("
+          //             << op.guid << ")" << std::endl;
         }
       }
     }
@@ -1084,14 +1085,15 @@ Graph *Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
     assert(false);
   }
   auto end = std::chrono::steady_clock::now();
-  std::cout << std::dec << eqs.num_equivalence_classes()
-            << " classes of equivalences with " << eqs.num_total_dags()
-            << " DAGs are loaded in "
-            << (double)std::chrono::duration_cast<std::chrono::milliseconds>(
-                   end - start)
-                       .count() /
-                   1000.0
-            << " seconds." << std::endl;
+  //   std::cout << std::dec << eqs.num_equivalence_classes()
+  //             << " classes of equivalences with " << eqs.num_total_dags()
+  //             << " DAGs are loaded in "
+  //             <<
+  //             (double)std::chrono::duration_cast<std::chrono::milliseconds>(
+  //                    end - start)
+  //                        .count() /
+  //                    1000.0
+  //             << " seconds." << std::endl;
 
   std::vector<GraphXfer *> xfers;
   for (const auto &equiv_set : eqs.get_all_equivalence_sets()) {
@@ -1132,8 +1134,8 @@ Graph *Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
     delete first_dag;
   }
 
-  std::cout << "Number of different transfers is " << xfers.size() << "."
-            << std::endl;
+  //   std::cout << "Number of different transfers is " << xfers.size() << "."
+  //             << std::endl;
 
   int counter = 0;
   int maxNumOps = inEdges.size();
@@ -1145,7 +1147,7 @@ Graph *Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
   candidates.push(this);
   hashmap.insert(hash());
 
-  printf("\n        ===== Start Cost-Based Backtracking Search =====\n");
+  //   printf("\n        ===== Start Cost-Based Backtracking Search =====\n");
   start = std::chrono::steady_clock::now();
   // TODO: add optional rotation merging in sa
   if (use_simulated_annealing) {
@@ -1281,18 +1283,19 @@ Graph *Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
       }
       counter++;
       end = std::chrono::steady_clock::now();
-      std::cout
-          << (double)std::chrono::duration_cast<std::chrono::milliseconds>(
-                 end - start)
-                     .count() /
-                 1000.0
-          << " seconds." << std::endl;
-      fprintf(stderr, "bestCost(%.4lf) candidates(%zu) after %.4lf seconds\n",
-              bestCost, candidates.size(),
-              (double)std::chrono::duration_cast<std::chrono::milliseconds>(
-                  end - start)
-                      .count() /
-                  1000.0);
+      //   std::cout
+      //       << (double)std::chrono::duration_cast<std::chrono::milliseconds>(
+      //              end - start)
+      //                  .count() /
+      //              1000.0
+      //       << " seconds." << std::endl;
+      //   fprintf(stderr, "bestCost(%.4lf) candidates(%zu) after %.4lf
+      //   seconds\n",
+      //           bestCost, candidates.size(),
+      //           (double)std::chrono::duration_cast<std::chrono::milliseconds>(
+      //               end - start)
+      //                   .count() /
+      //               1000.0);
 
       std::vector<Graph *> new_candidates;
       bool stop_search = false;
@@ -1308,7 +1311,7 @@ Graph *Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
       }
     }
   }
-  printf("        ===== Finish Cost-Based Backtracking Search =====\n\n");
+  //   printf("        ===== Finish Cost-Based Backtracking Search =====\n\n");
   // Print results
   //   std::map<Op, std::set<Edge, EdgeCompare>, OpCompare>::iterator it;
   //   for (it = bestGraph->inEdges.begin(); it !=

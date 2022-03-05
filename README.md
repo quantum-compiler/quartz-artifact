@@ -71,6 +71,22 @@ The results will be shown in the console. The figure below shows part of the res
 
 ### The results of Quartz
 
+To reproduce the results of Quartz on Nam's gate set, run the following script:
+
+``` shell
+./run_nam.sh
+```
+
+The results will be shown in the console. The figure below shows part of the results as an example:
+
+![](figures/quartz_nam_example.png)
+
+If you would like to run the experiments for different circuits separately, you can use the following script (assuming you are currently in the `build/` directory):
+
+``` shell
+./test_nam the/input/qasm/file/path --output the/output/qasm/file/(optional)
+```
+
 
 ## Table 4: Comparing Quartz with existing circuit optimizers on the IBM gate set
 
@@ -108,6 +124,22 @@ The results will be shown in the console. The figure below shows part of the res
 
 ### The results of Quartz
 
+To reproduce the results of Quartz on IBMQ gate set, run the following script:
+
+``` shell
+./run_ibmq.sh
+```
+
+The results will be shown in the console. The figure below shows part of the results as an example:
+
+![](figures/quartz_ibmq_example.png)
+
+If you would like to run the experiments for different circuits separately, you can use the following script (assuming you are currently in the `build/` directory):
+
+``` shell
+./test_ibmq the/input/qasm/file/path --output the/output/qasm/file/(optional)
+```
+
 ## Table 5: Comparing Quartz with Quilc and t|ket⟩ on the Rigetti gate set (𝑅𝑥 (𝑘𝜋/2)(𝑘 ∈Z),𝑅𝑧(𝜆),𝐶𝑍)
 
 ### The results of Quilc
@@ -136,3 +168,18 @@ The results will be shown in the console. The figure below shows part of the res
 
 ### The results of Quartz
 
+To reproduce the results of Quartz on Rigetti gate set, run the following script:
+
+``` shell
+./run_rigetti.sh
+```
+
+The results will be shown in the console. The figure below shows part of the results as an example:
+
+![](figures/quartz_rigetti_example.png)
+
+If you would like to run the experiments for different circuits separately, you can use the following script (assuming you are currently in the `build/` directory):
+
+``` shell
+./test_rigetti the/input/qasm/file/path --output the/output/qasm/file/(optional)
+```

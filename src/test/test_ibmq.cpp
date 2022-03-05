@@ -9,27 +9,11 @@ void parse_args(char **argv, int argc, bool &simulated_annealing,
                 std::string &output_filename, std::string &eqset_filename) {
   assert(argv[1] != nullptr);
   input_filename = std::string(argv[1]);
-  output_filename = input_filename + ".optimized";
+  early_stop = true;
   for (int i = 2; i < argc; i++) {
-    if (!std::strcmp(argv[i], "--sa")) {
-      simulated_annealing = true;
-      continue;
-    }
-    if (!std::strcmp(argv[i], "--simulated-annealing")) {
-      simulated_annealing = true;
-      continue;
-    }
     if (!std::strcmp(argv[i], "--output")) {
       output_filename = std::string(argv[++i]);
-      continue;
-    }
-    if (!std::strcmp(argv[i], "--eqset")) {
-      eqset_filename = std::string(argv[++i]);
-      continue;
-    }
-    if (!std::strcmp(argv[i], "--early-stop")) {
-      early_stop = true;
-      continue;
+      break;
     }
   }
 }
@@ -41,8 +25,6 @@ int main(int argc, char **argv) {
   bool early_stop = false;
   parse_args(argv, argc, simulated_annealing, early_stop, input_fn, output_fn,
              eqset_fn);
-  fprintf(stderr, "Input qasm file: %s\n", input_fn.c_str());
-
   // Construct contexts
   Context src_ctx({GateType::h, GateType::ccz, GateType::x, GateType::cx,
                    GateType::t, GateType::input_qubit, GateType::input_param});
@@ -51,9 +33,6 @@ int main(int argc, char **argv) {
   auto union_ctx = union_contexts(&src_ctx, &dst_ctx);
 
   // Construct GraphXfers for toffoli flip
-  // Use this for voqc gate set(h, rz, x, cx)
-  //   auto xfer_pair = TASOGraph::GraphXfer::ccz_cx_rz_xfer(&union_ctx);
-  // Use this for ibmq gate set(u1, u2, u3, cx)
   auto xfer_pair = GraphXfer::ccz_cx_u1_xfer(&union_ctx);
   // Load qasm file
   QASMParser qasm_parser(&src_ctx);
@@ -63,6 +42,7 @@ int main(int argc, char **argv) {
   }
   Graph graph(&src_ctx, dag);
 
+  auto start = std::chrono::steady_clock::now();
   // Context shift
   RuleParser rule_parser(
       {"h q0 = u2 q0 0 pi", "x q0 = u3 q0 pi 0 -pi", "t q0 = u1 q0 0.25pi"});
@@ -73,22 +53,26 @@ int main(int argc, char **argv) {
   // Greedy toffoli flip
   Graph *graph_before_search = graph_new_ctx->toffoli_flip_greedy(
       GateType::u1, xfer_pair.first, xfer_pair.second);
-  std::cout << "gate count after toffoli flip: "
-            << graph_before_search->total_cost() << std::endl;
 
   // Optimization
   Graph *graph_after_search = graph_before_search->optimize(
       0.999, 0, false, &dst_ctx, eqset_fn, simulated_annealing, early_stop,
       /*rotation_merging_in_searching*/ false, GateType::u1);
-  std::cout << "gate count after optimization: "
-            << graph_after_search->total_cost() << std::endl;
   eqset_fn = "../IBM_with_U3_2_1_complete_ECC_set.json";
-  Graph *gate_after_u3_pass = graph_after_search->optimize(
+  Graph *graph_after_u3_pass = graph_after_search->optimize(
       0.999, 0, false, &dst_ctx, eqset_fn, simulated_annealing, early_stop,
       /*rotation_merging_in_searching*/ false, GateType::u1);
-  //   graph_after_search->u3_merging();
-  std::cout << "gate count after u3 merging: "
-            << graph_after_search->total_cost() << std::endl;
+  auto end = std::chrono::steady_clock::now();
+  auto fn = input_fn.substr(input_fn.rfind('/') + 1);
+  std::cout << "Optimization results of Quartz for " << fn
+            << " on IBMQ gate set." << std::endl
+            << "Gate count after optimization: "
+            << graph_after_u3_pass->total_cost() << ", "
+            << (double)std::chrono::duration_cast<std::chrono::milliseconds>(
+                   end - start)
+                       .count() /
+                   1000.0
+            << " seconds." << std::endl;
 
   graph_after_search->to_qasm(output_fn, false, false);
 }
