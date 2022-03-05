@@ -20,11 +20,11 @@ To facilitate the artifact evaluation of our submission, we provide an Amazon Ma
 
 - Make sure you have CMake (https://cmake.org/) with version >= 3.16.
   
-- Install the Z3 Theorem Prover (https://github.com/Z3Prover/z3):
+- Install the Z3 Theorem Prover (https://github.com/Z3Prover/z3) and Qiskit (https://qiskit.org/):
   ```shell
-  pip install z3-solver
+  pip install z3-solver qiskit
   ```
-  Our evaluation uses Z3 4.8.14.
+  Our evaluation uses Z3 4.8.14 and Qiskit 0.34.2.
   
 - Run CMake:
   ```shell
