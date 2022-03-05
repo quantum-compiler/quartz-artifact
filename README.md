@@ -90,7 +90,9 @@ As the figures shows, for each circuit, we run Qiskit with optimization 1, 2, 3,
 
 It is worth noting that optimizations in Qiskit involves some non-determinism, which means that the results may vary among different runs of the optimizations.
 
-### The results of tket
+### The results of t|ket⟩
+
+We refer the results of t|ket⟩ on IBMQ gate set to the paper "A verified optimizer for Quantum circuits" (https://dl.acm.org/doi/10.1145/3434318). Specifically, the results can be found at Table 2, column "t|ket⟩" in this paper.
 
 ### The results of VOQC
 
@@ -109,5 +111,28 @@ The results will be shown in the console. The figure below shows part of the res
 ## Table 5: Comparing Quartz with Quilc and t|ket⟩ on the Rigetti gate set (𝑅𝑥 (𝑘𝜋/2)(𝑘 ∈Z),𝑅𝑧(𝜆),𝐶𝑍)
 
 ### The results of Quilc
-### The results of tket
+
+To reproduce the results of Quilc on Rigetti gate set, run the following script:
+
+``` shell
+python pyQuil_rigetti.py
+```
+
+The results will be shown in the console. The figure below shows part of the results as an example:
+
+![](figures/pyquil_rigetti_example.png)
+
+### The results of t|ket⟩
+
+To reproduce the results of t|ket⟩ on Rigetti gate set, run the following script:
+
+``` shell
+python tket_rigetti.py
+```
+
+The results will be shown in the console. The figure below shows part of the results as an example:
+
+![](figures/tket_rigetti_example.png)
+
 ### The results of Quartz
+
