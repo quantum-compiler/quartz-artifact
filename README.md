@@ -10,10 +10,13 @@ We provide the following two approaches to install the artifact.
 
 ### 2. Install from source code
 
-- Install dependencies:
+- Make sure you have CMake (https://cmake.org/) with version >= 3.16.
+  
+- Install the Z3 Theorem Prover (https://github.com/Z3Prover/z3):
   ```shell
   pip install z3-solver
   ```
+  Our evaluation uses Z3 4.8.14.
   
 - Run CMake:
   ```shell
@@ -32,6 +35,10 @@ bash run_table2.sh
 
 In the output of the script, lines starting with `***` indicate the numbers used in Table 2. We expect the numbers to
 differ a little from the numbers in the submission due to floating-point errors.
+
+This script runs for several hours. To only reproduce the running time for the generator and verifier with all pruning
+techniques in one hour, you can modify the third last argument for each invocation of `test_pruning` in `src/test/test_pruning.cpp`
+from `true` to `false`, and then run `bash run_table2.sh`.
 
 ## Characteristics and the Number of Transformations for the Three Gate Sets
 
