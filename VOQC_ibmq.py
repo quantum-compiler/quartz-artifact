@@ -17,5 +17,5 @@ if __name__ == "__main__":
     qasm_fns = [fn for fn in os.listdir(qasm_path) if isfile(join(qasm_path, fn)) and fn[-4:] == 'qasm']
     for fn in qasm_fns:
         r = VOQC_optimize_nam(qasm_path + fn)
-        print(f"Optimization results of VOQC for {fn} on Nam's gate set")
+        print(f"Optimization results of VOQC for {fn} on IBMQ gate set")
         print(f"{r[0]} gates after pass 'optimize_nam' and pass 'optimize_ibm' after {r[1]:.3f} seconds")
