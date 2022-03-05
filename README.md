@@ -8,6 +8,8 @@ Install dependencies:
 pip install z3-solver
 ```
 
+Note that it is not necessary to install Quartz beforehand to run the artifacts.
+
 ## Table 2: Evaluating the Quartz Generator and Verifier
 
 To reproduce the numbers in Table 2, run the following script:
