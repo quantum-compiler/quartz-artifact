@@ -20,20 +20,28 @@ To facilitate the artifact evaluation of our submission, we provide an Amazon Ma
 
 - Make sure you have CMake (https://cmake.org/) with version >= 3.16.
   
-- Install the Z3 Theorem Prover (https://github.com/Z3Prover/z3) and Qiskit (https://qiskit.org/):
+- Install the Z3 Theorem Prover (https://github.com/Z3Prover/z3):
   ```shell
-  pip install z3-solver qiskit
+  pip install z3-solver
   ```
-  Our evaluation uses Z3 4.8.14 and Qiskit 0.34.2.
+  Our evaluation uses Z3 4.8.14.
 
-- Install pyvoqc (https://github.com/inQWIRE/pyvoqc).
-  
 - Run CMake:
   ```shell
   bash run_cmake.sh
   ```
 
 Note that it is not necessary to install Quartz beforehand to run the artifact.
+
+### Install External Packages
+In order to run the experiments related to external packages, you need to install them:
+- Qiskit (https://qiskit.org/):
+  ```shell
+  pip install qiskit
+  ```
+  Our evaluation uses Qiskit 0.34.2.
+
+- pyvoqc (please follow the instructions on https://github.com/inQWIRE/pyvoqc).
 
 ## Table 2: Evaluating the Quartz Generator and Verifier
 
