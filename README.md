@@ -41,7 +41,21 @@ In order to run the experiments related to external packages, you need to instal
   ```
   Our evaluation uses Qiskit 0.34.2.
 
-- pyvoqc (please follow the instructions on https://github.com/inQWIRE/pyvoqc).
+- pyvoqc (please follow the instructions on https://github.com/inQWIRE/pyvoqc):
+
+- t|ket⟩ (https://github.com/CQCL/tket):
+
+  ``` shell
+  pip install pytket
+  ```
+  Our evaluation uses pytket 0.16.0.
+
+- pyQuil (https://github.com/rigetti/pyquil):
+
+  ``` shell
+  pip install pyquil
+  ```
+  Our evaluation uses pyquil 3.0.1.
 
 ## Table 2: Evaluating the Quartz Generator and Verifier
 
