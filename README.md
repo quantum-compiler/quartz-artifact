@@ -6,7 +6,7 @@
 
 ### Hardware Requirements
 
-We recommend running the artifact on an m6i.32xlarge AWS instance. Although it can also run on laptops with >= 256 GB memory, it will take a significantly longer time to run.
+We recommend running the artifact on an m6i.32xlarge AWS instance. Although it can also run on laptops with >= 256 GB memory and >= 256 GB storage, it will take a significantly longer time to run.
 
 ### Installation
 
@@ -24,7 +24,7 @@ To facilitate the artifact evaluation of our submission, we provide an Amazon Ma
   ```shell
   pip install z3-solver
   ```
-  Our evaluation uses Z3 4.8.14.
+  Our evaluation uses Z3 4.8.12.
 
 - Run CMake:
   ```shell
