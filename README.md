@@ -19,7 +19,14 @@ To facilitate the artifact evaluation of our submission, we provide an Amazon Ma
 
 #### 2. Install from source code
 
+We only tested the commands on Ubuntu 20.04, but they should also work on other operating systems.
+
 - Make sure you have CMake (https://cmake.org/) with version >= 3.16.
+
+- Make sure `python` points to `python3`. If not, you can install `python-is-python3`:
+  ```shell
+  sudo apt-get install python-is-python3
+  ```
   
 - Install the Z3 Theorem Prover (https://github.com/Z3Prover/z3):
   ```shell
@@ -67,7 +74,7 @@ If you installed from source, in order to run the experiments related to externa
 To reproduce the numbers in Table 2, run the following script:
 
 ```shell
-bash run_table2.sh
+bash run_table2.sh > table2.log
 ```
 
 In the output of the script, lines starting with `***` indicate the numbers used in Table 2. We expect the numbers to
