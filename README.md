@@ -106,23 +106,29 @@ You should be able to see the following intermediate results by running the Pyth
 The 5 rows with "`- Column`" correspond to 5 cells of the row "n = 3" of "Nam Gate Set" in Table 2.
 
 This script runs for about 10 hours. To only reproduce the running time for the generator and verifier with all pruning
-techniques faster, you can modify the fourth last argument for each invocation of `test_pruning` in `src/test/test_pruning.cpp`
-from `true` to `false`, and then run `bash run_table2.sh`.
+techniques faster (in 1.5 hours), you can modify the fourth last argument for each invocation of `test_pruning` in `src/test/test_pruning.cpp`
+from `true` to `false` and comment out the invocations of `Nam_7_` and `IBM_5_`, and then run `bash run_table2.sh`.
 
 ## Characteristics and the Number of Transformations for the Three Gate Sets
 
-To reproduce the characteristics at the end of section 4 in the submission, run the following script:
+To reproduce the characteristics at the end of Section 4 in the submission and to generate the ECC sets, run the following script:
 
 ```shell
-bash gen_ecc_set.sh
+bash gen_ecc_set.sh > eccset.log
+python show_eccset_results.py
 ```
+
+You can run the Python script while the shell script is running to see some intermediate results.
+After running the shell script for 1.5 hours, running the Python script should show the characteristics and the number
+of transformations for the (6,3)-complete ECC set for the Nam and Rigetti gate set, and for the
+(4,3)-complete ECC set for the IBM gate set.
 
 In the output, `*** ch(...) = ...` denotes the characteristics for each gate set.
 
 `*** Number of transformations of ... = ...` denotes the number of transformations for each gate set. We expect the
 numbers of transformations to differ from the numbers in the submission due to floating-point errors and bug fixes after the submission.
 
-The generated ECC Sets are stored in Json files with file name formatted like
+The generated ECC sets are stored in Json files with file name formatted like
 this: `{Gate set name}_{number of gates}_{number_of qubits}_complete_ECC_set.json`.
 
 ## Table 3: Comparing Quartz with existing quantum circuit optimizers on Nam's gate set {𝑅𝑧(𝜆),𝑋,𝐻,𝐶𝑁𝑂𝑇}
