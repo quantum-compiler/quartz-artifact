@@ -118,15 +118,26 @@ bash gen_ecc_set.sh > eccset.log
 python show_eccset_results.py
 ```
 
-You can run the Python script while the shell script is running to see some intermediate results.
-After running the shell script for 1.5 hours, running the Python script should show the characteristics and the number
-of transformations for the (6,3)-complete ECC set for the Nam and Rigetti gate set, and for the
-(4,3)-complete ECC set for the IBM gate set.
+This script runs for about 10 hours. After about 1.5 hours, the script is generating the ECC sets for scalability analysis
+(see the last section of this README file).
+If you do not want to run the scalability analysis, you can terminate the script after about 1.5 hours.
 
-In the output, `*** ch(...) = ...` denotes the characteristics for each gate set.
+You can run the Python script while the shell script is running to see some intermediate results.
+After running the shell script for about 1.5 hours, running the Python script should show the following result:
+```
+*** Number of transformations of IBM_4_3 = 16748
+*** Number of transformations of Nam_6_3 = 56152
+*** Number of transformations of Rigetti_6_3 = 346
+*** ch(IBM,q=3) = 1362
+*** ch(Nam,q=3) = 27
+*** ch(Rigetti,q=3) = 36
+```
+
+In the output, `*** ch(...) = ...` denotes the characteristics for each gate set. We expect the result of the IBM gate set
+to differ from the number in the submission because we added the U3 gate back (which was removed in the submission) and increased `q` from 2 to 3.
 
 `*** Number of transformations of ... = ...` denotes the number of transformations for each gate set. We expect the
-numbers of transformations to differ from the numbers in the submission due to floating-point errors and bug fixes after the submission.
+numbers of transformations to differ from the numbers in the submission due to floating-point errors, bug fixes, and changes of `n` and `q` after the submission.
 
 The generated ECC sets are stored in Json files with file name formatted like
 this: `{Gate set name}_{number of gates}_{number_of qubits}_complete_ECC_set.json`.
@@ -172,6 +183,8 @@ To reproduce the results of Quartz on Nam's gate set, run the following script:
 ``` shell
 ./run_nam.sh
 ```
+
+This script runs for 24 hours plus a few minutes.
 
 The results will be shown in the console. The figure below shows part of the results as an example:
 
@@ -226,6 +239,8 @@ To reproduce the results of Quartz on IBMQ gate set, run the following script:
 ./run_ibmq.sh
 ```
 
+This script runs for about 12 hours.
+
 The results will be shown in the console. The figure below shows part of the results as an example:
 
 ![](figures/quartz_ibmq_example.png)
@@ -275,6 +290,8 @@ To reproduce the results of Quartz on Rigetti gate set, run the following script
 ``` shell
 ./run_rigetti.sh
 ```
+
+This script runs for 24 hours plus a few minutes.
 
 The results will be shown in the console. The figure below shows part of the results as an example:
 
