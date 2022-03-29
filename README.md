@@ -75,13 +75,21 @@ To reproduce the numbers in Table 2, run the following script:
 
 ```shell
 bash run_table2.sh > table2.log
+python show_table2_results.py
 ```
 
-In the output of the script, lines starting with `***` indicate the numbers used in Table 2. We expect the numbers to
-differ a little from the numbers in the submission due to floating-point errors.
+We present Table 2 in a different way in the camera-ready version than in the submission version of the paper.
+We removed the "ECC Simplification" column and added some other columns. This script outputs the numbers
+corresponding to the camera-ready version, but the column titles match the submission version for artifact evaluation.
+We will modify the script to make the column titles match the camera-ready version when linking the artifact to the
+camera-ready version of the paper.
+
+You can run the python script while the shell script is running to see some intermediate results (a part of the table).
+
+We expect the numbers to differ from the numbers in the submission due to floating-point errors and bug fixes after the paper submission.
 
 This script runs for several hours. To only reproduce the running time for the generator and verifier with all pruning
-techniques in one hour, you can modify the third last argument for each invocation of `test_pruning` in `src/test/test_pruning.cpp`
+techniques in one hour, you can modify the fourth last argument for each invocation of `test_pruning` in `src/test/test_pruning.cpp`
 from `true` to `false`, and then run `bash run_table2.sh`.
 
 ## Characteristics and the Number of Transformations for the Three Gate Sets
