@@ -172,7 +172,7 @@ public:
   Graph(const Graph &graph);
   void add_edge(const Op &srcOp, const Op &dstOp, int srcIdx, int dstIdx);
   bool has_edge(const Op &srcOp, const Op &dstOp, int srcIdx, int dstIdx) const;
-  bool has_loop();
+  bool has_loop() const;
   size_t hash();
   bool check_correctness();
   float total_cost() const;
@@ -180,28 +180,42 @@ public:
   size_t get_next_special_op_guid();
   size_t get_special_op_guid();
   void set_special_op_guid(size_t _special_op_guid);
-  Graph *context_shift(Context *src_ctx, Context *dst_ctx, Context *union_ctx,
-                       RuleParser *rule_parser, bool ignore_toffoli = false);
-  Graph *optimize(float alpha, int budget, bool print_subst, Context *ctx,
-                  const std::string &equiv_file_name,
-                  bool use_simulated_annealing, bool enable_early_stop,
-                  bool use_rotation_merging_in_searching,
-                  GateType target_rotation);
+  std::shared_ptr<Graph> context_shift(Context *src_ctx, Context *dst_ctx,
+                                       Context *union_ctx,
+                                       RuleParser *rule_parser,
+                                       bool ignore_toffoli = false);
+  std::shared_ptr<Graph>
+  optimize(float alpha, int budget, bool print_subst, Context *ctx,
+           const std::string &equiv_file_name, bool use_simulated_annealing,
+           bool enable_early_stop, bool use_rotation_merging_in_searching,
+           GateType target_rotation, std::string circuit_name = "",
+           int timeout = 86400/*1 day*/);
   void constant_and_rotation_elimination();
   void rotation_merging(GateType target_rotation);
   void to_qasm(const std::string &save_filename, bool print_result,
-               bool print_id);
+               bool print_id) const;
   void draw_circuit(const std::string &qasm_str,
                     const std::string &save_filename);
-  size_t get_num_qubits();
+  size_t get_num_qubits() const;
   void print_qubit_ops();
-  Graph *toffoli_flip_greedy(GateType target_rotation, GraphXfer *xfer,
-                             GraphXfer *inverse_xfer);
+  std::shared_ptr<Graph> toffoli_flip_greedy(GateType target_rotation,
+                                             GraphXfer *xfer,
+                                             GraphXfer *inverse_xfer);
+  void toffoli_flip_greedy_with_trace(GateType target_rotation, GraphXfer *xfer,
+                                      GraphXfer *inverse_xfer,
+                                      std::vector<int> &trace);
+  std::shared_ptr<Graph>
+  toffoli_flip_by_instruction(GateType target_rotation, GraphXfer *xfer,
+                              GraphXfer *inverse_xfer,
+                              std::vector<int> instruction);
   bool xfer_appliable(GraphXfer *xfer, Op op) const;
-  Graph *apply_xfer(GraphXfer *xfer, Op op);
+  std::shared_ptr<Graph> apply_xfer(GraphXfer *xfer, Op op);
   void all_ops(std::vector<Op> &ops);
   void all_edges(std::vector<Edge> &edges);
   void topology_order_ops(std::vector<Op> &ops) const;
+  std::shared_ptr<Graph> ccz_flip_t(Context *ctx);
+  std::shared_ptr<Graph> ccz_flip_greedy_rz();
+  std::shared_ptr<Graph> ccz_flip_greedy_u1();
 
 private:
   void replace_node(Op oldOp, Op newOp);
@@ -219,18 +233,18 @@ private:
   bool moveable(GateType tp);
   bool move_forward(Pos &pos, bool left);
   bool merge_2_rotation_op(Op op_0, Op op_1);
-  Graph *_match_rest_ops(GraphXfer *xfer, int depth, int ignore_depth,
-                         int min_guid) const;
-
-private:
-  size_t special_op_guid;
+  std::shared_ptr<Graph> _match_rest_ops(GraphXfer *xfer, size_t depth,
+                                         size_t ignore_depth,
+                                         size_t min_guid) const;
 
 public:
   Context *context;
-  float totalCost;
   std::map<Op, std::set<Edge, EdgeCompare>, OpCompare> inEdges, outEdges;
   std::map<Op, ParamType> constant_param_values;
   std::unordered_map<Op, int, OpHash> qubit_2_idx;
+
+private:
+  size_t special_op_guid;
 };
 
 }; // namespace quartz

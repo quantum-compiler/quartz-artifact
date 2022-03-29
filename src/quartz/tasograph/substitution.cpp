@@ -38,9 +38,10 @@ GraphXfer *GraphXfer::create_GraphXfer(Context *_context, const DAG *src_graph,
     if (!src_dag->qubit_used(i))
       return nullptr;
   }
-  // Eliminate transfers where src dag has unused parameters
-  auto src_num_params = src_dag->get_num_input_parameters();
-  for (int i = 0; i < src_num_params; ++i) {
+
+  // Eliminate transfers where src dag has unused input parameters
+  auto src_num_input_params = src_dag->get_num_input_parameters();
+  for (int i = 0; i < src_num_input_params; ++i) {
     if (!src_dag->input_param_used(i))
       return nullptr;
   }
@@ -158,7 +159,7 @@ GraphXfer::create_single_gate_GraphXfer(Context *union_ctx, Command src_cmd,
   for (auto cmd : dst_cmds) {
     OpX *op = new OpX(cmd.get_gate_type());
     auto num_qubit = cmd.qubit_idx.size();
-    for (int i = 0; i < num_qubit; ++i) {
+    for (size_t i = 0; i < num_qubit; ++i) {
       assert(dst_qubits_2_tensorx.find(cmd.qubit_idx[i]) !=
              dst_qubits_2_tensorx.end());
       op->add_input(dst_qubits_2_tensorx[cmd.qubit_idx[i]]);
@@ -168,7 +169,7 @@ GraphXfer::create_single_gate_GraphXfer(Context *union_ctx, Command src_cmd,
       dst_qubits_2_tensorx[cmd.qubit_idx[i]] = tensor;
     }
     auto num_params = cmd.param_idx.size();
-    for (int i = 0; i < num_params; ++i) {
+    for (size_t i = 0; i < num_params; ++i) {
       // Non-constant parameters
       if (cmd.param_idx[i] != -1) {
         assert(dst_params_2_tensorx.find(cmd.param_idx[i]) !=
@@ -214,6 +215,24 @@ std::pair<GraphXfer *, GraphXfer *> GraphXfer::ccz_cx_u1_xfer(Context *ctx) {
                    GateType::input_param});
   std::pair<RuleParser *, RuleParser *> toffoli_rules =
       RuleParser::ccz_cx_u1_rules();
+  std::vector<Command> cmds;
+  Command cmd;
+  toffoli_rules.first->find_convert_commands(&dst_ctx, GateType::ccz, cmd,
+                                             cmds);
+  GraphXfer *xfer_0 = create_single_gate_GraphXfer(ctx, cmd, cmds);
+  toffoli_rules.second->find_convert_commands(&dst_ctx, GateType::ccz, cmd,
+                                              cmds);
+  GraphXfer *xfer_1 = create_single_gate_GraphXfer(ctx, cmd, cmds);
+  delete toffoli_rules.first;
+  delete toffoli_rules.second;
+  return std::make_pair(xfer_0, xfer_1);
+}
+
+std::pair<GraphXfer *, GraphXfer *> GraphXfer::ccz_cx_t_xfer(Context *ctx) {
+  Context dst_ctx({GateType::t, GateType::tdg, GateType::cx,
+                   GateType::input_qubit, GateType::input_param});
+  std::pair<RuleParser *, RuleParser *> toffoli_rules =
+      RuleParser::ccz_cx_t_rules();
   std::vector<Command> cmds;
   Command cmd;
   toffoli_rules.first->find_convert_commands(&dst_ctx, GateType::ccz, cmd,
@@ -320,6 +339,7 @@ bool GraphXfer::can_match(OpX *srcOp, Op op, const Graph *graph) const {
   // need to call this function with topological order. Because once both
   // the src op and the dst op are mapped, the edge connecting them will
   // be checked. This gauarentee that every edges are checked at the end.
+  // Check gate type
   if (srcOp->type != op.ptr->tp)
     return false;
   // Check num input tensors
@@ -327,12 +347,11 @@ bool GraphXfer::can_match(OpX *srcOp, Op op, const Graph *graph) const {
       op.ptr->get_num_qubits() + op.ptr->get_num_parameters())
     return false;
   // Check inputs
-  std::map<int, std::pair<Op, int>> newMapInputs;
+  std::unordered_map<int, std::pair<Op, int>> newMapInputs;
   for (size_t i = 0; i < srcOp->inputs.size(); i++) {
     TensorX in = srcOp->inputs[i];
     if (in.op == NULL) { // Input tensor
-      std::multimap<int, std::pair<Op, int>>::const_iterator it;
-      it = mappedInputs.find(in.idx);
+      auto it = mappedInputs.find(in.idx);
       if (it != mappedInputs.end()) {
         // Input is already mapped
         Op mappedOp = it->second.first;
@@ -341,8 +360,7 @@ bool GraphXfer::can_match(OpX *srcOp, Op op, const Graph *graph) const {
           return false;
       } else {
         // Input haven't been mapped
-        std::map<int, std::pair<Op, int>>::const_iterator newit;
-        newit = newMapInputs.find(in.idx);
+        auto newit = newMapInputs.find(in.idx);
         if (newit != newMapInputs.end()) {
           Op mappedOp = newit->second.first;
           int mappedIdx = newit->second.second;
@@ -371,8 +389,7 @@ bool GraphXfer::can_match(OpX *srcOp, Op op, const Graph *graph) const {
     // Check output
     for (size_t i = 0; i < srcOp->outputs.size(); i++) {
       TensorX out = srcOp->outputs[i];
-      std::map<TensorX, TensorX, TensorXCompare>::const_iterator it;
-      it = mappedOutputs.find(out);
+      auto it = mappedOutputs.find(out);
       // If out is in mappedOutputs, it represents an external edge,
       // we don't check it here
       if (it == mappedOutputs.end()) {
@@ -428,8 +445,7 @@ void GraphXfer::unmatch(OpX *srcOp, Op op, const Graph *graph) {
     TensorX in = srcOp->inputs[i];
     if (in.op == nullptr) {
       // Update mappedInputsa
-      std::multimap<int, std::pair<Op, int>>::iterator it;
-      it = mappedInputs.find(in.idx);
+      auto it = mappedInputs.find(in.idx);
       mappedInputs.erase(it);
     }
   }
@@ -439,7 +455,7 @@ void GraphXfer::unmatch(OpX *srcOp, Op op, const Graph *graph) {
   srcOp->mapOp.ptr = nullptr;
 }
 
-Graph *GraphXfer::run_1_time(int depth, Graph *src_graph) {
+std::shared_ptr<Graph> GraphXfer::run_1_time(int depth, Graph *src_graph) {
   if (depth >= (int)srcOps.size()) {
     // Create dst operators
     bool pass = true;
@@ -452,8 +468,7 @@ Graph *GraphXfer::run_1_time(int depth, Graph *src_graph) {
     if (!pass)
       return nullptr;
     // Check that output tensors with external edges are mapped
-    std::map<Op, OpX *, OpCompare>::const_iterator opIt;
-    for (opIt = mappedOps.begin(); opIt != mappedOps.end(); opIt++) {
+    for (auto opIt = mappedOps.cbegin(); opIt != mappedOps.cend(); opIt++) {
       const std::set<Edge, EdgeCompare> &list =
           src_graph->outEdges[opIt->first];
       std::set<Edge, EdgeCompare>::const_iterator it;
@@ -475,13 +490,12 @@ Graph *GraphXfer::run_1_time(int depth, Graph *src_graph) {
     // Check that the new graph should not have any loop
     if (dst_graph->has_loop()) {
       std::cout << "Found a new graph with LOOP!!!!\n" << std::endl;
-      delete dst_graph;
+      //   delete dst_graph;
       return nullptr;
     }
     // TODO: remove me for better performance
     assert(dst_graph->check_correctness());
     if (dst_graph->hash() == src_graph->hash()) {
-      delete dst_graph;
       return nullptr;
     }
     return dst_graph;
@@ -492,14 +506,14 @@ Graph *GraphXfer::run_1_time(int depth, Graph *src_graph) {
          ++it) {
       // printf("can_match(%d)\n", can_match(srcOp, it->first,
       // graph));
-      if (can_match(srcOp, it->first, src_graph) &&
-          (mappedOps.find(it->first) == mappedOps.end())) {
+      if ((mappedOps.find(it->first) == mappedOps.end()) &&
+          can_match(srcOp, it->first, src_graph)) {
         Op op = it->first;
         // Check mapOutput
         match(srcOp, op, src_graph);
         auto dst_graph = run_1_time(depth + 1, src_graph);
         unmatch(srcOp, op, src_graph);
-        if (dst_graph != nullptr)
+        if (dst_graph.get() != nullptr)
           return dst_graph;
       }
     }
@@ -508,7 +522,7 @@ Graph *GraphXfer::run_1_time(int depth, Graph *src_graph) {
 }
 
 void GraphXfer::run(int depth, Graph *graph,
-                    std::vector<Graph *> &new_candidates,
+                    std::vector<std::shared_ptr<Graph>> &new_candidates,
                     std::set<size_t> &hashmap, float threshold, int maxNumOps,
                     bool enable_early_stop, bool &stop_search) {
   if (stop_search)
@@ -528,8 +542,7 @@ void GraphXfer::run(int depth, Graph *graph,
     if (!pass)
       return;
     // Check that all external edges are mapped outputs
-    std::map<Op, OpX *, OpCompare>::const_iterator opIt;
-    for (opIt = mappedOps.begin(); opIt != mappedOps.end(); opIt++) {
+    for (auto opIt = mappedOps.cbegin(); opIt != mappedOps.cend(); opIt++) {
       const std::set<Edge, EdgeCompare> &list = graph->outEdges[opIt->first];
       std::set<Edge, EdgeCompare>::const_iterator it;
       for (it = list.begin(); it != list.end(); it++)
@@ -546,11 +559,11 @@ void GraphXfer::run(int depth, Graph *graph,
         }
     }
     // Generate a new graph by applying xfer rule
-    Graph *newGraph = create_new_graph(graph);
+    // Graph *newGraph = create_new_graph(graph);
+    std::shared_ptr<Graph> newGraph = create_new_graph(graph);
     // Check that the new graph should not have any loop
     if (newGraph->has_loop()) {
       // printf("Found a new graph with LOOP!!!!\n");
-      delete newGraph;
       return;
     }
     // TODO: remove me for better performance
@@ -564,8 +577,6 @@ void GraphXfer::run(int depth, Graph *graph,
           stop_search = true;
         // std::cout << newGraph->total_cost() << " ";
       }
-    } else {
-      delete newGraph;
     }
   } else {
     OpX *srcOp = srcOps[depth];
@@ -573,8 +584,8 @@ void GraphXfer::run(int depth, Graph *graph,
     for (it = graph->inEdges.begin(); it != graph->inEdges.end(); it++) {
       // printf("can_match(%d)\n", can_match(srcOp, it->first,
       // graph));
-      if (can_match(srcOp, it->first, graph) &&
-          (mappedOps.find(it->first) == mappedOps.end())) {
+      if ((mappedOps.find(it->first) == mappedOps.end()) &&
+          can_match(srcOp, it->first, graph)) {
         Op op = it->first;
         // Check mapOutput
         match(srcOp, op, graph);
@@ -595,9 +606,10 @@ bool GraphXfer::create_new_operator(const OpX *opx, Op &op) {
   return true;
 }
 
-Graph *GraphXfer::create_new_graph(const Graph *graph) const {
-  // std::shared_ptr<Graph> newGraph(new Graph(*graph));
-  Graph *newGraph = new Graph(*graph);
+std::shared_ptr<Graph> GraphXfer::create_new_graph(const Graph *graph) const {
+  std::shared_ptr<Graph> newGraph(new Graph(*graph));
+  newGraph->inEdges.clear();
+  newGraph->outEdges.clear();
   // Step 1: map dst ops
   std::map<Op, std::set<Edge, EdgeCompare>, OpCompare>::const_iterator opIt;
   std::vector<OpX *>::const_iterator dstIt;
@@ -618,8 +630,7 @@ Graph *GraphXfer::create_new_graph(const Graph *graph) const {
           if (dstTen.op == NULL) {
             // mappedOutput is an input --- this indicates
             // an empty target graph
-            std::multimap<int, std::pair<Op, int>>::const_iterator it2 =
-                mappedInputs.find(dstTen.idx);
+            auto it2 = mappedInputs.find(dstTen.idx);
             assert(it2 != mappedInputs.end());
             std::pair<Op, int> srcEdge = it2->second;
             newGraph->add_edge(srcEdge.first, it->dstOp, srcEdge.second,
@@ -648,8 +659,7 @@ Graph *GraphXfer::create_new_graph(const Graph *graph) const {
           newGraph->add_edge(input_constant_param_op, dstOp->mapOp, 0, i);
           continue;
         };
-        std::multimap<int, std::pair<Op, int>>::const_iterator it =
-            mappedInputs.find(dstOp->inputs[i].idx);
+        auto it = mappedInputs.find(dstOp->inputs[i].idx);
         assert(it != mappedInputs.end());
         std::pair<Op, int> srcEdge = it->second;
         newGraph->add_edge(srcEdge.first, dstOp->mapOp, srcEdge.second, i);
@@ -662,5 +672,7 @@ Graph *GraphXfer::create_new_graph(const Graph *graph) const {
   }
   return newGraph;
 }
+int GraphXfer::num_src_op() { return srcOps.size(); }
+int GraphXfer::num_dst_op() { return dstOps.size(); }
 
 }; // namespace quartz

@@ -40,6 +40,9 @@ namespace quartz {
 	}
 
 	bool DAG::fully_equivalent(const DAG &other) const {
+	    if (this == &other) {
+	      return true;
+	    }
 		// Do not check the hash value because of floating point errors
 		// and it is possible that one of the two DAGs may have not calculated
 		// the hash value.
@@ -89,6 +92,9 @@ namespace quartz {
 	}
 
 	bool DAG::less_than(const DAG &other) const {
+        if (this == &other) {
+          return false;
+        }
 		if (num_qubits != other.num_qubits) {
 			return num_qubits < other.num_qubits;
 		}
@@ -492,6 +498,33 @@ namespace quartz {
 		       DAGNode::input_param);
 		assert(nodes[get_num_qubits() + param_index]->index == param_index);
 		return !nodes[get_num_qubits() + param_index]->output_edges.empty();
+	}
+
+    std::pair<InputParamMaskType, std::vector<InputParamMaskType>>
+    DAG::get_input_param_mask() const {
+	  std::vector<InputParamMaskType> param_mask(get_num_total_parameters());
+	  for (int i = 0; i < get_num_input_parameters(); i++) {
+	    param_mask[i] = 1 << i;
+	  }
+	  for (int i = get_num_input_parameters(); i < get_num_total_parameters(); i++) {
+	    param_mask[i] = 0;
+	    assert(parameters[i]->input_edges.size() == 1);
+	    for (auto &input_node : parameters[i]->input_edges[0]->input_nodes) {
+          param_mask[i] |= param_mask[input_node->index];
+	    }
+	  }
+      InputParamMaskType usage_mask{0};
+	  for (auto &edge : edges) {
+	    // Only consider quantum gate usages of parameters
+	    if (edge->gate->is_parametrized_gate()) {
+	      for (auto &input_node : edge->input_nodes) {
+	        if (input_node->is_parameter()) {
+	          usage_mask |= param_mask[input_node->index];
+	        }
+	      }
+	    }
+	  }
+	  return std::make_pair(usage_mask, param_mask);
 	}
 
 	void DAG::generate_hash_values(
@@ -917,6 +950,12 @@ namespace quartz {
 		fin >> num_total_params;
 		fin.ignore(std::numeric_limits< std::streamsize >::max(), ',');
 		fin >> num_gates;
+
+		// TODO: Do not generate the distribution here -- we should generate
+		//  earlier to make the result more deterministic.
+        ctx->get_and_gen_hashing_dis(num_dag_qubits);
+        ctx->get_and_gen_input_dis(num_dag_qubits);
+        ctx->get_and_gen_parameters(num_input_params);
 
 		// ignore other hash values
 		fin.ignore(std::numeric_limits< std::streamsize >::max(), '[');

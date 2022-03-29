@@ -11,12 +11,11 @@
 using namespace quartz;
 
 int main() {
-	Context ctx({GateType::rz, GateType::u1, GateType::add});
-
 	const int num_qubits = 1;
 	const int num_input_parameters = 1;
 	const int max_num_gates = 2;
 	const int max_num_param_gates = 1;
+    Context ctx({GateType::rz, GateType::u1, GateType::add}, num_qubits, num_input_parameters);
 
 	Generator gen(&ctx);
 	Dataset dataset;
@@ -24,7 +23,7 @@ int main() {
 	auto start = std::chrono::steady_clock::now();
 	gen.generate(num_qubits, num_input_parameters, max_num_gates,
 	             max_num_param_gates, &dataset, /*verify_equivalences=*/
-	             true, &equiv_set,              /*verbose=*/
+	             true, &equiv_set, /*unique_parameters=*/false, /*verbose=*/
 	             true);
 	auto end = std::chrono::steady_clock::now();
 	std::cout

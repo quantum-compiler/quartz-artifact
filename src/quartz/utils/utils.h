@@ -4,13 +4,14 @@
 using ParamType = double;
 #ifdef USE_ARBLIB
 #include "arb_complex.h"
-using ComplexType = quartz::ArbComplex;
+using ComplexType = ArbComplex;
 #else
 using ComplexType = std::complex< double >;
 #endif
 using DAGHashType = unsigned long long;
 using PhaseShiftIdType = int;
 using EquivalenceHashType = std::pair< unsigned long long, int >;
+using InputParamMaskType = unsigned long long;
 
 using namespace std::complex_literals; // so that we can write stuff like 1.0i
 

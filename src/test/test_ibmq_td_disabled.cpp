@@ -5,24 +5,15 @@
 using namespace quartz;
 
 void parse_args(char **argv, int argc, bool &simulated_annealing,
-                bool &early_stop, bool &disable_search,
-                std::string &input_filename, std::string &output_filename,
-                std::string &eqset_filename) {
+                bool &early_stop, std::string &input_filename,
+                std::string &output_filename, std::string &eqset_filename) {
   assert(argv[1] != nullptr);
   input_filename = std::string(argv[1]);
   early_stop = true;
   for (int i = 2; i < argc; i++) {
     if (!std::strcmp(argv[i], "--output")) {
       output_filename = std::string(argv[++i]);
-      continue;
-    }
-    if (!std::strcmp(argv[i], "--eqset")) {
-      eqset_filename = std::string(argv[++i]);
-      continue;
-    }
-    if (!std::strcmp(argv[i], "--disable_search")) {
-      disable_search = true;
-      continue;
+      break;
     }
   }
 }
@@ -32,10 +23,8 @@ int main(int argc, char **argv) {
   std::string eqset_fn = "../IBM_3_3_complete_ECC_set.json";
   bool simulated_annealing = false;
   bool early_stop = false;
-  bool disable_search = false;
-  parse_args(argv, argc, simulated_annealing, early_stop, disable_search,
-             input_fn, output_fn, eqset_fn);
-  auto fn = input_fn.substr(input_fn.rfind('/') + 1);
+  parse_args(argv, argc, simulated_annealing, early_stop, input_fn, output_fn,
+             eqset_fn);
   // Construct contexts
   Context src_ctx({GateType::h, GateType::ccz, GateType::x, GateType::cx,
                    GateType::t, GateType::input_qubit, GateType::input_param});
@@ -62,23 +51,11 @@ int main(int argc, char **argv) {
                                            true);
 
   // Greedy toffoli flip
-  auto graph_before_search = graph_new_ctx->toffoli_flip_greedy(
-      GateType::u1, xfer_pair.first, xfer_pair.second);
-
-  auto end = std::chrono::steady_clock::now();
-  if (disable_search) {
-    std::cout << "Optimization results of Quartz for " << fn
-              << " on IBMQ gate set." << std::endl
-              << "Gate count after optimization: "
-              << graph_before_search->total_cost() << ", "
-              << (double)std::chrono::duration_cast<std::chrono::milliseconds>(
-                     end - start)
-                         .count() /
-                     1000.0
-              << " seconds." << std::endl;
-
-    return 0;
-  }
+  std::vector<int> trace;
+  graph_new_ctx->toffoli_flip_greedy_with_trace(GateType::u1, xfer_pair.first,
+                                                xfer_pair.second, trace);
+  auto graph_before_search = graph_new_ctx->toffoli_flip_by_instruction(
+      GateType::u1, xfer_pair.first, xfer_pair.second, trace);
 
   // Optimization
   auto graph_after_search = graph_before_search->optimize(
@@ -88,7 +65,8 @@ int main(int argc, char **argv) {
   //  Graph *graph_after_u3_pass = graph_after_search->optimize(
   //      0.999, 0, false, &dst_ctx, eqset_fn, simulated_annealing, early_stop,
   //      /*rotation_merging_in_searching*/ false, GateType::u1);
-  end = std::chrono::steady_clock::now();
+  auto end = std::chrono::steady_clock::now();
+  auto fn = input_fn.substr(input_fn.rfind('/') + 1);
   std::cout << "Optimization results of Quartz for " << fn
             << " on IBMQ gate set." << std::endl
             << "Gate count after optimization: "

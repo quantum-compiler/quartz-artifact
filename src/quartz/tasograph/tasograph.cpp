@@ -12,7 +12,7 @@ enum {
   GUID_INVALID = 0,
   GUID_INPUT = 10,
   GUID_WEIGHT = 11,
-  GUID_PRESERVED = 16000,
+  GUID_PRESERVED = 16383
 };
 
 bool equal_to_2k_pi(double d) {
@@ -27,8 +27,7 @@ Op::Op(void) : guid(GUID_INVALID), ptr(NULL) {}
 
 const Op Op::INVALID_OP = Op();
 
-Graph::Graph(Context *ctx)
-    : context(ctx), special_op_guid(0), totalCost(0.0f) {}
+Graph::Graph(Context *ctx) : context(ctx), special_op_guid(0) {}
 
 Graph::Graph(Context *ctx, const DAG *dag) : context(ctx), special_op_guid(0) {
   // Guid for input qubit and input parameter nodes
@@ -73,7 +72,7 @@ Graph::Graph(Context *ctx, const DAG *dag) : context(ctx), special_op_guid(0) {
   //   std::cout << edge_2_op.size() << std::endl;
 
   for (auto &node : dag->nodes) {
-    int srcIdx = -1; // Assumption: a node can have at most 1 input
+    size_t srcIdx = -1; // Assumption: a node can have at most 1 input
     Op srcOp;
     if (node->type == DAGNode::input_qubit) {
       srcOp = input_qubits_op[node->index];
@@ -100,7 +99,7 @@ Graph::Graph(Context *ctx, const DAG *dag) : context(ctx), special_op_guid(0) {
     assert(srcOp != Op::INVALID_OP);
 
     for (auto output_edge : node->output_edges) {
-      int dstIdx;
+      size_t dstIdx;
       bool found = false;
       for (dstIdx = 0; dstIdx < output_edge->input_nodes.size(); ++dstIdx) {
         if (node.get() == output_edge->input_nodes[dstIdx]) {
@@ -115,8 +114,6 @@ Graph::Graph(Context *ctx, const DAG *dag) : context(ctx), special_op_guid(0) {
       add_edge(srcOp, dstOp, srcIdx, dstIdx);
     }
   }
-
-  totalCost = total_cost();
 }
 
 Graph::Graph(const Graph &graph) {
@@ -124,6 +121,8 @@ Graph::Graph(const Graph &graph) {
   constant_param_values = graph.constant_param_values;
   special_op_guid = graph.special_op_guid;
   qubit_2_idx = graph.qubit_2_idx;
+  inEdges = graph.inEdges;
+  outEdges = graph.outEdges;
 }
 
 size_t Graph::get_next_special_op_guid() {
@@ -162,39 +161,50 @@ Edge::Edge(void)
 Edge::Edge(const Op &_srcOp, const Op &_dstOp, int _srcIdx, int _dstIdx)
     : srcOp(_srcOp), dstOp(_dstOp), srcIdx(_srcIdx), dstIdx(_dstIdx) {}
 
-// TODO: some problem with this implementation
-bool Graph::has_loop(void) {
-  std::map<Op, int, OpCompare> todos;
-  std::map<Op, std::set<Edge, EdgeCompare>, OpCompare>::const_iterator it;
-  std::vector<Op> opList;
-  for (it = inEdges.begin(); it != inEdges.end(); it++) {
-    int cnt = 0;
-    std::set<Edge, EdgeCompare> inList = it->second;
-    std::set<Edge, EdgeCompare>::const_iterator it2;
-    for (it2 = inList.begin(); it2 != inList.end(); it2++) {
-      if (it2->srcOp.guid > GUID_PRESERVED)
-        // Not input Ops
-        cnt++;
+bool Graph::has_loop(void) const {
+  int done_ops_cnt = 0;
+  std::unordered_map<Op, int, OpHash> op_in_degree;
+  std::queue<Op> op_q;
+  for (auto it = outEdges.cbegin(); it != outEdges.cend(); ++it) {
+    if (it->first.ptr->tp == GateType::input_qubit ||
+        it->first.ptr->tp == GateType::input_param) {
+      op_q.push(it->first);
     }
-    todos[it->first] = cnt;
-    if (todos[it->first] == 0)
-      opList.push_back(it->first);
   }
-  size_t i = 0;
-  while (i < opList.size()) {
-    Op op = opList[i++];
+
+  for (auto it = inEdges.cbegin(); it != inEdges.cend(); ++it) {
+    op_in_degree[it->first] = it->second.size();
+  }
+
+  while (!op_q.empty()) {
+    auto op = op_q.front();
+    op_q.pop();
     if (outEdges.find(op) != outEdges.end()) {
-      std::set<Edge, EdgeCompare> outList = outEdges[op];
-      std::set<Edge, EdgeCompare>::const_iterator it2;
-      for (it2 = outList.begin(); it2 != outList.end(); it2++) {
-        todos[it2->dstOp]--;
-        if (todos[it2->dstOp] == 0) {
-          opList.push_back(it2->dstOp);
+      auto op_out_edges = outEdges.find(op)->second;
+      for (auto e_it = op_out_edges.cbegin(); e_it != op_out_edges.cend();
+           ++e_it) {
+        assert(op_in_degree[e_it->dstOp] > 0);
+        op_in_degree[e_it->dstOp]--;
+        if (op_in_degree[e_it->dstOp] == 0) {
+          done_ops_cnt++;
+          op_q.push(e_it->dstOp);
         }
       }
     }
   }
-  return (opList.size() < inEdges.size());
+  // Return directly for better performance
+  return done_ops_cnt != gate_count();
+  // Debug information
+  //   if (done_ops_cnt == gate_count())
+  //     return false;
+
+  //   for (const auto &it : op_in_degree) {
+  //     if (it.second != 0) {
+  //       std::cout << gate_type_name(it.first.ptr->tp) << "(" << it.first.guid
+  //                 << ")" << it.second << std::endl;
+  //     }
+  //   }
+  //   return true;
 }
 
 bool Graph::check_correctness(void) {
@@ -269,9 +279,10 @@ size_t Graph::hash(void) {
   return total;
 }
 
-Graph *Graph::context_shift(Context *src_ctx, Context *dst_ctx,
-                            Context *union_ctx, RuleParser *rule_parser,
-                            bool ignore_toffoli) {
+std::shared_ptr<Graph> Graph::context_shift(Context *src_ctx, Context *dst_ctx,
+                                            Context *union_ctx,
+                                            RuleParser *rule_parser,
+                                            bool ignore_toffoli) {
   auto src_gates = src_ctx->get_supported_gates();
   auto dst_gate_set = std::set<GateType>(dst_ctx->get_supported_gates().begin(),
                                          dst_ctx->get_supported_gates().end());
@@ -289,12 +300,11 @@ Graph *Graph::context_shift(Context *src_ctx, Context *dst_ctx,
           GraphXfer::create_single_gate_GraphXfer(union_ctx, src_cmd, cmds);
     }
   }
-  Graph *src_graph = this;
-  Graph *dst_graph = nullptr;
+  std::shared_ptr<Graph> src_graph(new Graph(*this));
+  std::shared_ptr<Graph> dst_graph(nullptr);
   for (auto it = tp_2_xfer.begin(); it != tp_2_xfer.end(); ++it) {
-    while ((dst_graph = it->second->run_1_time(0, src_graph)) != nullptr) {
-      if (src_graph != this)
-        delete src_graph;
+    while ((dst_graph = it->second->run_1_time(0, src_graph.get())) !=
+           nullptr) {
       src_graph = dst_graph;
     }
   }
@@ -408,11 +418,10 @@ void Graph::remove_edge(Op srcOp, Op dstOp) {
 // Merge constant parameters
 // Eliminate rotation with parameter 0
 void Graph::constant_and_rotation_elimination() {
-  std::map<Op, std::set<Edge, EdgeCompare>, OpCompare>::const_iterator it;
   std::unordered_map<size_t, size_t> hash_values;
   std::queue<Op> op_queue;
   // Compute the hash value for input ops
-  for (it = outEdges.begin(); it != outEdges.end(); it++) {
+  for (auto it = outEdges.cbegin(); it != outEdges.cend(); it++) {
     if (it->first.ptr->tp == GateType::input_qubit ||
         it->first.ptr->tp == GateType::input_param) {
       op_queue.push(it->first);
@@ -421,7 +430,7 @@ void Graph::constant_and_rotation_elimination() {
 
   // Construct in-degree map
   std::map<Op, size_t> op_in_edges_cnt;
-  for (it = inEdges.begin(); it != inEdges.end(); ++it) {
+  for (auto it = inEdges.cbegin(); it != inEdges.cend(); ++it) {
     op_in_edges_cnt[it->first] = it->second.size();
   }
 
@@ -489,7 +498,6 @@ void Graph::constant_and_rotation_elimination() {
       auto input_edges = inEdges[op];
       bool all_parameter_is_0 = true;
       int num_qubits = op.ptr->get_num_qubits();
-      int num_params = op.ptr->get_num_parameters();
       for (auto in_edge : input_edges) {
         if (in_edge.dstIdx >= num_qubits &&
             in_edge.srcOp.ptr->is_parameter_gate()) {
@@ -871,7 +879,7 @@ void Graph::rotation_merging(GateType target_rotation) {
   }
 }
 
-size_t Graph::get_num_qubits() { return qubit_2_idx.size(); }
+size_t Graph::get_num_qubits() const { return qubit_2_idx.size(); }
 
 void Graph::print_qubit_ops() {
   std::unordered_map<Pos, int, PosHash> pos_to_qubits;
@@ -938,7 +946,7 @@ void Graph::print_qubit_ops() {
 }
 
 void Graph::to_qasm(const std::string &save_filename, bool print_result,
-                    bool print_guid) {
+                    bool print_guid) const {
   std::ofstream ofs(save_filename);
   std::ostringstream o;
   std::map<float, std::string> constant_2_pi;
@@ -961,7 +969,7 @@ void Graph::to_qasm(const std::string &save_filename, bool print_result,
   for (const auto &it : outEdges) {
     if (it.first.ptr->tp == GateType::input_qubit) {
       todos.push(it.first);
-      int qubit_idx = qubit_2_idx[it.first];
+      int qubit_idx = qubit_2_idx.find(it.first)->second;
       pos_to_qubits[Pos(it.first, 0)] = qubit_idx;
     } else if (it.first.ptr->tp == GateType::input_param) {
       todos.push(it.first);
@@ -985,7 +993,7 @@ void Graph::to_qasm(const std::string &save_filename, bool print_result,
       std::ostringstream iss;
       iss << gate_type_name(op.ptr->tp);
       int num_qubits = op.ptr->get_num_qubits();
-      auto in_edges = inEdges[op];
+      auto in_edges = inEdges.find(op)->second;
       // Maintain pos_to_qubits
       if (op.ptr->is_parametrized_gate()) {
         iss << '(';
@@ -1000,7 +1008,7 @@ void Graph::to_qasm(const std::string &save_filename, bool print_result,
                    constant_param_values.end()); // All parameters should be
                                                  // constant
             param_values[edge.dstIdx - num_qubits] =
-                constant_param_values[edge.srcOp];
+                constant_param_values.find(edge.srcOp)->second;
           }
         }
         bool first = true;
@@ -1049,7 +1057,7 @@ void Graph::to_qasm(const std::string &save_filename, bool print_result,
     }
 
     if (outEdges.find(op) != outEdges.end()) {
-      std::set<Edge, EdgeCompare> list = outEdges[op];
+      std::set<Edge, EdgeCompare> list = outEdges.find(op)->second;
       std::set<Edge, EdgeCompare>::const_iterator it2;
       for (it2 = list.begin(); it2 != list.end(); it2++) {
         auto e = *it2;
@@ -1072,11 +1080,11 @@ void Graph::draw_circuit(const std::string &src_file_name,
              .c_str());
 }
 
-Graph *Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
-                       const std::string &equiv_file_name,
-                       bool use_simulated_annealing, bool enable_early_stop,
-                       bool use_rotation_merging_in_searching,
-                       GateType target_rotation) {
+std::shared_ptr<Graph> Graph::optimize(
+    float alpha, int budget, bool print_subst, Context *ctx,
+    const std::string &equiv_file_name, bool use_simulated_annealing,
+    bool enable_early_stop, bool use_rotation_merging_in_searching,
+    GateType target_rotation, std::string circuit_name, int timeout) {
   EquivalenceSet eqs;
   // Load equivalent dags from file
   auto start = std::chrono::steady_clock::now();
@@ -1120,14 +1128,8 @@ Graph *Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
             GraphXfer::create_GraphXfer(ctx, other_dag, first_dag);
         if (first_2_other != nullptr)
           xfers.push_back(first_2_other);
-        // else
-        //   std::cout << "nullptr"
-        //             << " ";
         if (other_2_first != nullptr)
           xfers.push_back(other_2_first);
-        // else
-        //   std::cout << "nullptr"
-        //             << " ";
         delete other_dag;
       }
     }
@@ -1140,12 +1142,15 @@ Graph *Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
   int counter = 0;
   int maxNumOps = inEdges.size();
 
-  std::priority_queue<Graph *, std::vector<Graph *>, GraphCompare> candidates;
+  std::priority_queue<std::shared_ptr<Graph>,
+                      std::vector<std::shared_ptr<Graph>>, GraphCompare>
+      candidates;
   std::set<size_t> hashmap;
-  Graph *bestGraph = this;
+  std::shared_ptr<Graph> bestGraph(new Graph(*this));
   float bestCost = total_cost();
-  candidates.push(this);
+  candidates.push(std::shared_ptr<Graph>(new Graph(*this)));
   hashmap.insert(hash());
+  std::vector<GraphXfer *> good_xfers;
 
   //   printf("\n        ===== Start Cost-Based Backtracking Search =====\n");
   start = std::chrono::steady_clock::now();
@@ -1160,7 +1165,7 @@ Graph *Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
     constexpr bool always_delete_original_circuit = true;
     const double kDeleteOriginalCircuitRate = -1;
     // <cost, graph>
-    std::vector<std::pair<float, Graph *>> sa_candidates;
+    std::vector<std::pair<float, std::shared_ptr<Graph>>> sa_candidates;
     sa_candidates.reserve(kNumKeepGraph);
     sa_candidates.emplace_back(bestCost, this);
     int num_iteration = 0;
@@ -1169,17 +1174,17 @@ Graph *Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
     for (double T = kSABeginTemp; T > kSAEndTemp; T *= kSACoolingFactor) {
       num_iteration++;
       hashmap.clear();
-      std::vector<std::pair<float, Graph *>> new_candidates;
+      std::vector<std::pair<float, std::shared_ptr<Graph>>> new_candidates;
       new_candidates.reserve(sa_candidates.size() * xfers.size());
       int num_possible_new_candidates = 0;
       int num_candidates_kept = 0;
       for (auto &candidate : sa_candidates) {
         const auto current_cost = candidate.first;
-        std::vector<Graph *> current_new_candidates;
+        std::vector<std::shared_ptr<Graph>> current_new_candidates;
         current_new_candidates.reserve(xfers.size());
         bool stop_search = false;
         for (auto &xfer : xfers) {
-          xfer->run(0, candidate.second, current_new_candidates, hashmap,
+          xfer->run(0, candidate.second.get(), current_new_candidates, hashmap,
                     bestCost * alpha, 2 * maxNumOps, enable_early_stop,
                     stop_search);
         }
@@ -1203,7 +1208,7 @@ Graph *Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
             // Accept the new candidate.
             new_candidates.emplace_back(new_cost, new_candidate);
           } else {
-            delete new_candidate;
+            new_candidate.reset();
           }
         }
         if (!always_delete_original_circuit &&
@@ -1214,8 +1219,8 @@ Graph *Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
           hashmap.insert(candidate.second->hash());
           num_candidates_kept++;
         } else {
-          if (candidate.second != bestGraph && candidate.second != this) {
-            delete candidate.second;
+          if (candidate.second != bestGraph && candidate.second.get() != this) {
+            candidate.second.reset();
           }
         }
       }
@@ -1245,9 +1250,9 @@ Graph *Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
                           new_candidates.begin() + kNumKeepGraph,
                           new_candidates.end());
         for (int i = kNumKeepGraph; i < (int)new_candidates.size(); i++) {
-          if (new_candidates[i].second != this &&
+          if (new_candidates[i].second.get() != this &&
               new_candidates[i].second != bestGraph) {
-            delete new_candidates[i].second;
+            new_candidates[i].second.reset();
           }
         }
         new_candidates.resize(kNumKeepGraph);
@@ -1264,17 +1269,14 @@ Graph *Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
     }
   } else {
     while (!candidates.empty()) {
-      Graph *subGraph = candidates.top();
+      auto subGraph = candidates.top();
       if (use_rotation_merging_in_searching) {
         subGraph->rotation_merging(target_rotation);
       }
       candidates.pop();
       if (subGraph->total_cost() < bestCost) {
-        if (bestGraph != this)
-          delete bestGraph;
         bestCost = subGraph->total_cost();
         bestGraph = subGraph;
-        // bestGraph->to_qasm("current_best.qasm", false, false);
       }
       if (counter > budget) {
         // TODO: free all remaining candidates when budget exhausted
@@ -1282,32 +1284,41 @@ Graph *Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
         ;
       }
       counter++;
+      subGraph->constant_and_rotation_elimination();
       end = std::chrono::steady_clock::now();
-      //   std::cout
-      //       << (double)std::chrono::duration_cast<std::chrono::milliseconds>(
-      //              end - start)
-      //                  .count() /
-      //              1000.0
-      //       << " seconds." << std::endl;
-      //   fprintf(stderr, "bestCost(%.4lf) candidates(%zu) after %.4lf
-      //   seconds\n",
-      //           bestCost, candidates.size(),
-      //           (double)std::chrono::duration_cast<std::chrono::milliseconds>(
-      //               end - start)
-      //                   .count() /
-      //               1000.0);
+      if (circuit_name != "")
+        std::cout << circuit_name << ": ";
+      if ((int)std::chrono::duration_cast<std::chrono::milliseconds>(end -
+                                                                     start)
+                  .count() /
+              1000.0 >
+          timeout) {
+        std::cout << "Timeout. Program terminated. Best gate count is "
+                  << bestCost << std::endl;
+        exit(1);
+      }
+      fprintf(stdout, "bestCost(%.4lf) candidates(%zu) after %.4lf seconds\n",
+              bestCost, candidates.size(),
+              (double)std::chrono::duration_cast<std::chrono::milliseconds>(
+                  end - start)
+                      .count() /
+                  1000.0);
+      fflush(stdout);
 
-      std::vector<Graph *> new_candidates;
+      //   std::vector<Graph *> new_candidates;
       bool stop_search = false;
       for (auto &xfer : xfers) {
-        xfer->run(0, subGraph, new_candidates, hashmap, bestCost * alpha,
+        std::vector<std::shared_ptr<Graph>> new_candidates;
+        xfer->run(0, subGraph.get(), new_candidates, hashmap, bestCost * alpha,
                   2 * maxNumOps, enable_early_stop, stop_search);
-      }
-      for (auto &candidate : new_candidates) {
-        candidates.push(candidate);
-      }
-      if (bestGraph != subGraph) {
-        delete subGraph;
+        // auto front_gate_count = candidates.top()->gate_count();
+        for (auto &candidate : new_candidates) {
+          candidates.push(candidate);
+        }
+        // auto new_front_gate_count = candidates.top()->gate_count();
+        // if (new_front_gate_count < front_gate_count) {
+        //   good_xfers.push_back(xfer);
+        //   }
       }
     }
   }
@@ -1321,32 +1332,107 @@ Graph *Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
   //   }
   bestGraph->constant_and_rotation_elimination();
   return bestGraph;
+} // namespace quartz
+
+std::shared_ptr<Graph> Graph::ccz_flip_t(Context *ctx) {
+  // Transform ccz to t, an naive solution
+  // Simply 1 normal 1 inverse
+  auto xfers = GraphXfer::ccz_cx_t_xfer(ctx);
+  Graph *graph = this;
+  bool flip = false;
+  while (true) {
+    std::shared_ptr<Graph> new_graph(nullptr);
+    if (flip) {
+      new_graph = xfers.first->run_1_time(0, graph);
+      flip = false;
+    } else {
+      new_graph = xfers.second->run_1_time(0, graph);
+      flip = true;
+    }
+    if (new_graph.get() == nullptr) {
+      return std::shared_ptr<Graph>(graph);
+    }
+    if (graph != this)
+      delete graph;
+    graph = new_graph.get();
+  }
+  assert(false); // Should never reach here
 }
 
-Graph *Graph::toffoli_flip_greedy(GateType target_rotation, GraphXfer *xfer,
-                                  GraphXfer *inverse_xfer) {
-  Graph *graph = this;
+std::shared_ptr<Graph> Graph::toffoli_flip_greedy(GateType target_rotation,
+                                                  GraphXfer *xfer,
+                                                  GraphXfer *inverse_xfer) {
+  std::shared_ptr<Graph> temp_graph(new Graph(*this));
   while (true) {
-    Graph *new_graph_0 = xfer->run_1_time(0, graph);
-    Graph *new_graph_1 = inverse_xfer->run_1_time(0, graph);
-    if (new_graph_0 == nullptr) {
-      assert(new_graph_1 == nullptr);
-      return graph;
+    auto new_graph_0 = xfer->run_1_time(0, temp_graph.get());
+    auto new_graph_1 = inverse_xfer->run_1_time(0, temp_graph.get());
+    if (new_graph_0.get() == nullptr) {
+      assert(new_graph_1.get() == nullptr);
+      return temp_graph;
     }
     new_graph_0->rotation_merging(target_rotation);
     new_graph_1->rotation_merging(target_rotation);
-    if (graph != this)
-      delete graph;
-    if (new_graph_0->total_cost() <= new_graph_1->total_cost()) {
-      delete new_graph_1;
-      graph = new_graph_0;
+    if (new_graph_0->gate_count() <= new_graph_1->gate_count()) {
+      temp_graph = new_graph_0;
     } else {
-      delete new_graph_0;
-      graph = new_graph_1;
+      temp_graph = new_graph_1;
     }
   }
   assert(false); // Should never reach here
 }
+
+void Graph::toffoli_flip_greedy_with_trace(GateType target_rotation,
+                                           GraphXfer *xfer,
+                                           GraphXfer *inverse_xfer,
+                                           std::vector<int> &trace) {
+  std::shared_ptr<Graph> temp_graph(new Graph(*this));
+  while (true) {
+    auto new_graph_0 = xfer->run_1_time(0, temp_graph.get());
+    auto new_graph_1 = inverse_xfer->run_1_time(0, temp_graph.get());
+    if (new_graph_0.get() == nullptr) {
+      assert(new_graph_1.get() == nullptr);
+      return;
+    }
+    new_graph_0->rotation_merging(target_rotation);
+    new_graph_1->rotation_merging(target_rotation);
+    if (new_graph_0->gate_count() <= new_graph_1->gate_count()) {
+      temp_graph = new_graph_0;
+      trace.push_back(0);
+    } else {
+      temp_graph = new_graph_1;
+      trace.push_back(1);
+    }
+  }
+  assert(false); // Should never reach here
+}
+
+std::shared_ptr<Graph>
+Graph::toffoli_flip_by_instruction(GateType target_rotation, GraphXfer *xfer,
+                                   GraphXfer *inverse_xfer,
+                                   std::vector<int> instruction) {
+  std::shared_ptr<Graph> graph(new Graph(*this));
+  std::shared_ptr<Graph> new_graph(nullptr);
+  for (const auto direction : instruction) {
+    if (direction == 0) {
+      new_graph = xfer->run_1_time(0, graph.get());
+    } else {
+      new_graph = inverse_xfer->run_1_time(0, graph.get());
+    }
+    graph = new_graph;
+  }
+  return graph;
+}
+
+std::shared_ptr<Graph> Graph::ccz_flip_greedy_rz() {
+  auto xfer_pair = GraphXfer::ccz_cx_rz_xfer(context);
+  std::vector<int> trace;
+  toffoli_flip_greedy_with_trace(GateType::rz, xfer_pair.first,
+                                 xfer_pair.second, trace);
+  auto graph_ccz_flipped = toffoli_flip_by_instruction(
+      GateType::rz, xfer_pair.first, xfer_pair.second, trace);
+  return graph_ccz_flipped;
+}
+// std::shared_ptr<Graph> Graph::ccz_flip_greedy_u1() {}
 
 bool Graph::xfer_appliable(GraphXfer *xfer, Op op) const {
   for (auto it = xfer->srcOps.begin(); it != xfer->srcOps.end(); ++it) {
@@ -1363,8 +1449,9 @@ bool Graph::xfer_appliable(GraphXfer *xfer, Op op) const {
   return false;
 }
 
-Graph *Graph::_match_rest_ops(GraphXfer *xfer, int depth, int ignore_depth,
-                              int min_guid) const {
+std::shared_ptr<Graph> Graph::_match_rest_ops(GraphXfer *xfer, size_t depth,
+                                              size_t ignore_depth,
+                                              size_t min_guid) const {
   // The parameter min_guid is the guid of the first mapped Op
   if (depth == xfer->srcOps.size()) {
     // Create dst operators
@@ -1377,7 +1464,7 @@ Graph *Graph::_match_rest_ops(GraphXfer *xfer, int depth, int ignore_depth,
       }
     }
     if (!pass)
-      return nullptr;
+      return std::shared_ptr<Graph>(nullptr);
     // Check that output tensors with external edges are mapped
     for (auto mapped_ops_it = xfer->mappedOps.cbegin();
          mapped_ops_it != xfer->mappedOps.cend(); ++mapped_ops_it) {
@@ -1392,12 +1479,18 @@ Graph *Graph::_match_rest_ops(GraphXfer *xfer, int depth, int ignore_depth,
             srcTen.op = mapped_ops_it->second;
             srcTen.idx = edge_it->srcIdx;
             if (xfer->mappedOutputs.find(srcTen) == xfer->mappedOutputs.end()) {
-              return nullptr;
+              return std::shared_ptr<Graph>(nullptr);
             }
           }
       }
     }
-    return xfer->create_new_graph(this);
+
+    auto new_graph = xfer->create_new_graph(this);
+    if (new_graph->has_loop()) {
+      new_graph.reset();
+      return new_graph;
+    }
+    return new_graph;
   }
   if (depth == ignore_depth) {
     return _match_rest_ops(xfer, depth + 1, ignore_depth, min_guid);
@@ -1406,35 +1499,34 @@ Graph *Graph::_match_rest_ops(GraphXfer *xfer, int depth, int ignore_depth,
   for (auto it = inEdges.cbegin(); it != inEdges.cend(); ++it) {
     if (it->first.guid < min_guid)
       continue;
-    if (xfer->can_match(srcOp, it->first, this) &&
-        (xfer->mappedOps.find(it->first) == xfer->mappedOps.end())) {
+    if ((xfer->mappedOps.find(it->first) == xfer->mappedOps.end()) &&
+        xfer->can_match(srcOp, it->first, this)) {
       Op match_op = it->first;
       // Check mapOutput
       xfer->match(srcOp, match_op, this);
-      Graph *new_graph =
-          _match_rest_ops(xfer, depth + 1, ignore_depth, min_guid);
+      auto new_graph = _match_rest_ops(xfer, depth + 1, ignore_depth, min_guid);
       xfer->unmatch(srcOp, match_op, this);
       if (new_graph != nullptr)
         return new_graph;
     }
   }
-  return nullptr;
+  return std::shared_ptr<Graph>(nullptr);
 }
 
-Graph *Graph::apply_xfer(GraphXfer *xfer, Op op) {
+std::shared_ptr<Graph> Graph::apply_xfer(GraphXfer *xfer, Op op) {
   for (auto it = xfer->srcOps.begin(); it != xfer->srcOps.end(); ++it) {
     // Find a match for the given Op
     if (xfer->can_match(*it, op, this)) {
       xfer->match(*it, op, this);
-      Graph *new_graph =
+      auto new_graph =
           _match_rest_ops(xfer, 0, it - xfer->srcOps.begin(), op.guid);
       xfer->unmatch(*it, op, this);
-      if (new_graph != nullptr) {
+      if (new_graph.get() != nullptr) {
         return new_graph;
       }
     }
   }
-  return nullptr;
+  return std::shared_ptr<Graph>(nullptr);
 }
 
 void Graph::all_ops(std::vector<Op> &ops) {
@@ -1482,5 +1574,4 @@ void Graph::topology_order_ops(std::vector<Op> &ops) const {
     }
   }
 }
-
 }; // namespace quartz

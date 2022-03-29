@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 project(Quartz)
 
-set(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_BUILD_TYPE "Debug")
 
 if (EXISTS ${CMAKE_CURRENT_BINARY_DIR}/config.cmake)
@@ -17,6 +16,16 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 set(USE_ARBLIB FALSE)
 
+if(USE_ARBLIB)
+    macro (add_executable _name)
+        # invoke built-in add_executable
+        _add_executable(${ARGV})
+        if (TARGET ${_name})
+            target_link_libraries(${_name} flint flint-arb gmp)
+        endif()
+    endmacro()
+    add_compile_definitions(USE_ARBLIB)
+endif()
 
 include_directories(${CMAKE_INCLUDE_PATH})
 include_directories("src/quartz/")

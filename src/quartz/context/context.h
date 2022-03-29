@@ -8,6 +8,7 @@
 #include <vector>
 #include <memory>
 #include <algorithm>
+#include <random>
 #include <set>
 
 namespace quartz {
@@ -16,6 +17,7 @@ namespace quartz {
 	class Context {
 	public:
 		explicit Context(const std::vector< GateType > &supported_gates);
+        Context(const std::vector< GateType > &supported_gates, const int num_qubits, const int num_params);
 		Gate *get_gate(GateType tp);
 		[[nodiscard]] const std::vector< GateType > &
 		get_supported_gates() const;
@@ -24,9 +26,12 @@ namespace quartz {
 		[[nodiscard]] const std::vector< GateType > &
 		get_supported_quantum_gates() const;
 		// Two deterministic (random) distributions for each number of qubits.
-		const Vector &get_generated_input_dis(int num_qubits);
-		const Vector &get_generated_hashing_dis(int num_qubits);
-		std::vector< ParamType > get_generated_parameters(int num_params);
+        const Vector& get_and_gen_input_dis(int num_qubits);
+        const Vector& get_and_gen_hashing_dis(int num_qubits);
+        std::vector< ParamType > get_and_gen_parameters(int num_params);
+		const Vector &get_generated_input_dis(int num_qubits) const;
+		const Vector &get_generated_hashing_dis(int num_qubits) const;
+		std::vector< ParamType > get_generated_parameters(int num_params) const;
 		std::vector< ParamType > get_all_generated_parameters() const;
 		size_t next_global_unique_id();
 
@@ -60,6 +65,8 @@ namespace quartz {
 		// A vector to store the representative DAGs.
 		std::vector< std::unique_ptr< DAG > > representative_dags_;
 		std::unordered_map< DAGHashType, DAG * > representatives_;
+        // Standard mersenne_twister_engine seeded with 0
+        std::mt19937 gen{0};
 	};
 
 	Context union_contexts(Context *ctx_0, Context *ctx_1);
