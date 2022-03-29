@@ -6,7 +6,8 @@
 
 ### Hardware Requirements
 
-We recommend running the artifact on an m6i.32xlarge AWS instance. Although it can also run on laptops with >= 256 GB memory and >= 256 GB storage, it will take a significantly longer time to run.
+We recommend (and only tested) running the artifact on an m6i.32xlarge AWS instance with an Ubuntu 20.04 operating system.
+If other devices are used, we require >= 256 GB memory and >= 256 GB storage, and it may take a longer time to run.
 
 ### Installation
 
@@ -22,9 +23,9 @@ To facilitate the artifact evaluation of our submission, we provide an Amazon Ma
   
 - Install the Z3 Theorem Prover (https://github.com/Z3Prover/z3):
   ```shell
-  pip install z3-solver
+  pip install z3-solver==4.8.12
   ```
-  Our evaluation uses Z3 4.8.12.
+  **We require Z3 version 4.8.12.** Please do not use the latest version of Z3 Theorem Prover.
 
 - Run CMake:
   ```shell
@@ -61,7 +62,7 @@ If you installed from source, in order to run the experiments related to externa
   ```
   Our evaluation uses pyquil 3.0.1.
 
-## Table 2: Evaluating the Quartz Generator and Verifier
+## Table 2: Evaluating the Quartz Generator and the Pruning Techniques
 
 To reproduce the numbers in Table 2, run the following script:
 
