@@ -84,12 +84,29 @@ corresponding to the camera-ready version, but the column titles match the submi
 We will modify the script to make the column titles match the camera-ready version when linking the artifact to the
 camera-ready version of the paper.
 
-You can run the python script while the shell script is running to see some intermediate results (a part of the table).
+We expect the numbers to differ from the numbers in the submission due to floating-point errors and bug fixes after the
+paper submission.
 
-We expect the numbers to differ from the numbers in the submission due to floating-point errors and bug fixes after the paper submission.
+You can run the Python script while the shell script is running to see some intermediate results (a part of the table).
+You should be able to see the following intermediate results by running the Python script after running the shell script 1 minute:
+```
+- Nam Gate Set:
+  - Row "n = 3":
+    - Column "Original": 11404 (4179)
+    - Algorithm 1 with only singleton removal (not shown in the submission): 1180 (566)
+    - Column "Representative": 231 (99)
+    - Column "Common Subcircuit": 164 (66)
+    - Column "Overall Reduction": 98.56% (98.42%)
+    - |Rn| (not shown in the submission): 4179
+    - Verification time (s) (not shown in the submission): 2.575
+    - Column "Running Time (s)": 3.721
+  - Row "n = 4":
+    - ...
+```
+The 5 rows with "`- Column`" correspond to 5 cells of the row "n = 3" of "Nam Gate Set" in Table 2.
 
-This script runs for several hours. To only reproduce the running time for the generator and verifier with all pruning
-techniques in one hour, you can modify the fourth last argument for each invocation of `test_pruning` in `src/test/test_pruning.cpp`
+This script runs for about (TODO) hours. To only reproduce the running time for the generator and verifier with all pruning
+techniques faster, you can modify the fourth last argument for each invocation of `test_pruning` in `src/test/test_pruning.cpp`
 from `true` to `false`, and then run `bash run_table2.sh`.
 
 ## Characteristics and the Number of Transformations for the Three Gate Sets
@@ -103,7 +120,7 @@ bash gen_ecc_set.sh
 In the output, `*** ch(...) = ...` denotes the characteristics for each gate set.
 
 `*** Number of transformations of ... = ...` denotes the number of transformations for each gate set. We expect the
-numbers of transformations to differ from the numbers in the submission due to floating-point errors.
+numbers of transformations to differ from the numbers in the submission due to floating-point errors and bug fixes after the submission.
 
 The generated ECC Sets are stored in Json files with file name formatted like
 this: `{Gate set name}_{number of gates}_{number_of qubits}_complete_ECC_set.json`.
