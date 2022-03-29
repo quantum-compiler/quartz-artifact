@@ -105,7 +105,7 @@ You should be able to see the following intermediate results by running the Pyth
 ```
 The 5 rows with "`- Column`" correspond to 5 cells of the row "n = 3" of "Nam Gate Set" in Table 2.
 
-This script runs for about (TODO) hours. To only reproduce the running time for the generator and verifier with all pruning
+This script runs for about 10 hours. To only reproduce the running time for the generator and verifier with all pruning
 techniques faster, you can modify the fourth last argument for each invocation of `test_pruning` in `src/test/test_pruning.cpp`
 from `true` to `false`, and then run `bash run_table2.sh`.
 
