@@ -181,12 +181,21 @@ The results will be shown in the console. The figure below shows part of the res
 To reproduce the results of Quartz on Nam's gate set, run the following script:
 
 ``` shell
-./run_nam.sh
+./run_nam.sh > nam.log
+python extract_results.py nam.log
 ```
 
 This script runs for 24 hours plus a few minutes.
 
-The results will be shown in the console. The figure below shows part of the results as an example:
+You can run the Python script while the shell script is running to see some intermediate results.
+Following shows an example excerpt of the output of the Python script:
+```
+barenco_tof_3   38
+barenco_tof_4   68
+barenco_tof_5   98
+```
+
+The figure below shows part of the results in `nam.log` as an example:
 
 ![](figures/quartz_nam_example.png)
 
@@ -236,12 +245,21 @@ The results will be shown in the console. The figure below shows part of the res
 To reproduce the results of Quartz on IBMQ gate set, run the following script:
 
 ``` shell
-./run_ibmq.sh
+./run_ibmq.sh > ibm.log
+python extract_results.py ibm.log
 ```
 
 This script runs for about 12 hours.
 
-The results will be shown in the console. The figure below shows part of the results as an example:
+You can run the Python script while the shell script is running to see some intermediate results.
+Following shows an example excerpt of the output of the Python script:
+```
+barenco_tof_3   36
+barenco_tof_4   69
+barenco_tof_5   102
+```
+
+The figure below shows part of the results in `ibm.log` as an example:
 
 ![](figures/quartz_ibmq_example.png)
 
@@ -288,12 +306,21 @@ The results will be shown in the console. The figure below shows part of the res
 To reproduce the results of Quartz on Rigetti gate set, run the following script:
 
 ``` shell
-./run_rigetti.sh
+./run_rigetti.sh > rigetti.log
+python extract_results.py rigetti.log
 ```
 
 This script runs for 24 hours plus a few minutes.
 
-The results will be shown in the console. The figure below shows part of the results as an example:
+You can run the Python script while the shell script is running to see some intermediate results.
+Following shows an example excerpt of the output of the Python script:
+```
+barenco_tof_3   148
+barenco_tof_4   272
+barenco_tof_5   388
+```
+
+The figure below shows part of the results in `rigetti.log` as an example:
 
 ![](figures/quartz_rigetti_example.png)
 
