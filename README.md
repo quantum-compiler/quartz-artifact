@@ -31,7 +31,7 @@ We only tested the commands on Ubuntu 20.04, but they should also work on other 
   ```shell
   pip install z3-solver==4.8.12
   ```
-  **We require Z3 version 4.8.12.** Please do not use the latest version of Z3 Theorem Prover.
+  **We require Z3 version 4.8.12.** Please do not use the latest version of Z3 as we have observed potential bugs.
 
 - Run CMake:
   ```shell
