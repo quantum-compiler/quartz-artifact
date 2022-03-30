@@ -194,6 +194,8 @@ To reproduce the results of Qiskit on Nam's gate set, run the following script:
 python Qiskit_nam.py
 ```
 
+This script runs for about 0.7 seconds.
+
 The results will be shown in the console. The figure below shows part of the results as an example:
 
 ![](figures/Qiskit_nam_example.png)
@@ -213,6 +215,8 @@ To reproduce the results of VOQC on Nam's gate set, run the following script:
 ``` shell
 python VOQC_nam.py
 ```
+
+This script runs for about 0.5 seconds.
 
 The results will be shown in the console. The figure below shows part of the results as an example:
 
@@ -265,6 +269,8 @@ To reproduce the results of Qiskit on IBMQ gate set, run the following script:
 python Qiskit_ibmq.py
 ```
 
+This script runs for about 0.9 seconds.
+
 The results will be shown in the console. The figure below shows part of the results as an example:
 
 ![](figures/Qiskit_ibmq_example.png)
@@ -284,6 +290,8 @@ To reproduce the results of VOQC on IBMQ gate set, run the following script:
 ``` shell
 python VOQC_ibmq.py
 ```
+
+This script runs for about 0.5 seconds.
 
 The results will be shown in the console. The figure below shows part of the results as an example:
 
@@ -340,6 +348,8 @@ This spawn an RPCQ-mode Quilc server that Quilc's compiler can communication wit
 python pyQuil_rigetti.py
 ```
 
+This script runs for about 2 minutes.
+
 The results will be shown in the console. The figure below shows part of the results as an example:
 
 ![](figures/pyquil_rigetti_example.png)
@@ -353,6 +363,8 @@ To reproduce the results of t|ket⟩ on Rigetti gate set, run the following scri
 ``` shell
 python tket_rigetti.py
 ```
+
+This script runs for about 8 seconds.
 
 The results will be shown in the console. The figure below shows part of the results as an example:
 
