@@ -42,9 +42,11 @@ Note that it is not necessary to install Quartz beforehand to run the artifact.
 
 ##### On Windows
 
-Note that the results may differ slightly on Windows.
+Note that the experiment results may differ slightly on Windows.
 
 - Make sure you have CMake (https://cmake.org/) with version >= 3.16.
+
+- Make sure `python` points to `python3`.
 
 - Make sure you have Visual Studio 2019. We have only tested version 16.11.5 of Visual Studio Community 2019.
 
