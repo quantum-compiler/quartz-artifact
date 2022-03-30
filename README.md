@@ -6,8 +6,7 @@
 
 ### Hardware Requirements
 
-We recommend (and only tested) running the artifact on an m6i.32xlarge AWS instance with an Ubuntu 20.04 operating system.
-If other devices are used, we require >= 256 GB memory and >= 256 GB storage, and it may take a longer time to run.
+We recommend (and have only tested) an m6i.32xlarge AWS instance with Ubuntu 20.04 to run our artifact. If other instances are used, we require at least 256 GB DRAM and disk space, and it may take longer than the reported times to run.
 
 ### Installation
 
