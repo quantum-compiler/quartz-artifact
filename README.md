@@ -77,7 +77,7 @@ bash run_table2.sh > table2.log
 python show_table2_results.py
 ```
 
-We present Table 2 in a different way in the camera-ready version than in the submission version of the paper.
+We present Table 2 in a different way in the [camera-ready version](https://www.cs.cmu.edu/~zhihaoj2/papers/quartz_pldi22.pdf) than in the submission version of the paper.
 We removed the "ECC Simplification" column and added some other columns. This script outputs the numbers
 corresponding to the camera-ready version, but the column titles match the submission version for artifact evaluation.
 We will modify the script to make the column titles match the camera-ready version when linking the artifact to the
