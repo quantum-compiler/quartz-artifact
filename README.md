@@ -18,7 +18,7 @@ To facilitate the artifact evaluation of our submission, we provide an Amazon Ma
 
 #### 2. Install from source code
 
-We only tested the commands on Ubuntu 20.04, but they should also work on other operating systems.
+We have only tested all commands on Ubuntu 20.04, but they should also work on other operating systems such as Windows (see the "On Windows" paragraph below).
 
 - Make sure you have CMake (https://cmake.org/) with version >= 3.16.
 
@@ -39,6 +39,23 @@ We only tested the commands on Ubuntu 20.04, but they should also work on other 
   ```
 
 Note that it is not necessary to install Quartz beforehand to run the artifact.
+
+##### On Windows
+
+Note that the results may differ slightly on Windows.
+
+- Make sure you have CMake (https://cmake.org/) with version >= 3.16.
+
+- Make sure you have Visual Studio 2019. We have only tested version 16.11.5 of Visual Studio Community 2019.
+
+- Run the following commands:
+  ```batch
+  mkdir build
+  cd build
+  cmake ..
+  ```
+  
+- Open `build\Quartz.sln` in Visual Studio 2019, and click Build -> Build Solution.
 
 ### Install External Packages
 
@@ -103,10 +120,26 @@ You should be able to see the following intermediate results by running the Pyth
     - ...
 ```
 The 5 rows with "`- Column`" correspond to 5 cells of the row "n = 3" of "Nam Gate Set" in Table 2.
+- `Column "Original"` corresponds to the column `Original` in the submission, and column `Brute Force` in the camera-ready version.
+- `Algorithm 1 with only singleton removal` corresponds to the column `RepGen` in the camera-ready version.
+- `Column "Representative"` corresponds to the column `Representative` in the submission, and column `+ ECC Simplification` in the camera-ready version.
+- `Column "Common Subcircuit"` corresponds to the column `Common Subcircuit` in the submission, and column `+ Common Subcircuit Pruning` in the camera-ready version.
+- `Column "Overall Reduction"` corresponds to the column `Overall Reduction` in both versions.
+- `|Rn|` corresponds to the column `|Rn|` in Table 3 of the camera-ready version.
+- `Verification time (s)` corresponds to the column `Verification time (s)` in Table 3 of the camera-ready version.
+- `Column "Running Time (s)"` corresponds to the column `Running Time (s)` in the submission, and column `Total Time (s)` in Table 3 of the camera-ready version.
 
 This script runs for about 10 hours. To only reproduce the running time for the generator and verifier with all pruning
 techniques faster (in 1.5 hours), you can modify the fourth last argument for each invocation of `test_pruning` in `src/test/test_pruning.cpp`
 from `true` to `false` and comment out the invocations of `Nam_7_` and `IBM_5_`, and then run `bash run_table2.sh`.
+
+##### On Windows
+
+Run the following command:
+```batch
+build\Debug\test_pruning.exe > table2.log
+python show_table2_results.py
+```
 
 ## Characteristics and the Number of Transformations for the Three Gate Sets
 
@@ -140,6 +173,14 @@ numbers of transformations to differ from the numbers in the submission due to f
 
 The generated ECC sets are stored in Json files with file name formatted like
 this: `{Gate set name}_{number of gates}_{number_of qubits}_complete_ECC_set.json`.
+
+##### On Windows
+
+Run the following command:
+```batch
+build\Debug\gen_ecc_set.exe > eccset.log
+python show_eccset_results.py
+```
 
 ## Table 3: Comparing Quartz with existing quantum circuit optimizers on Nam's gate set {𝑅𝑧(𝜆),𝑋,𝐻,𝐶𝑁𝑂𝑇}
 
@@ -204,6 +245,13 @@ If you would like to run the experiments for different circuits separately, you 
 ./test_nam the/input/qasm/file/path --output the/output/qasm/file/(optional)
 ```
 
+##### On Windows
+
+To run the experiments for different circuits separately, for example, to run the experiment for `barenco_tof_3`:
+```batch
+cd build
+Debug\test_nam.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm
+```
 
 ## Table 4: Comparing Quartz with existing circuit optimizers on the IBM gate set
 
@@ -248,7 +296,7 @@ To reproduce the results of Quartz on IBMQ gate set, run the following script:
 python extract_results.py ibm.log
 ```
 
-This script runs for about 12 hours.
+This script runs for about 8 hours.
 
 You can run the Python script while the shell script is running to see some intermediate results.
 Following shows an example excerpt of the output of the Python script:
@@ -266,6 +314,14 @@ If you would like to run the experiments for different circuits separately, you 
 
 ``` shell
 ./test_ibmq the/input/qasm/file/path --output the/output/qasm/file/(optional)
+```
+
+##### On Windows
+
+To run the experiments for different circuits separately, for example, to run the experiment for `barenco_tof_3`:
+```batch
+cd build
+Debug\test_ibmq.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm
 ```
 
 ## Table 5: Comparing Quartz with Quilc and t|ket⟩ on the Rigetti gate set (𝑅𝑥 (𝑘𝜋/2)(𝑘 ∈Z),𝑅𝑧(𝜆),𝐶𝑍)
@@ -329,10 +385,17 @@ If you would like to run the experiments for different circuits separately, you 
 ./test_rigetti the/input/qasm/file/path --output the/output/qasm/file/(optional)
 ```
 
+##### On Windows
+
+To run the experiments for different circuits separately, for example, to run the experiment for `barenco_tof_3`:
+```batch
+cd build
+Debug\test_rigetti.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm
+```
 
 ## Scalability Analysis on the Nam gate set
 
-This is not included in the paper submission, but we would like to include it for completeness because it appears in the camera-ready version.
+This is not included in the paper submission, but we would like to include it for completeness because it appears in the camera-ready version (Figure 10).
 To reproduce the scalability analysis results, run the following script after generating the ECC sets:
 
 ``` shell
@@ -342,3 +405,11 @@ bash run_scalability.sh
 This script runs for about 27 hours.
 The results are stored in `scalability_{n}{q}.txt` where `n` ranges from 1 to 7, and `q` ranges from 1 to 4 (if `n` is 7 then the upper bound of `q` is 3).
 You can run `python extract_results.py scalability_{n}{q}.txt` to see the results.
+
+##### On Windows
+
+To run the experiments for different ECC sets and circuits separately, for example, to run the experiment for `barenco_tof_3` with a (3,2)-complete ECC set (`n=3, q=2`):
+```batch
+cd build
+Debug\test_nam.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm --eqset ../Nam_3_2_complete_ECC_set.json
+```
