@@ -329,3 +329,17 @@ If you would like to run the experiments for different circuits separately, you 
 ``` shell
 ./test_rigetti the/input/qasm/file/path --output the/output/qasm/file/(optional)
 ```
+
+
+## Scalability Analysis on the Nam gate set
+
+This is not included in the paper submission, but we would like to include it for completeness because it appears in the camera-ready version.
+To reproduce the scalability analysis results, run the following script after generating the ECC sets:
+
+``` shell
+bash run_scalability.sh
+```
+
+This script runs for about 27 hours.
+The results are stored in `scalability_{n}{q}.txt` where `n` ranges from 1 to 7, and `q` ranges from 1 to 4 (if `n` is 7 then the upper bound of `q` is 3).
+You can run `python extract_results.py scalability_{n}{q}.txt` to see the results.
