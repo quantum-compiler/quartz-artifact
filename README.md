@@ -33,6 +33,11 @@ We have only tested all commands on Ubuntu 20.04, but they should also work on o
   ```
   **We require Z3 version 4.8.12.** Please do not use the latest version of Z3 as we have observed potential bugs.
 
+- Install the Natsort Python package (https://pypi.org/project/natsort/)
+  ```shell
+  pip install natsort
+  ```
+
 - Run CMake:
   ```shell
   bash run_cmake.sh
@@ -186,6 +191,8 @@ python show_eccset_results.py
 
 ## Table 3: Comparing Quartz with existing quantum circuit optimizers on Nam's gate set {𝑅𝑧(𝜆),𝑋,𝐻,𝐶𝑁𝑂𝑇}
 
+This corresponds to Table 4 in the camera-ready version.
+
 ### The results of Qiskit
 
 To reproduce the results of Qiskit on Nam's gate set, run the following script:
@@ -221,6 +228,26 @@ This script runs for about 0.5 seconds.
 The results will be shown in the console. The figure below shows part of the results as an example:
 
 ![](figures/VOQC_nam_example.png)
+
+### The results of Quartz Preprocessing
+
+To reproduce the "Quartz Preprocess" column in the camera-ready version (not shown in the submission version),
+run the following script:
+
+```shell
+bash run_nam_disable_search.sh > nam_disable_search.log
+python extract_results.py nam_disable_search.log
+```
+
+This script runs for about 7 seconds.
+
+##### On Windows
+
+To run the experiments for different circuits separately, for example, to run the experiment for `barenco_tof_3`:
+```batch
+cd build
+Debug\test_nam.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm --disable_search
+```
 
 ### The results of Quartz
 
@@ -261,6 +288,8 @@ Debug\test_nam.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm
 
 ## Table 4: Comparing Quartz with existing circuit optimizers on the IBM gate set
 
+This corresponds to Table 5 in the camera-ready version.
+
 ### The results of Qiskit
 
 To reproduce the results of Qiskit on IBMQ gate set, run the following script:
@@ -296,6 +325,26 @@ This script runs for about 0.5 seconds.
 The results will be shown in the console. The figure below shows part of the results as an example:
 
 ![](figures/VOQC_ibmq_example.png)
+
+### The results of Quartz Preprocessing
+
+To reproduce the "Quartz Preprocess" column in the camera-ready version (not shown in the submission version),
+run the following script:
+
+```shell
+bash run_ibmq_disable_search.sh > ibm_disable_search.log
+python extract_results.py ibm_disable_search.log
+```
+
+This script runs for about 10 seconds.
+
+##### On Windows
+
+To run the experiments for different circuits separately, for example, to run the experiment for `barenco_tof_3`:
+```batch
+cd build
+Debug\test_ibmq.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm --disable_search
+```
 
 ### The results of Quartz
 
@@ -336,6 +385,8 @@ Debug\test_ibmq.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm
 
 ## Table 5: Comparing Quartz with Quilc and t|ket⟩ on the Rigetti gate set (𝑅𝑥 (𝑘𝜋/2)(𝑘 ∈Z),𝑅𝑧(𝜆),𝐶𝑍)
 
+This corresponds to Table 6 in the camera-ready version.
+
 ### The results of Quilc
 
 We use a docker image of Quilc (available at https://hub.docker.com/r/rigetti/quilc) for optimizing our quantum circuit benchmarks on the Quilc compiler. First, to get the latest stable version of Quilc, run `docker pull rigetti/quilc`. Second, start a Quilc server on a seperate process by running 
@@ -369,6 +420,26 @@ This script runs for about 8 seconds.
 The results will be shown in the console. The figure below shows part of the results as an example:
 
 ![](figures/tket_rigetti_example.png)
+
+### The results of Quartz Preprocessing
+
+To reproduce the "Quartz Preprocess" column in the camera-ready version (not shown in the submission version),
+run the following script:
+
+```shell
+bash run_rigetti_disable_search.sh > rigetti_disable_search.log
+python extract_results.py rigetti_disable_search.log
+```
+
+This script runs for about 1 minute.
+
+##### On Windows
+
+To run the experiments for different circuits separately, for example, to run the experiment for `barenco_tof_3`:
+```batch
+cd build
+Debug\test_rigetti.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm --disable_search
+```
 
 ### The results of Quartz
 
