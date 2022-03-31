@@ -96,7 +96,7 @@ bash run_table2.sh > table2.log
 python show_table2_results.py
 ```
 
-We present Table 2 in a different way in the [camera-ready version](https://www.cs.cmu.edu/~zhihaoj2/papers/quartz_pldi22.pdf) than in the submission version of the paper.
+We present Table 2 in a different way in the camera-ready version than in the submission version of the paper.
 We removed the "ECC Simplification" column and added some other columns. This script outputs the numbers
 corresponding to the camera-ready version, but the column titles match the submission version for artifact evaluation.
 We will modify the script to make the column titles match the camera-ready version when linking the artifact to the
@@ -425,5 +425,5 @@ You can run `python extract_results.py scalability_{n}{q}.txt` to see the result
 To run the experiments for different ECC sets and circuits separately, for example, to run the experiment for `barenco_tof_3` with a (3,2)-complete ECC set (`n=3, q=2`):
 ```batch
 cd build
-Debug\test_nam.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm --eqset ../Nam_3_2_complete_ECC_set.json
+Debug\test_nam.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm --eqset ..\Nam_3_2_complete_ECC_set.json
 ```
