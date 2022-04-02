@@ -157,7 +157,7 @@ bash gen_ecc_set.sh > eccset.log
 python show_eccset_results.py
 ```
 
-This script runs for about 10 hours. After about 1.5 hours, the script is generating the ECC sets for scalability analysis
+This script runs for about 30 hours. After about 1.5 hours, the script is generating the ECC sets for scalability analysis
 (see the last section of this README file).
 If you do not want to run the scalability analysis, you can terminate the script after about 1.5 hours.
 
