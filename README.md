@@ -280,9 +280,9 @@ If you would like to run the experiments for different circuits separately, you 
 
 ##### On Windows
 
-To run the experiments for different circuits separately, for example, to run the experiment for `barenco_tof_3`:
+To run the experiments for different circuits separately, for example, to run the experiment for `barenco_tof_3`
+(assuming you are currently in the `build\` directory):
 ```batch
-cd build
 Debug\test_nam.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm
 ```
 
@@ -340,9 +340,9 @@ This script runs for about 10 seconds.
 
 ##### On Windows
 
-To run the experiments for different circuits separately, for example, to run the experiment for `barenco_tof_3`:
+To run the experiments for different circuits separately, for example, to run the experiment for `barenco_tof_3`
+(assuming you are currently in the `build\` directory):
 ```batch
-cd build
 Debug\test_ibmq.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm --disable_search
 ```
 
@@ -377,9 +377,9 @@ If you would like to run the experiments for different circuits separately, you 
 
 ##### On Windows
 
-To run the experiments for different circuits separately, for example, to run the experiment for `barenco_tof_3`:
+To run the experiments for different circuits separately, for example, to run the experiment for `barenco_tof_3`
+(assuming you are currently in the `build\` directory):
 ```batch
-cd build
 Debug\test_ibmq.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm
 ```
 
@@ -435,9 +435,9 @@ This script runs for about 1 minute.
 
 ##### On Windows
 
-To run the experiments for different circuits separately, for example, to run the experiment for `barenco_tof_3`:
+To run the experiments for different circuits separately, for example, to run the experiment for `barenco_tof_3`
+(assuming you are currently in the `build\` directory):
 ```batch
-cd build
 Debug\test_rigetti.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm --disable_search
 ```
 
@@ -472,9 +472,9 @@ If you would like to run the experiments for different circuits separately, you 
 
 ##### On Windows
 
-To run the experiments for different circuits separately, for example, to run the experiment for `barenco_tof_3`:
+To run the experiments for different circuits separately, for example, to run the experiment for `barenco_tof_3`
+(assuming you are currently in the `build\` directory):
 ```batch
-cd build
 Debug\test_rigetti.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm
 ```
 
@@ -493,9 +493,9 @@ You can run `python extract_results.py scalability_{n}{q}.txt` to see the result
 
 ##### On Windows
 
-To run the experiments for different ECC sets and circuits separately, for example, to run the experiment for `barenco_tof_3` with a (3,2)-complete ECC set (`n=3, q=2`):
+To run the experiments for different ECC sets and circuits separately, for example, to run the experiment for `barenco_tof_3` with a (3,2)-complete ECC set (`n=3, q=2`)
+(assuming you are currently in the `build\` directory):
 ```batch
-cd build
 Debug\test_nam.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm --eqset ..\Nam_3_2_complete_ECC_set.json
 ```
 
