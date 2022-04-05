@@ -529,3 +529,46 @@ To run the experiments for different ECC sets and circuits separately, for examp
 cd build
 Debug\test_nam.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm --eqset ..\Nam_3_2_complete_ECC_set.json
 ```
+
+## Test other ECC sets
+
+You can also test other ECC sets not shown above in this artifact.
+
+For example, if you want to generate a (3,3)-complete ECC set with 4 input parameters
+for the IBM gate set but without the U3 gate (to make the ECC set much smaller),
+you can change the main function in `src/test/gen_ecc_set.cpp` to the following:
+
+```c++
+gen_ecc_set({GateType::u1, GateType::u2, GateType::cx, GateType::add},
+            "IBM_without_U3_3_3_", true, 3, 4, 3);
+return 0;
+```
+
+And then run the following commands:
+
+```shell
+./gen_ecc_set.sh
+./run_ibmq.sh ../IBM_without_U3_3_3_complete_ECC_set.json > ibm_without_u3.txt
+python extract_results.py ibm_without_u3.txt
+```
+
+The results should be slightly worse than the results in the paper, but it will run
+much faster (in about 1 hour).
+
+To generate a (4,3)-complete ECC set with 2 input parameters for the Rigetti gate set
+but without the constraint that each input parameter can only be used once,
+you can change the main function in `src/test/gen_ecc_set.cpp` to the following:
+
+```c++
+gen_ecc_set({GateType::rx, GateType::rz, GateType::cz, GateType::add},
+            "Rigetti_modified_4_3_", false, 3, 2, 4);
+return 0;
+```
+
+And then run the following commands:
+
+```shell
+./gen_ecc_set.sh
+./run_rigetti.sh ../Rigetti_modified_4_3_complete_ECC_set.json > rigetti_modified.txt
+python extract_results.py rigetti_modified.txt
+```
