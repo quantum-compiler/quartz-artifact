@@ -495,8 +495,8 @@ To reproduce the scalability analysis results, run the following script after ge
 bash run_scalability.sh
 ```
 
-This script runs for about 27 hours.
-The results are stored in `scalability_{n}{q}.txt` where `n` ranges from 1 to 7, and `q` ranges from 1 to 4 (if `n` is 7 then the upper bound of `q` is 3).
+This script runs for about 27 hours. For `n=8`, some threads will run for about 2 days, but the result will not change after 27 hours.
+The results are stored in `scalability_{n}{q}.txt` where `n` ranges from 1 to 8, and `q` ranges from 1 to 4 (if `n` is 7 or 8, then the upper bound of `q` is 3).
 You can run `python extract_results.py scalability_{n}{q}.txt` to see the results.
 
 ##### On Windows
