@@ -10,7 +10,6 @@ void parse_args(char **argv, int argc, bool &simulated_annealing,
                 std::string &eqset_filename) {
   assert(argv[1] != nullptr);
   input_filename = std::string(argv[1]);
-  early_stop = true;
   for (int i = 2; i < argc; i++) {
     if (!std::strcmp(argv[i], "--output")) {
       output_filename = std::string(argv[++i]);
@@ -76,7 +75,7 @@ int main(int argc, char **argv) {
 
   // Optimization
   auto graph_after_search = graph_before_search->optimize(
-      0.999, 0, false, &dst_ctx, eqset_fn, simulated_annealing, early_stop,
+      1.0001, 0, false, &dst_ctx, eqset_fn, simulated_annealing, early_stop,
       /*rotation_merging_in_searching*/ false, GateType::rz, fn);
   end = std::chrono::steady_clock::now();
   std::cout << "Optimization results of Quartz for " << fn

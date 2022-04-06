@@ -1278,6 +1278,9 @@ std::shared_ptr<Graph> Graph::optimize(
         bestCost = subGraph->total_cost();
         bestGraph = subGraph;
       }
+      if (alpha >= 1 && subGraph->total_cost() > bestCost * alpha) {
+        break;
+      }
       if (counter > budget) {
         // TODO: free all remaining candidates when budget exhausted
         //   break;
