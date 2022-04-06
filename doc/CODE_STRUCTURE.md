@@ -39,6 +39,7 @@ In `src/dataset/equivalence_set.h`
 
 In `src/generator/generator.h`
 * `class Generator`: the circuit generator
+* `Generator::generate`: generate circuits for an unverified ECC set (then use `src/python/verify_equivalences.py` to get the ECC set)
 
 In `src/math/matrix.h`
 * `class Matrix`: a complex square matrix
@@ -56,3 +57,12 @@ In `src/tasograph/tasograph.h`
 
 In `src/tasograph/substitution.h`
 * `class GraphXfer`: a circuit transformation
+
+In `src/test/gen_ecc_set.cpp`
+* `gen_ecc_set`: a function to generate ECC sets with given gate set and hyperparameters
+
+In `src/test/`
+* `test_nam.cpp`: a file to run benchmarks on the Nam gate set
+* `test_ibmq.cpp`: a file to run benchmarks on the IBM gate set
+* `test_rigetti.cpp`: a file to run benchmarks on the Rigetti gate set
+* `test_pruning.cpp`: a file to run experiments for Table 2 and Table 3
