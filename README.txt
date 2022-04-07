@@ -382,7 +382,7 @@ To reproduce the results of Quartz on IBMQ gate set, run the following script:
 python extract_results.py ibm.log
 ```
 
-This script runs for about 8 hours.
+This script runs for 24 hours plus a few minutes.
 
 You can run the Python script while the shell script is running to see some intermediate results.
 Following shows an example excerpt of the output of the Python script:
@@ -526,7 +526,7 @@ To reproduce the scalability analysis results, run the following script after ge
 bash run_scalability.sh
 ```
 
-This script runs for about 27 hours. For `n=8`, some threads will run for about 2 days, but the result will not change after 27 hours.
+This script runs for about 100 hours (or 27 hours on machines with 512 threads). For `n=8`, some threads will run for about 2 days, but the result will not change after 27 hours.
 The results are stored in `scalability_{n}{q}.txt` where `n` ranges from 1 to 8, and `q` ranges from 1 to 4 (if `n` is 7 or 8, then the upper bound of `q` is 3).
 You can run `python extract_results.py scalability_{n}{q}.txt` to see the results.
 
