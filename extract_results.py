@@ -44,7 +44,7 @@ def extract_results(filename):
             tot_time += 86400  # 1-day timeout
         if len(data) >= 2 and data[1].startswith('bestCost('):
             key = data[0].split('.')[0]
-            val = data[1].split('.')[0][9:] + ' (not finished)'
+            val = data[1].split('.')[0][9:] + ' (at ' + data[-2] + ' seconds)'
             result[key] = val
     for k, v in natsorted(result.items()):
         print(k.ljust(15), v)
