@@ -90,12 +90,42 @@ int main(int argc, char **argv) {
   auto union_ctx_0 = union_contexts(&cz_ctx, &dst_ctx);
   auto graph_before_h_cz_merge = new_graph->context_shift(
       &dst_ctx, &cz_ctx, &union_ctx_0, &cx_2_cz, false);
+  int num_h = 0, num_cz = 0;
+  for (const auto &it : graph_before_h_cz_merge->inEdges) {
+    if (it.first.ptr->is_quantum_gate()) {
+      if (it.first.ptr->tp == GateType::h) {
+        num_h++;
+      } else if (it.first.ptr->tp == GateType::cz) {
+        num_cz++;
+      }
+    }
+  }
+  start = std::chrono::steady_clock::now();
   auto graph_after_h_cz_merge = graph_before_h_cz_merge->optimize(
       1.0001, 0, false, &union_ctx_0, "../H_CZ_2_2_complete_ECC_set_modified.json",
       simulated_annealing, /*enable_early_stop=*/true, /*rotation_merging_in_searching*/ true,
       GateType::rz, fn);
+  end = std::chrono::steady_clock::now();
   //   graph_after_h_cz_merge->to_qasm(
   //       "circuit/voqc-benchmarks/after_h_cz_merge.qasm", false, false);
+  int num_h_new = 0, num_cz_new = 0;
+  for (const auto &it : graph_after_h_cz_merge->inEdges) {
+    if (it.first.ptr->is_quantum_gate()) {
+      if (it.first.ptr->tp == GateType::h) {
+        num_h_new++;
+      } else if (it.first.ptr->tp == GateType::cz) {
+        num_cz_new++;
+      }
+    }
+  }
+  std::cout << "H/CZ cancellation for " << fn
+            << " on Rigetti gate set: " << num_h - num_h_new << " H gate(s) and "
+            << num_cz - num_cz_new << " CZ gate(s) cancelled in "
+            << (double)std::chrono::duration_cast<std::chrono::milliseconds>(
+                end - start)
+                .count() /
+                1000.0
+            << " seconds." << std::endl;
 
   // Shift the context to Rigetti Agave
   RuleParser rules({"h q0 = rx q0 pi; rz q0 0.5pi; rx q0 0.5pi; rz q0 -0.5pi;",
