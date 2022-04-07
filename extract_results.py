@@ -76,6 +76,9 @@ def extract_results_from_files(prefix):
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        print('Usage: python extract_results.py [ECC set name, i.e., Nam_6_3/IBM_4_3/Rigetti_6_3]')
+        print('Usage: python extract_results.py [ECC set name, i.e., Nam_6_3/IBM_4_3/Rigetti_6_3; or result file name (need to be a .txt file), e.g., scalability_32.txt]')
         exit()
-    extract_results_from_files(sys.argv[1])
+    if sys.argv[1].endswith('.txt'):
+        extract_results_from_file(sys.argv[1])
+    else:
+        extract_results_from_files(sys.argv[1])
