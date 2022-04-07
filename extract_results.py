@@ -50,7 +50,8 @@ def extract_results(filename):
         print(k.ljust(15), v)
     print('num_circuits (finished) =', num_finished)
     print('tot_gate =', tot_gate)
-    print('geomean_gatecount =', gate_product ** (1 / num_finished))
+    if num_finished > 0:
+        print('geomean_gatecount =', gate_product ** (1 / num_finished))
     print('tot_time =', tot_time)
     for k, v in natsorted(result.items()):  # easy paste to google doc
         if v.isnumeric():
