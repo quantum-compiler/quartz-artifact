@@ -52,8 +52,11 @@ def extract_results(filename):
     print('tot_gate =', tot_gate)
     print('geomean_gatecount =', gate_product ** (1 / num_finished))
     print('tot_time =', tot_time)
-    for k, v in natsorted(result.items()):
-        print(v)  # easy paste to google doc
+    for k, v in natsorted(result.items()):  # easy paste to google doc
+        if v.isnumeric():
+            print(v)
+        else:
+            print(v.split(' ')[0])
 
 
 if __name__ == '__main__':
