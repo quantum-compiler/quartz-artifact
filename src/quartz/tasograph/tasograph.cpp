@@ -1300,11 +1300,11 @@ std::shared_ptr<Graph> Graph::optimize(
                   << bestCost << std::endl;
         exit(1);
       }
-      fprintf(stdout, "bestCost(%.4lf) candidates(%zu) after %.4lf seconds\n",
-              bestCost, candidates.size(),
+      fprintf(stdout, "bestCost(%.2f) currentCost(%.2f) candidates(%zu) after %.4lf seconds\n",
+              bestCost, subGraph->total_cost(), candidates.size(),
               (double)std::chrono::duration_cast<std::chrono::milliseconds>(
                   end - start)
-                      .count() /
+                  .count() /
                   1000.0);
       fflush(stdout);
 
