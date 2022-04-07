@@ -1103,6 +1103,15 @@ std::shared_ptr<Graph> Graph::optimize(
   //                    1000.0
   //             << " seconds." << std::endl;
 
+  auto log_file_name = equiv_file_name.substr(0, std::max(0, (int)equiv_file_name.size() - 21))
+      + circuit_name.substr(0, std::max(0, (int)circuit_name.size() - 5))
+      + ".log";
+  auto err_file_name = equiv_file_name.substr(0, std::max(0, (int)equiv_file_name.size() - 21))
+      + circuit_name.substr(0, std::max(0, (int)circuit_name.size() - 5))
+      + ".err";
+  FILE *fout = fopen(log_file_name.c_str(), "w");
+  freopen(err_file_name.c_str(), "w", stderr);
+
   std::vector<GraphXfer *> xfers;
   for (const auto &equiv_set : eqs.get_all_equivalence_sets()) {
     bool first = true;
@@ -1141,6 +1150,9 @@ std::shared_ptr<Graph> Graph::optimize(
 
   int counter = 0;
   int maxNumOps = inEdges.size();
+
+  constexpr int kMaxNumCandidates = 2000;
+  constexpr int kShrinkToNumCandidates = 1000;
 
   std::priority_queue<std::shared_ptr<Graph>,
                       std::vector<std::shared_ptr<Graph>>, GraphCompare>
@@ -1278,7 +1290,7 @@ std::shared_ptr<Graph> Graph::optimize(
         bestCost = subGraph->total_cost();
         bestGraph = subGraph;
       }
-      if (alpha >= 1 && subGraph->total_cost() > bestCost * alpha) {
+      if (alpha >= 1 && subGraph->total_cost() > bestCost * alpha + 7) {
         break;
       }
       if (counter > budget) {
@@ -1289,24 +1301,26 @@ std::shared_ptr<Graph> Graph::optimize(
       counter++;
       subGraph->constant_and_rotation_elimination();
       end = std::chrono::steady_clock::now();
-      if (circuit_name != "")
-        std::cout << circuit_name << ": ";
-      if ((int)std::chrono::duration_cast<std::chrono::milliseconds>(end -
-                                                                     start)
-                  .count() /
-              1000.0 >
-          timeout) {
-        std::cout << "Timeout. Program terminated. Best gate count is "
-                  << bestCost << std::endl;
+      if (std::chrono::duration_cast<std::chrono::seconds>(end -
+          start).count() > timeout) {
+        fprintf(fout,
+                "%s: Timeout. Program terminated. Best gate count is %.2f\n",
+                circuit_name.c_str(),
+                bestCost);
+        fclose(fout);
         exit(1);
       }
-      fprintf(stdout, "bestCost(%.2f) currentCost(%.2f) candidates(%zu) after %.4lf seconds\n",
-              bestCost, subGraph->total_cost(), candidates.size(),
-              (double)std::chrono::duration_cast<std::chrono::milliseconds>(
+      fprintf(fout,
+              "%s: bestCost(%.2f) currentCost(%.2f) candidates(%zu) after %.4lf seconds\n",
+              circuit_name.c_str(),
+              bestCost,
+              subGraph->total_cost(),
+              candidates.size(),
+              (double) std::chrono::duration_cast<std::chrono::milliseconds>(
                   end - start)
                   .count() /
                   1000.0);
-      fflush(stdout);
+      fflush(fout);
 
       //   std::vector<Graph *> new_candidates;
       bool stop_search = false;
@@ -1323,8 +1337,37 @@ std::shared_ptr<Graph> Graph::optimize(
         //   good_xfers.push_back(xfer);
         //   }
       }
+      if (candidates.size() > kMaxNumCandidates) {
+        fprintf(fout,
+                "%s: shrink the priority queue with %d candidates.\n",  circuit_name.c_str(), (int)candidates.size());
+        auto shrink_start = std::chrono::steady_clock::now();
+        std::priority_queue<std::shared_ptr<Graph>,
+                            std::vector<std::shared_ptr<Graph>>, GraphCompare>
+            new_candidates;
+        std::map<float, int> cost_count;
+        while (!candidates.empty()) {
+          auto candidate = candidates.top();
+          cost_count[candidate->total_cost()]++;
+          if (new_candidates.size() < kShrinkToNumCandidates) {
+            new_candidates.push(candidate);
+          }
+          candidates.pop();
+        }
+        std::swap(candidates, new_candidates);
+        auto shrink_end = std::chrono::steady_clock::now();
+        fprintf(fout,
+                "%s: shrank the priority queue to %d candidates in %.3f seconds.\n", circuit_name.c_str(), (int)candidates.size(), (double) std::chrono::duration_cast<std::chrono::milliseconds>(
+                shrink_end - shrink_start)
+                .count() /
+                1000.0);
+        for (auto &it : cost_count) {
+          fprintf(fout, "%d circuits have cost %.2f\n", it.second, it.first);
+        }
+        fflush(fout);
+      }
     }
   }
+  fclose(fout);
   //   printf("        ===== Finish Cost-Based Backtracking Search =====\n\n");
   // Print results
   //   std::map<Op, std::set<Edge, EdgeCompare>, OpCompare>::iterator it;
