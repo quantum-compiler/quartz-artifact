@@ -268,7 +268,7 @@ python extract_results.py nam.log
 
 This script runs for 24 hours plus a few minutes.
 
-You can run the Python script while the shell script is running to see some intermediate results.
+You can run the Python script `python extract_results.py Nam_6_3` while the shell script is running to see some intermediate results.
 Following shows an example excerpt of the output of the Python script:
 ```
 barenco_tof_3   38
@@ -365,7 +365,7 @@ python extract_results.py ibm.log
 
 This script runs for 24 hours plus a few minutes.
 
-You can run the Python script while the shell script is running to see some intermediate results.
+You can run the Python script `python extract_results.py IBM_4_3` while the shell script is running to see some intermediate results.
 Following shows an example excerpt of the output of the Python script:
 ```
 barenco_tof_3   36
@@ -460,7 +460,7 @@ python extract_results.py rigetti.log
 
 This script runs for 24 hours plus a few minutes.
 
-You can run the Python script while the shell script is running to see some intermediate results.
+You can run the Python script `python extract_results.py Rigetti_6_3` while the shell script is running to see some intermediate results.
 Following shows an example excerpt of the output of the Python script:
 ```
 barenco_tof_3   148
@@ -497,7 +497,8 @@ bash run_scalability.sh
 
 This script runs for about 100 hours (or 27 hours on machines with 512 threads). For `n=8`, some threads will run for about 2 days, but the result will not change after 27 hours.
 The results are stored in `scalability_{n}{q}.txt` where `n` ranges from 1 to 8, and `q` ranges from 1 to 4 (if `n` is 7 or 8, then the upper bound of `q` is 3).
-You can run `python extract_results.py scalability_{n}{q}.txt` to see the results.
+You can run `python extract_results.py scalability_{n}{q}.txt` to see the final results,
+or run `python extract_results.py Nam_{n}_{q}` to see the intermediate results.
 
 ##### On Windows
 
