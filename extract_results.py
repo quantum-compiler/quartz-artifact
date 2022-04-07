@@ -1,10 +1,9 @@
 import sys
+import os
 from natsort import natsorted
 
 
-def extract_results(filename):
-    with open(filename) as f:
-        content = f.readlines()
+def extract_results(content):
     flag = False
     tot_time = 0
     tot_gate = 0
@@ -60,8 +59,23 @@ def extract_results(filename):
             print(v.split(' ')[0])
 
 
+def extract_results_from_file(filename):
+    with open(filename) as f:
+        content = f.readlines()
+    extract_results(content)
+
+
+def extract_results_from_files(prefix):
+    files = [f for f in os.listdir('.') if f.startswith(prefix) and f.endswith('log')]
+    content = []
+    for filename in files:
+        with open(filename) as f:
+            content += f.readlines()
+    extract_results(content)
+
+
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        print('Usage: python extract_results.py [result file of ./run_*.sh]')
+        print('Usage: python extract_results.py [ECC set name, i.e., Nam_6_3/IBM_4_3/Rigetti_6_3]')
         exit()
-    extract_results(sys.argv[1])
+    extract_results_from_files(sys.argv[1])
