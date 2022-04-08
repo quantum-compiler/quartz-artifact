@@ -3,6 +3,11 @@ import os
 from natsort import natsorted
 
 
+original_product = 1.26174404020641E+63
+num_timestamps = 48
+timestamps = [i * 1800 for i in range(num_timestamps)]
+
+
 def extract_results(content, max_timeout=86400):
     flag = False
     tot_time = 0
@@ -11,6 +16,7 @@ def extract_results(content, max_timeout=86400):
     gate_product = 1
     key = ''
     result = {}
+    result_timestamps = [{} for _ in range(num_timestamps)]
     for line in content:
         line = line.strip()
         data = line.split()
@@ -47,6 +53,14 @@ def extract_results(content, max_timeout=86400):
             key = data[0].split('.')[0]
             val = data[1].split('.')[0][9:] + ' (at ' + data[-2] + ' seconds)'
             result[key] = val
+            if key not in result_timestamps[0]:  # first time
+                for i in range(num_timestamps):
+                    result_timestamps[i][key] = float(data[1].split('.')[0][9:])
+            else:
+                for i in range(num_timestamps - 1, -1, -1):
+                    if timestamps[i] < float(data[-2]):
+                        break
+                    result_timestamps[i][key] = float(data[1].split('.')[0][9:])
     for k, v in natsorted(result.items()):
         print(k.ljust(15), v)
     print('num_circuits (finished) =', num_finished)
@@ -59,6 +73,17 @@ def extract_results(content, max_timeout=86400):
             print(v)
         else:
             print(v.split(' ')[0])
+    if len(result_timestamps[0]) == 26:
+        result_timestamps_geomean_reduction = []
+        for i in range(num_timestamps):
+            val = 1.0 / original_product
+            assert len(result_timestamps[i]) == 26
+            for k, v in result_timestamps[i].items():
+                val *= v
+            val = val ** (1.0 / 26)
+            val = 1 - val
+            result_timestamps_geomean_reduction.append(i)
+        print(result_timestamps_geomean_reduction)
 
 
 def extract_results_from_file(filename):
