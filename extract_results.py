@@ -85,7 +85,7 @@ if __name__ == '__main__':
     if sys.argv[1].endswith('.txt'):
         extract_results_from_file(sys.argv[1])
     else:
-        if len(sys.argv == 3):
+        if len(sys.argv) == 3:
             extract_results_from_files(sys.argv[1], float(sys.argv[2]))
         else:
             extract_results_from_files(sys.argv[1])
