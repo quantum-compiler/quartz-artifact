@@ -41,7 +41,7 @@ def extract_results(content, max_timeout=86400):
             flag = False
         if len(data) >= 2 and data[1] == 'Timeout.':
             key = data[0].split('.')[0]
-            val = data[-1] + ' (timeout)'
+            val = data[-1].split('.')[0] + ' (timeout)'
             result[key] = val
             num_finished += 1
             tot_gate += int(float(data[-1]))
