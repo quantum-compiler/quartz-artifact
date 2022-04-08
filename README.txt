@@ -165,8 +165,8 @@ bash gen_ecc_set.sh > eccset.log
 python show_eccset_results.py
 ```
 
-This script runs for about 30 hours. After about 1.5 hours, the script is generating the ECC sets for scalability analysis
-(see the last section of this README file).
+This script runs for about 10 hours. After about 1.5 hours, the script is generating the ECC sets for scalability analysis
+(see the "Scalability Analysis on the Nam gate set" section of this README file).
 If you do not want to run the scalability analysis, you can terminate the script after about 1.5 hours.
 
 You can run the Python script while the shell script is running to see some intermediate results.
@@ -526,8 +526,8 @@ To reproduce the scalability analysis results, run the following script after ge
 bash run_scalability.sh
 ```
 
-This script runs for about 100 hours (or 27 hours on machines with 512 threads). For `n=8`, some threads will run for about 2 days, but the result will not change after 27 hours.
-The results are stored in `scalability_{n}{q}.txt` where `n` ranges from 1 to 8, and `q` ranges from 1 to 4 (if `n` is 7 or 8, then the upper bound of `q` is 3).
+This script runs for about 100 hours (On machines with 512 threads, you can run all commands in the script in parallel, so it will only take 24 hours plus a few minutes.).
+The results are stored in `scalability_{n}{q}.txt` where `n` ranges from 1 to 7, and `q` ranges from 1 to 4 (if `n` is 7, then the upper bound of `q` is 3).
 You can run `python extract_results.py scalability_{n}{q}.txt` to see the final results,
 or run `python extract_results.py Nam_{n}_{q}` to see the intermediate results.
 
