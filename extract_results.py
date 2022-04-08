@@ -85,7 +85,9 @@ def extract_results(content, max_timeout=86400):
             cnt = 0
             for k, v in natsorted(result_timestamps[i].items()):
                 val *= v
-                result_timestamps_reduction[k] = 1 - val / original_val[cnt]
+                if i == 0:
+                    result_timestamps_reduction[k] = []
+                result_timestamps_reduction[k].append(1 - val / original_val[cnt])
                 cnt += 1
             val = val ** (1.0 / 26)
             val = 1 - val
