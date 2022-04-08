@@ -3,7 +3,7 @@ import os
 from natsort import natsorted
 
 
-def extract_results(content):
+def extract_results(content, max_timeout=86400):
     flag = False
     tot_time = 0
     tot_gate = 0
@@ -40,8 +40,10 @@ def extract_results(content):
             num_finished += 1
             tot_gate += int(data[-1])
             gate_product *= int(data[-1])
-            tot_time += 86400  # 1-day timeout
+            tot_time += max_timeout
         if len(data) >= 2 and data[1].startswith('bestCost('):
+            if float(data[-2]) > max_timeout:
+                continue
             key = data[0].split('.')[0]
             val = data[1].split('.')[0][9:] + ' (at ' + data[-2] + ' seconds)'
             result[key] = val
@@ -65,20 +67,25 @@ def extract_results_from_file(filename):
     extract_results(content)
 
 
-def extract_results_from_files(prefix):
+def extract_results_from_files(prefix, max_timeout=86400):
     files = [f for f in os.listdir('.') if f.startswith(prefix) and f.endswith('log')]
     content = []
     for filename in files:
         with open(filename) as f:
             content += f.readlines()
-    extract_results(content)
+    extract_results(content, max_timeout)
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print('Usage: python extract_results.py [ECC set name, i.e., Nam_6_3/IBM_4_3/Rigetti_6_3; or result file name (need to be a .txt file), e.g., scalability_32.txt]')
+    if len(sys.argv) < 2 or len(sys.argv) > 3:
+        print('Usage:')
+        print('For final result: python extract_results.py [result file name (need to be a .txt file), e.g., scalability_32.txt]')
+        print('For intermediate result: python extract_results.py [ECC set name, i.e., Nam_6_3/IBM_4_3/Rigetti_6_3] [Max running time (s) (default=86400)]')
         exit()
     if sys.argv[1].endswith('.txt'):
         extract_results_from_file(sys.argv[1])
     else:
-        extract_results_from_files(sys.argv[1])
+        if len(sys.argv == 3):
+            extract_results_from_files(sys.argv[1], float(sys.argv[2]))
+        else:
+            extract_results_from_files(sys.argv[1])
