@@ -44,8 +44,8 @@ def extract_results(content, max_timeout=86400):
             val = data[-1] + ' (timeout)'
             result[key] = val
             num_finished += 1
-            tot_gate += float(data[-1])
-            gate_product *= float(data[-1])
+            tot_gate += int(float(data[-1]))
+            gate_product *= int(float(data[-1]))
             tot_time += max_timeout
         if len(data) >= 2 and data[1].startswith('bestCost('):
             if float(data[-2]) > max_timeout:
@@ -82,7 +82,7 @@ def extract_results(content, max_timeout=86400):
                 val *= v
             val = val ** (1.0 / 26)
             val = 1 - val
-            result_timestamps_geomean_reduction.append(i)
+            result_timestamps_geomean_reduction.append(val)
         print(result_timestamps_geomean_reduction)
 
 
