@@ -3,9 +3,12 @@ import os
 from natsort import natsorted
 
 
-original_product = 1.26174404020641E+63
-num_timestamps = 49
-timestamps = [i * 1800 for i in range(num_timestamps)]
+original_val = [900, 58, 114, 170, 450, 170, 420, 225, 347, 495, 669, 883, 1095, 1347, 63, 119, 278, 521, 443, 884, 200, 45, 75, 105, 255, 150]
+original_product = 1
+for val in original_val:
+    original_product *= val
+num_timestamps = 73
+timestamps = [i * 900 if i < 48 else (i - 24) * 1800 for i in range(num_timestamps)]
 
 
 def extract_results(content, max_timeout=86400):
@@ -75,15 +78,20 @@ def extract_results(content, max_timeout=86400):
             print(v.split(' ')[0])
     if len(result_timestamps[0]) == 26:
         result_timestamps_geomean_reduction = []
+        result_timestamps_reduction = {}
         for i in range(num_timestamps):
             val = 1.0 / original_product
             assert len(result_timestamps[i]) == 26
-            for k, v in result_timestamps[i].items():
+            cnt = 0
+            for k, v in natsorted(result_timestamps[i].items()):
                 val *= v
+                result_timestamps_reduction[key] = 1 - v / original_val[cnt]
+                cnt += 1
             val = val ** (1.0 / 26)
             val = 1 - val
             result_timestamps_geomean_reduction.append(val)
         print(result_timestamps_geomean_reduction)
+        print(result_timestamps_reduction)
 
 
 def extract_results_from_file(filename):
