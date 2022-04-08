@@ -87,7 +87,7 @@ def extract_results(content, max_timeout=86400):
                 val *= v
                 if i == 0:
                     result_timestamps_reduction[k] = []
-                result_timestamps_reduction[k].append(1 - val / original_val[cnt])
+                result_timestamps_reduction[k].append(1 - v / original_val[cnt])
                 cnt += 1
             val = val ** (1.0 / 26)
             val = 1 - val
