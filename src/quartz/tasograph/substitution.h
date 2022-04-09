@@ -60,7 +60,11 @@ public:
 class GraphCompare {
 public:
   bool operator()(std::shared_ptr<Graph> lhs, std::shared_ptr<Graph> rhs) {
-    return lhs->total_cost() > rhs->total_cost();
+    auto lc = lhs->total_cost(), rc = rhs->total_cost();
+    if (lc == rc) {
+      return lhs->random_value_ < rhs->random_value_;
+    }
+    return lc > rc;
   }
 };
 

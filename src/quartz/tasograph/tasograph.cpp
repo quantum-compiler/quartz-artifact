@@ -27,9 +27,9 @@ Op::Op(void) : guid(GUID_INVALID), ptr(NULL) {}
 
 const Op Op::INVALID_OP = Op();
 
-Graph::Graph(Context *ctx) : context(ctx), special_op_guid(0) {}
+Graph::Graph(Context *ctx) : context(ctx), special_op_guid(0), random_value_(rand()) {}
 
-Graph::Graph(Context *ctx, const DAG *dag) : context(ctx), special_op_guid(0) {
+Graph::Graph(Context *ctx, const DAG *dag) : context(ctx), special_op_guid(0), random_value_(rand()) {
   // Guid for input qubit and input parameter nodes
   int num_input_qubits = dag->get_num_qubits();
   int num_input_params = dag->get_num_input_parameters();
@@ -116,7 +116,7 @@ Graph::Graph(Context *ctx, const DAG *dag) : context(ctx), special_op_guid(0) {
   }
 }
 
-Graph::Graph(const Graph &graph) {
+Graph::Graph(const Graph &graph): random_value_(rand()) {
   context = graph.context;
   constant_param_values = graph.constant_param_values;
   special_op_guid = graph.special_op_guid;
@@ -1106,14 +1106,15 @@ Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
   //                    1000.0
   //             << " seconds." << std::endl;
 
+  srand(0);
   auto log_file_name =
       equiv_file_name.substr(0, std::max(0, (int)equiv_file_name.size() - 21)) +
       circuit_name.substr(0, std::max(0, (int)circuit_name.size() - 5)) +
-      "_100000.log";
+      "_2k_rand0.log";
   auto err_file_name =
       equiv_file_name.substr(0, std::max(0, (int)equiv_file_name.size() - 21)) +
       circuit_name.substr(0, std::max(0, (int)circuit_name.size() - 5)) +
-      "_100000.err";
+      "_2k_rand0.err";
   FILE *fout = fopen(log_file_name.c_str(), "w");
   freopen(err_file_name.c_str(), "w", stderr);
 
@@ -1156,8 +1157,8 @@ Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
   int counter = 0;
   int maxNumOps = inEdges.size();
 
-  constexpr int kMaxNumCandidates = 100000;
-  constexpr int kShrinkToNumCandidates = 50000;
+  constexpr int kMaxNumCandidates = 2000;
+  constexpr int kShrinkToNumCandidates = 1000;
 
   std::priority_queue<std::shared_ptr<Graph>,
                       std::vector<std::shared_ptr<Graph>>, GraphCompare>
@@ -1299,8 +1300,6 @@ Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
              it != bestGraph->inEdges.end(); ++it) {
           std::cout << gate_type_name(it->first.ptr->tp) << std::endl;
         }
-        bestGraph->constant_and_rotation_elimination();
-        bestGraph->constant_and_rotation_elimination();
         bestGraph->constant_and_rotation_elimination();
         std::cout << "after: " << std::endl;
         for (auto it = bestGraph->inEdges.begin();
