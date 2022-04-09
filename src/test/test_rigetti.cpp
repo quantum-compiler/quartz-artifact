@@ -102,8 +102,9 @@ int main(int argc, char **argv) {
   }
   start = std::chrono::steady_clock::now();
   auto graph_after_h_cz_merge = graph_before_h_cz_merge->optimize(
-      1.0001, 0, false, &union_ctx_0, "../H_CZ_2_2_complete_ECC_set_modified.json",
-      simulated_annealing, /*enable_early_stop=*/true, /*rotation_merging_in_searching*/ true,
+      1.0001, 0, false, &union_ctx_0,
+      "../H_CZ_2_2_complete_ECC_set_modified.json", simulated_annealing,
+      /*enable_early_stop=*/true, /*rotation_merging_in_searching*/ true,
       GateType::rz, fn);
   end = std::chrono::steady_clock::now();
   //   graph_after_h_cz_merge->to_qasm(
@@ -119,19 +120,26 @@ int main(int argc, char **argv) {
     }
   }
   std::cout << "H/CZ cancellation for " << fn
-            << " on Rigetti gate set: " << num_h - num_h_new << " H gate(s) and "
-            << num_cz - num_cz_new << " CZ gate(s) cancelled in "
+            << " on Rigetti gate set: " << num_h - num_h_new
+            << " H gate(s) and " << num_cz - num_cz_new
+            << " CZ gate(s) cancelled in "
             << (double)std::chrono::duration_cast<std::chrono::milliseconds>(
-                end - start)
-                .count() /
-                1000.0
+                   end - start)
+                       .count() /
+                   1000.0
             << " seconds." << std::endl;
 
   // Shift the context to Rigetti Agave
-  RuleParser rules({"h q0 = rx q0 pi; rz q0 0.5pi; rx q0 0.5pi; rz q0 -0.5pi;",
-                    "x q0 = rx q0 pi;"});
-  Context rigetti_ctx({GateType::rx, GateType::rz, GateType::cz, GateType::add,
-                       GateType::input_qubit, GateType::input_param});
+  //   RuleParser rules({"h q0 = rx q0 pi; rz q0 0.5pi; rx q0 0.5pi; rz q0
+  //   -0.5pi;",
+  //                     "x q0 = rx q0 pi;"});
+  //   Context rigetti_ctx({GateType::rx, GateType::rz, GateType::cz,
+  //   GateType::add,
+  //                        GateType::input_qubit, GateType::input_param});
+  RuleParser rules({"h q0 = x q0; rz q0 0.5pi; rx1 q0; rz q0 -0.5pi;"});
+  Context rigetti_ctx({GateType::rx1, GateType::rx3, GateType::x, GateType::rz,
+                       GateType::cz, GateType::add, GateType::input_qubit,
+                       GateType::input_param});
   auto union_ctx_1 = union_contexts(&rigetti_ctx, &union_ctx_0);
   auto graph_rigetti = graph_after_h_cz_merge->context_shift(
       &cz_ctx, &rigetti_ctx, &union_ctx_1, &rules, false);
