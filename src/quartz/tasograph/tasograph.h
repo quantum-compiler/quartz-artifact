@@ -243,7 +243,7 @@ public:
   std::map<Op, std::set<Edge, EdgeCompare>, OpCompare> inEdges, outEdges;
   std::map<Op, ParamType> constant_param_values;
   std::unordered_map<Op, int, OpHash> qubit_2_idx;
-  int random_value_;
+  //int random_value_;
 
 private:
   size_t special_op_guid;
