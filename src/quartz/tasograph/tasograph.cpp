@@ -437,6 +437,16 @@ void Graph::constant_and_rotation_elimination() {
   while (!op_queue.empty()) {
     auto op = op_queue.front();
     op_queue.pop();
+    if (outEdges.find(op) != outEdges.end()) {
+      std::set<Edge, EdgeCompare> list = outEdges[op];
+      for (auto it2 = list.cbegin(); it2 != list.cend(); it2++) {
+        auto e = *it2;
+        op_in_edges_cnt[e.dstOp]--;
+        if (op_in_edges_cnt[e.dstOp] == 0) {
+          op_queue.push(e.dstOp);
+        }
+      }
+    }
     // Won't remove node in op_queue
     // Remove node won't change the in-degree of other nodes
     // because we only remove poped nodes and their predecessors
@@ -521,17 +531,6 @@ void Graph::constant_and_rotation_elimination() {
       }
       if (all_parameter_is_0) {
         remove_node(op);
-      }
-    }
-    if (outEdges.find(op) != outEdges.end()) {
-      std::set<Edge, EdgeCompare> list = outEdges[op];
-      std::set<Edge, EdgeCompare>::const_iterator it2;
-      for (it2 = list.begin(); it2 != list.end(); it2++) {
-        auto e = *it2;
-        op_in_edges_cnt[e.dstOp]--;
-        if (op_in_edges_cnt[e.dstOp] == 0) {
-          op_queue.push(e.dstOp);
-        }
       }
     }
   }
@@ -1082,11 +1081,13 @@ void Graph::draw_circuit(const std::string &src_file_name,
              .c_str());
 }
 
-std::shared_ptr<Graph> Graph::optimize(
-    float alpha, int budget, bool print_subst, Context *ctx,
-    const std::string &equiv_file_name, bool use_simulated_annealing,
-    bool enable_early_stop, bool use_rotation_merging_in_searching,
-    GateType target_rotation, std::string circuit_name, std::string output_fn, int timeout) {
+std::shared_ptr<Graph>
+Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
+                const std::string &equiv_file_name,
+                bool use_simulated_annealing, bool enable_early_stop,
+                bool use_rotation_merging_in_searching,
+                GateType target_rotation, std::string circuit_name,
+                std::string output_fn, int timeout) {
   EquivalenceSet eqs;
   // Load equivalent dags from file
   auto start = std::chrono::steady_clock::now();
@@ -1105,12 +1106,14 @@ std::shared_ptr<Graph> Graph::optimize(
   //                    1000.0
   //             << " seconds." << std::endl;
 
-  auto log_file_name = equiv_file_name.substr(0, std::max(0, (int)equiv_file_name.size() - 21))
-      + circuit_name.substr(0, std::max(0, (int)circuit_name.size() - 5))
-      + ".log";
-  auto err_file_name = equiv_file_name.substr(0, std::max(0, (int)equiv_file_name.size() - 21))
-      + circuit_name.substr(0, std::max(0, (int)circuit_name.size() - 5))
-      + ".err";
+  auto log_file_name =
+      equiv_file_name.substr(0, std::max(0, (int)equiv_file_name.size() - 21)) +
+      circuit_name.substr(0, std::max(0, (int)circuit_name.size() - 5)) +
+      ".log";
+  auto err_file_name =
+      equiv_file_name.substr(0, std::max(0, (int)equiv_file_name.size() - 21)) +
+      circuit_name.substr(0, std::max(0, (int)circuit_name.size() - 5)) +
+      ".err";
   FILE *fout = fopen(log_file_name.c_str(), "w");
   freopen(err_file_name.c_str(), "w", stderr);
 
@@ -1292,18 +1295,16 @@ std::shared_ptr<Graph> Graph::optimize(
         bestCost = subGraph->total_cost();
         bestGraph = subGraph;
         std::cout << "before: " << std::endl;
-           for (auto it = bestGraph->inEdges.begin(); it !=
-           bestGraph->inEdges.end();
-           ++it) {
-         	std::cout << gate_type_name(it->first.ptr->tp) << std::endl;
-           }
+        for (auto it = bestGraph->inEdges.begin();
+             it != bestGraph->inEdges.end(); ++it) {
+          std::cout << gate_type_name(it->first.ptr->tp) << std::endl;
+        }
         bestGraph->constant_and_rotation_elimination();
         bestGraph->constant_and_rotation_elimination();
         bestGraph->constant_and_rotation_elimination();
         std::cout << "after: " << std::endl;
-        for (auto it = bestGraph->inEdges.begin(); it !=
-            bestGraph->inEdges.end();
-             ++it) {
+        for (auto it = bestGraph->inEdges.begin();
+             it != bestGraph->inEdges.end(); ++it) {
           std::cout << gate_type_name(it->first.ptr->tp) << std::endl;
         }
         bestGraph->to_qasm(output_fn + std::to_string(bestCost), false, false);
@@ -1319,24 +1320,22 @@ std::shared_ptr<Graph> Graph::optimize(
       counter++;
       subGraph->constant_and_rotation_elimination();
       end = std::chrono::steady_clock::now();
-      if (std::chrono::duration_cast<std::chrono::seconds>(end -
-          start).count() > timeout) {
+      if (std::chrono::duration_cast<std::chrono::seconds>(end - start)
+              .count() > timeout) {
         fprintf(fout,
                 "%s: Timeout. Program terminated. Best gate count is %.2f\n",
-                circuit_name.c_str(),
-                bestCost);
+                circuit_name.c_str(), bestCost);
         fclose(fout);
         exit(1);
       }
       fprintf(fout,
-              "%s: bestCost(%.2f) currentCost(%.2f) candidates(%zu) after %.4lf seconds\n",
-              circuit_name.c_str(),
-              bestCost,
-              subGraph->total_cost(),
+              "%s: bestCost(%.2f) currentCost(%.2f) candidates(%zu) after "
+              "%.4lf seconds\n",
+              circuit_name.c_str(), bestCost, subGraph->total_cost(),
               candidates.size(),
-              (double) std::chrono::duration_cast<std::chrono::milliseconds>(
+              (double)std::chrono::duration_cast<std::chrono::milliseconds>(
                   end - start)
-                  .count() /
+                      .count() /
                   1000.0);
       fflush(fout);
 
@@ -1356,8 +1355,8 @@ std::shared_ptr<Graph> Graph::optimize(
         //   }
       }
       if (candidates.size() > kMaxNumCandidates) {
-        fprintf(fout,
-                "%s: shrink the priority queue with %d candidates.\n",  circuit_name.c_str(), (int)candidates.size());
+        fprintf(fout, "%s: shrink the priority queue with %d candidates.\n",
+                circuit_name.c_str(), (int)candidates.size());
         auto shrink_start = std::chrono::steady_clock::now();
         std::priority_queue<std::shared_ptr<Graph>,
                             std::vector<std::shared_ptr<Graph>>, GraphCompare>
@@ -1373,10 +1372,13 @@ std::shared_ptr<Graph> Graph::optimize(
         }
         std::swap(candidates, new_candidates);
         auto shrink_end = std::chrono::steady_clock::now();
-        fprintf(fout,
-                "%s: shrank the priority queue to %d candidates in %.3f seconds.\n", circuit_name.c_str(), (int)candidates.size(), (double) std::chrono::duration_cast<std::chrono::milliseconds>(
+        fprintf(
+            fout,
+            "%s: shrank the priority queue to %d candidates in %.3f seconds.\n",
+            circuit_name.c_str(), (int)candidates.size(),
+            (double)std::chrono::duration_cast<std::chrono::milliseconds>(
                 shrink_end - shrink_start)
-                .count() /
+                    .count() /
                 1000.0);
         for (auto &it : cost_count) {
           fprintf(fout, "%d circuits have cost %.2f\n", it.second, it.first);
