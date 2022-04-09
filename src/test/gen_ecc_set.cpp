@@ -10,7 +10,7 @@ void gen_ecc_set(const std::vector<GateType> &supported_gates,
                  const std::string &file_prefix, bool unique_parameters,
                  int num_qubits,
                  int num_input_parameters, int max_num_quantum_gates,
-                 int max_num_param_gates = 1) {
+                 int max_num_param_gates = 1/*TODO: this is in fact depth, not num*/) {
   Context ctx(supported_gates, num_qubits, num_input_parameters);
   Generator gen(&ctx);
 
@@ -89,7 +89,7 @@ int main() {
     file_prefix += std::to_string(n);
     file_prefix += "_3_";
     gen_ecc_set({GateType::rx1, GateType::x, GateType::rx3, GateType::rz, GateType::cz, GateType::add, GateType::neg},
-                file_prefix, true, 3, 2, n, 2);
+                file_prefix, true, 3, 2, n);
   }
   return 0;
   gen_ecc_set({GateType::u1, GateType::u2, GateType::u3, GateType::cx,
