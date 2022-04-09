@@ -1110,11 +1110,11 @@ Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
   auto log_file_name =
       equiv_file_name.substr(0, std::max(0, (int)equiv_file_name.size() - 21)) +
       circuit_name.substr(0, std::max(0, (int)circuit_name.size() - 5)) +
-      "_100k_rand3.log";
+      ".log";
   auto err_file_name =
       equiv_file_name.substr(0, std::max(0, (int)equiv_file_name.size() - 21)) +
       circuit_name.substr(0, std::max(0, (int)circuit_name.size() - 5)) +
-      "_100k_rand3.err";
+      ".err";
   FILE *fout = fopen(log_file_name.c_str(), "w");
   freopen(err_file_name.c_str(), "w", stderr);
 
@@ -1157,8 +1157,8 @@ Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
   int counter = 0;
   int maxNumOps = inEdges.size();
 
-  constexpr int kMaxNumCandidates = 100000;
-  constexpr int kShrinkToNumCandidates = 50000;
+  constexpr int kMaxNumCandidates = 2000;
+  constexpr int kShrinkToNumCandidates = 1000;
 
   std::priority_queue<std::shared_ptr<Graph>,
                       std::vector<std::shared_ptr<Graph>>, GraphCompare>
