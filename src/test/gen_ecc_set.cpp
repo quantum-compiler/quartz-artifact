@@ -84,6 +84,14 @@ void gen_ecc_set(const std::vector<GateType> &supported_gates,
 }
 
 int main() {
+  for (int n = 3; n <= 6; n++) {
+    std::string file_prefix = "Rigetti_const_";
+    file_prefix += std::to_string(n);
+    file_prefix += "_3_";
+    gen_ecc_set({GateType::rx1, GateType::x, GateType::rx3, GateType::rz, GateType::cz, GateType::add},
+                file_prefix, true, 3, 2, n);
+  }
+  return 0;
   gen_ecc_set({GateType::u1, GateType::u2, GateType::u3, GateType::cx,
                GateType::add},
               "IBM_3_3_", true, 3, 4, 3);
