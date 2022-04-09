@@ -1106,15 +1106,15 @@ Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
   //                    1000.0
   //             << " seconds." << std::endl;
 
-  srand(0);
+  srand(1);
   auto log_file_name =
       equiv_file_name.substr(0, std::max(0, (int)equiv_file_name.size() - 21)) +
       circuit_name.substr(0, std::max(0, (int)circuit_name.size() - 5)) +
-      "_100k_rand0.log";
+      "_100k_rand1.log";
   auto err_file_name =
       equiv_file_name.substr(0, std::max(0, (int)equiv_file_name.size() - 21)) +
       circuit_name.substr(0, std::max(0, (int)circuit_name.size() - 5)) +
-      "_100k_rand0.err";
+      "_100k_rand1.err";
   FILE *fout = fopen(log_file_name.c_str(), "w");
   freopen(err_file_name.c_str(), "w", stderr);
 
@@ -1295,17 +1295,7 @@ Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
       if (subGraph->total_cost() < bestCost) {
         bestCost = subGraph->total_cost();
         bestGraph = subGraph;
-        std::cout << "before: " << std::endl;
-        for (auto it = bestGraph->inEdges.begin();
-             it != bestGraph->inEdges.end(); ++it) {
-          std::cout << gate_type_name(it->first.ptr->tp) << std::endl;
-        }
         bestGraph->constant_and_rotation_elimination();
-        std::cout << "after: " << std::endl;
-        for (auto it = bestGraph->inEdges.begin();
-             it != bestGraph->inEdges.end(); ++it) {
-          std::cout << gate_type_name(it->first.ptr->tp) << std::endl;
-        }
         bestGraph->to_qasm(output_fn + std::to_string(bestCost), false, false);
       }
       if (alpha >= 1 && subGraph->total_cost() > bestCost * alpha + 7) {
