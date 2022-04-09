@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
   // Optimization
   auto graph_after_search = graph_before_search->optimize(
       1.0001, 0, false, &dst_ctx, eqset_fn, simulated_annealing, early_stop,
-      /*rotation_merging_in_searching*/ false, GateType::rz, fn);
+      /*rotation_merging_in_searching*/ false, GateType::rz, fn, output_fn);
   end = std::chrono::steady_clock::now();
   std::cout << "Optimization results of Quartz for " << fn
             << " on Nam's gate set." << std::endl

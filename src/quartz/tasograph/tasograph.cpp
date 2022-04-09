@@ -1084,7 +1084,7 @@ std::shared_ptr<Graph> Graph::optimize(
     float alpha, int budget, bool print_subst, Context *ctx,
     const std::string &equiv_file_name, bool use_simulated_annealing,
     bool enable_early_stop, bool use_rotation_merging_in_searching,
-    GateType target_rotation, std::string circuit_name, int timeout) {
+    GateType target_rotation, std::string circuit_name, std::string output_fn, int timeout) {
   EquivalenceSet eqs;
   // Load equivalent dags from file
   auto start = std::chrono::steady_clock::now();
@@ -1212,6 +1212,7 @@ std::shared_ptr<Graph> Graph::optimize(
           if (new_cost < bestCost) {
             bestGraph = new_candidate;
             bestCost = new_cost;
+            bestGraph->to_qasm(output_fn + std::to_string(bestCost), false, false);
           }
           // Apply the criteria of simulated annealing.
           // Cost is the smaller the better here.
