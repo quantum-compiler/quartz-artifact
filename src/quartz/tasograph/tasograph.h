@@ -176,7 +176,6 @@ public:
   size_t hash();
   bool check_correctness();
   float total_cost() const;
-  void update_cost();
   int gate_count() const;
   size_t get_next_special_op_guid();
   size_t get_special_op_guid();
@@ -247,7 +246,6 @@ public:
 
 private:
   size_t special_op_guid;
-  float cost_;
 };
 
 }; // namespace quartz

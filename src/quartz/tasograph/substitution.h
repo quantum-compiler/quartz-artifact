@@ -60,10 +60,6 @@ public:
 class GraphCompare {
 public:
   bool operator()(std::shared_ptr<Graph> lhs, std::shared_ptr<Graph> rhs) {
-    if (lhs->total_cost() == rhs->total_cost() && !lhs->inEdges.empty() && !rhs->inEdges.empty()) {
-      // break tie by first Op's guid
-      return lhs->inEdges.begin()->first.guid > rhs->inEdges.begin()->first.guid;
-    }
     return lhs->total_cost() > rhs->total_cost();
   }
 };

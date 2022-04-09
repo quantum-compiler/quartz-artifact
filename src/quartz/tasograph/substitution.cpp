@@ -670,7 +670,6 @@ std::shared_ptr<Graph> GraphXfer::create_new_graph(const Graph *graph) const {
         newGraph->add_edge(srcOp->mapOp, dstOp->mapOp, srcIdx, i);
       }
   }
-  newGraph->update_cost();
   return newGraph;
 }
 int GraphXfer::num_src_op() { return srcOps.size(); }

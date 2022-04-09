@@ -27,9 +27,7 @@ Op::Op(void) : guid(GUID_INVALID), ptr(NULL) {}
 
 const Op Op::INVALID_OP = Op();
 
-Graph::Graph(Context *ctx) : context(ctx), special_op_guid(0) {
-  update_cost();
-}
+Graph::Graph(Context *ctx) : context(ctx), special_op_guid(0) {}
 
 Graph::Graph(Context *ctx, const DAG *dag) : context(ctx), special_op_guid(0) {
   // Guid for input qubit and input parameter nodes
@@ -116,7 +114,6 @@ Graph::Graph(Context *ctx, const DAG *dag) : context(ctx), special_op_guid(0) {
       add_edge(srcOp, dstOp, srcIdx, dstIdx);
     }
   }
-  update_cost();
 }
 
 Graph::Graph(const Graph &graph) {
@@ -126,7 +123,6 @@ Graph::Graph(const Graph &graph) {
   qubit_2_idx = graph.qubit_2_idx;
   inEdges = graph.inEdges;
   outEdges = graph.outEdges;
-  cost_ = graph.cost_;
 }
 
 size_t Graph::get_next_special_op_guid() {
@@ -316,16 +312,12 @@ std::shared_ptr<Graph> Graph::context_shift(Context *src_ctx, Context *dst_ctx,
 }
 
 float Graph::total_cost(void) const {
-  return cost_;
-}
-
-void Graph::update_cost() {
   size_t cnt = 0;
   for (const auto &it : inEdges) {
     if (it.first.ptr->is_quantum_gate())
       cnt++;
   }
-  cost_ = cnt;
+  return (float)cnt;
 }
 
 int Graph::gate_count() const {
@@ -542,7 +534,6 @@ void Graph::constant_and_rotation_elimination() {
       }
     }
   }
-  update_cost();
 }
 
 uint64_t Graph::xor_bitmap(uint64_t src_bitmap, int src_idx,
@@ -885,7 +876,6 @@ void Graph::rotation_merging(GateType target_rotation) {
       }
     }
   }
-  update_cost();
 }
 
 size_t Graph::get_num_qubits() const { return qubit_2_idx.size(); }
@@ -1309,6 +1299,8 @@ Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
              it != bestGraph->inEdges.end(); ++it) {
           std::cout << gate_type_name(it->first.ptr->tp) << std::endl;
         }
+        bestGraph->constant_and_rotation_elimination();
+        bestGraph->constant_and_rotation_elimination();
         bestGraph->constant_and_rotation_elimination();
         std::cout << "after: " << std::endl;
         for (auto it = bestGraph->inEdges.begin();
