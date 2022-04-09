@@ -1106,15 +1106,15 @@ Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
   //                    1000.0
   //             << " seconds." << std::endl;
 
-  srand(1);
+  srand(2);
   auto log_file_name =
       equiv_file_name.substr(0, std::max(0, (int)equiv_file_name.size() - 21)) +
       circuit_name.substr(0, std::max(0, (int)circuit_name.size() - 5)) +
-      "_2k_rand1.log";
+      "_2k_rand2.log";
   auto err_file_name =
       equiv_file_name.substr(0, std::max(0, (int)equiv_file_name.size() - 21)) +
       circuit_name.substr(0, std::max(0, (int)circuit_name.size() - 5)) +
-      "_2k_rand1.err";
+      "_2k_rand2.err";
   FILE *fout = fopen(log_file_name.c_str(), "w");
   freopen(err_file_name.c_str(), "w", stderr);
 
