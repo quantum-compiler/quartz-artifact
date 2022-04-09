@@ -1292,7 +1292,7 @@ std::shared_ptr<Graph> Graph::optimize(
         bestCost = subGraph->total_cost();
         bestGraph = subGraph;
         std::cout << "before: " << std::endl;
-           for (it = bestGraph->inEdges.begin(); it !=
+           for (auto it = bestGraph->inEdges.begin(); it !=
            bestGraph->inEdges.end();
            ++it) {
          	std::cout << gate_type_name(it->first.ptr->tp) << std::endl;
@@ -1301,7 +1301,7 @@ std::shared_ptr<Graph> Graph::optimize(
         bestGraph->constant_and_rotation_elimination();
         bestGraph->constant_and_rotation_elimination();
         std::cout << "after: " << std::endl;
-        for (it = bestGraph->inEdges.begin(); it !=
+        for (auto it = bestGraph->inEdges.begin(); it !=
             bestGraph->inEdges.end();
              ++it) {
           std::cout << gate_type_name(it->first.ptr->tp) << std::endl;
