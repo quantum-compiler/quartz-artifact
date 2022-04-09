@@ -1291,6 +1291,7 @@ std::shared_ptr<Graph> Graph::optimize(
       if (subGraph->total_cost() < bestCost) {
         bestCost = subGraph->total_cost();
         bestGraph = subGraph;
+        bestGraph->constant_and_rotation_elimination();
         bestGraph->to_qasm(output_fn + std::to_string(bestCost), false, false);
       }
       if (alpha >= 1 && subGraph->total_cost() > bestCost * alpha + 7) {
