@@ -34,5 +34,5 @@ fi
 ./test_nam ../circuit/nam-benchmarks/tof_3.qasm --output ../circuit/nam-benchmarks/output_files/nam/tof_3.qasm.output.nam $eqset_arg &
 ./test_nam ../circuit/nam-benchmarks/tof_4.qasm --output ../circuit/nam-benchmarks/output_files/nam/tof_4.qasm.output.nam $eqset_arg &
 ./test_nam ../circuit/nam-benchmarks/tof_5.qasm --output ../circuit/nam-benchmarks/output_files/nam/tof_5.qasm.output.nam $eqset_arg &
-./test_nam ../circuit/nam-benchmarks/tof_10.qasm --output ../circuit/nam-benchmarks/output_files/nam/tof_10.qasm.output.nnam $eqset_arg &
+./test_nam ../circuit/nam-benchmarks/tof_10.qasm --output ../circuit/nam-benchmarks/output_files/nam/tof_10.qasm.output.nam $eqset_arg &
 ./test_nam ../circuit/nam-benchmarks/vbe_adder_3.qasm --output ../circuit/nam-benchmarks/output_files/nam/vbe_adder_3.qasm.output.nam $eqset_arg &
