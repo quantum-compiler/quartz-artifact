@@ -78,24 +78,24 @@ def extract_results(content, max_timeout=default_timeout):
             print(v)
         else:
             print(v.split(' ')[0])
-    # if len(result_timestamps[0]) == 26:
-    #     result_timestamps_geomean_reduction = []
-    #     result_timestamps_reduction = {}
-    #     for i in range(num_timestamps):
-    #         val = 1.0 / original_product
-    #         assert len(result_timestamps[i]) == 26
-    #         cnt = 0
-    #         for k, v in natsorted(result_timestamps[i].items()):
-    #             val *= v
-    #             if i == 0:
-    #                 result_timestamps_reduction[k] = []
-    #             result_timestamps_reduction[k].append(1 - v / original_val[cnt])
-    #             cnt += 1
-    #         val = val ** (1.0 / 26)
-    #         val = 1 - val
-    #         result_timestamps_geomean_reduction.append(val)
-    #     print(result_timestamps_geomean_reduction)
-    #     print(result_timestamps_reduction)
+    if len(result_timestamps[0]) == 26:
+        result_timestamps_geomean_reduction = []
+        result_timestamps_reduction = {}
+        for i in range(num_timestamps):
+            val = 1.0 / original_product
+            assert len(result_timestamps[i]) == 26
+            cnt = 0
+            for k, v in natsorted(result_timestamps[i].items()):
+                val *= v
+                if i == 0:
+                    result_timestamps_reduction[k] = []
+                result_timestamps_reduction[k].append(1 - v / original_val[cnt])
+                cnt += 1
+            val = val ** (1.0 / 26)
+            val = 1 - val
+            result_timestamps_geomean_reduction.append(val)
+        print(result_timestamps_geomean_reduction)
+        print(result_timestamps_reduction)
 
 
 def extract_results_from_file(filename):
