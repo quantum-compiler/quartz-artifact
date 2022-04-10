@@ -2,9 +2,9 @@
 
 int main() {
   test_pruning({GateType::rz, GateType::h, GateType::cx, GateType::x,
-                GateType::add}, "Nam_2_", 3, 2, 3, false, 1, true, false, false, false, true);
+                GateType::add}, "Nam_2_", 3, 2, 2, false, 1, true, false, false, false, true);
   test_pruning({GateType::rx1, GateType::x, GateType::rx3, GateType::rz, GateType::cz,
-                GateType::add}, "Rigetti_const_2_", 3, 2, 3, false, 1, true, false, false, false, true);
+                GateType::add}, "Rigetti_const_2_", 3, 2, 2, false, 1, true, false, false, false, true);
   return 0;
   test_pruning({GateType::rx1, GateType::x, GateType::rx3, GateType::rz, GateType::cz,
                 GateType::add}, "Rigetti_const_3_", 3, 2, 3, false, 1, true, true, false, true, true);
