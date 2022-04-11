@@ -6,6 +6,8 @@
 Quartz is a quantum circuit optimizer that automatically generates and verifies circuit transformations for an arbitrary quantum gate set. To optimize an input quantum circuit, Quartz uses these auto-generated circuit transformations to construct a search space of functionally equivalent quantum circuits.
 Quartz uses a cost-based search algorithm to explore the space and discovers highly optimized quantum circuits.
 
+Note: This README was written for the artifact evaluation and might not match everything in the latest version of the paper for now. We will update it very soon.
+
 ## Repository Organization
 
 See [code structure](doc/CODE_STRUCTURE.md) for more information about the organization of the Quartz artifact code base.
