@@ -1339,6 +1339,7 @@ Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
                   2 * maxNumOps, enable_early_stop, stop_search);
         // auto front_gate_count = candidates.top()->gate_count();
         for (auto &candidate : new_candidates) {
+          fprintf(fout, "iter %d: push %zu\n", counter, candidate->hash());
           candidates.push(candidate);
         }
         // auto new_front_gate_count = candidates.top()->gate_count();
