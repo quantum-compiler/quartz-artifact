@@ -1110,11 +1110,11 @@ Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
   auto log_file_name =
       equiv_file_name.substr(0, std::max(0, (int)equiv_file_name.size() - 21)) +
       circuit_name.substr(0, std::max(0, (int)circuit_name.size() - 5)) +
-      ".log";
+      "_20220413.log";
   auto err_file_name =
       equiv_file_name.substr(0, std::max(0, (int)equiv_file_name.size() - 21)) +
       circuit_name.substr(0, std::max(0, (int)circuit_name.size() - 5)) +
-      ".err";
+      "_20220413.err";
   FILE *fout = fopen(log_file_name.c_str(), "w");
   freopen(err_file_name.c_str(), "w", stderr);
 
@@ -1298,6 +1298,8 @@ Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
         bestGraph->constant_and_rotation_elimination();
         bestGraph->to_qasm(output_fn + std::to_string(bestCost), false, false);
       }
+      subGraph->constant_and_rotation_elimination();
+      subGraph->to_qasm(output_fn + "_" + std::to_string(subGraph->total_cost()) + "_" + std::to_string(subGraph->hash()), false, false);
       if (alpha >= 1 && subGraph->total_cost() > bestCost * alpha + 7) {
         break;
       }
@@ -1319,13 +1321,14 @@ Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
       }
       fprintf(fout,
               "%s: bestCost(%.2f) currentCost(%.2f) candidates(%zu) after "
-              "%.4lf seconds\n",
+              "%.4lf seconds, ",
               circuit_name.c_str(), bestCost, subGraph->total_cost(),
               candidates.size(),
               (double)std::chrono::duration_cast<std::chrono::milliseconds>(
                   end - start)
                       .count() /
                   1000.0);
+      fprintf(fout, "iter %d: hash %zu\n", counter, subGraph->hash());
       fflush(fout);
 
       //   std::vector<Graph *> new_candidates;
