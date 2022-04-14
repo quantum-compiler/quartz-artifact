@@ -12,6 +12,8 @@ timestamps = [i * 900 if i < 48 else (i - 24) * 1800 for i in range(num_timestam
 
 default_timeout = 86400
 
+mod54 = False
+
 
 def extract_results(content, max_timeout=default_timeout):
     flag = False
@@ -25,6 +27,22 @@ def extract_results(content, max_timeout=default_timeout):
     for line in content:
         line = line.strip()
         data = line.split()
+        if len(data) >= 2 and data[1].startswith('bestCost('):
+            if float(data[-2]) > max_timeout:
+                continue
+            key = data[0].split('.')[0]
+            val = data[1].split('.')[0][9:] + ' (at ' + data[-2] + ' seconds)'
+            result[key] = val
+            if key not in result_timestamps[0]:  # first time
+                for i in range(num_timestamps):
+                    result_timestamps[i][key] = float(data[1].split('.')[0][9:])
+            else:
+                for i in range(num_timestamps - 1, -1, -1):
+                    if timestamps[i] < float(data[-2]):
+                        break
+                    result_timestamps[i][key] = float(data[1].split('.')[0][9:])
+        if mod54:
+            continue
         if flag:
             pos = line.find(':')
             pos2 = line.find(',', pos)
@@ -52,20 +70,6 @@ def extract_results(content, max_timeout=default_timeout):
             tot_gate += int(float(data[-1]))
             gate_product *= int(float(data[-1]))
             tot_time += max_timeout
-        if len(data) >= 2 and data[1].startswith('bestCost('):
-            if float(data[-2]) > max_timeout:
-                continue
-            key = data[0].split('.')[0]
-            val = data[1].split('.')[0][9:] + ' (at ' + data[-2] + ' seconds)'
-            result[key] = val
-            if key not in result_timestamps[0]:  # first time
-                for i in range(num_timestamps):
-                    result_timestamps[i][key] = float(data[1].split('.')[0][9:])
-            else:
-                for i in range(num_timestamps - 1, -1, -1):
-                    if timestamps[i] < float(data[-2]):
-                        break
-                    result_timestamps[i][key] = float(data[1].split('.')[0][9:])
     for k, v in natsorted(result.items()):
         print(k.ljust(15), v)
     print('num_circuits (finished) =', num_finished)
@@ -80,7 +84,7 @@ def extract_results(content, max_timeout=default_timeout):
         else:
             print(v.split(' ')[0], end=', ')
     print('],')
-    if len(result_timestamps[0]) == 26:
+    if len(result_timestamps[0]) == 26 or mod54:
         result_timestamps_geomean_reduction = []
         result_timestamps_reduction = {}
         for i in range(num_timestamps):
@@ -107,11 +111,18 @@ def extract_results_from_file(filename):
 
 
 def extract_results_from_files(prefix, max_timeout=default_timeout):
+    global mod54
+    if 'mod5_4' in prefix:
+        mod54 = True
     files = [f for f in os.listdir('.') if f.startswith(prefix) and f.endswith('log')]
     content = []
     for filename in files:
         with open(filename) as f:
-            content += f.readlines()
+            if mod54:
+                for line in f.readlines():
+                    content += filename + line
+            else:
+                content += f.readlines()
     extract_results(content, max_timeout)
 
 
