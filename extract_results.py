@@ -27,6 +27,9 @@ def extract_results(content, max_timeout=default_timeout):
     for line in content:
         line = line.strip()
         data = line.split()
+        print(line)
+        print(data)
+        exit()
         if len(data) >= 2 and data[1].startswith('bestCost('):
             if float(data[-2]) > max_timeout:
                 continue
