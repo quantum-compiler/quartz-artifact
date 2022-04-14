@@ -27,10 +27,8 @@ def extract_results(content, max_timeout=default_timeout):
     for line in content:
         line = line.strip()
         data = line.split()
-        print(line)
-        print(data)
-        exit()
         if len(data) >= 2 and data[1].startswith('bestCost('):
+            print(data)
             if float(data[-2]) > max_timeout:
                 continue
             key = data[0].split('.')[0]
@@ -125,7 +123,6 @@ def extract_results_from_files(prefix, max_timeout=default_timeout):
                 lns = f.readlines()
                 for line in lns:
                     content += filename + line
-                    print(filename + line)
             else:
                 content += f.readlines()
     extract_results(content, max_timeout)
