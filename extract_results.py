@@ -89,7 +89,7 @@ def extract_results(content, max_timeout=default_timeout):
         result_timestamps_reduction = {}
         for i in range(num_timestamps):
             val = 1.0 / original_product
-            assert len(result_timestamps[i]) == 26
+            assert len(result_timestamps[i]) == 26 or mod54
             cnt = 0
             for k, v in natsorted(result_timestamps[i].items()):
                 val *= v
