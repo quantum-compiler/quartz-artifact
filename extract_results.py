@@ -28,7 +28,6 @@ def extract_results(content, max_timeout=default_timeout):
         line = line.strip()
         data = line.split()
         if len(data) >= 2 and data[1].startswith('bestCost('):
-            print(data)
             if float(data[-2]) > max_timeout:
                 continue
             key = data[0].split('.')[0]
@@ -89,14 +88,14 @@ def extract_results(content, max_timeout=default_timeout):
         result_timestamps_geomean_reduction = []
         result_timestamps_reduction = {}
         for i in range(num_timestamps):
-            val = 1.0 / original_product
+            val = 1.0 / (63**len(result_timestamps[0]) if mod54 else original_product)
             assert len(result_timestamps[i]) == 26 or mod54
             cnt = 0
             for k, v in natsorted(result_timestamps[i].items()):
                 val *= v
                 if i == 0:
                     result_timestamps_reduction[k] = []
-                result_timestamps_reduction[k].append(1 - v / original_val[cnt])
+                result_timestamps_reduction[k].append(1 - v / (63 if mod54 else original_val[cnt]))
                 cnt += 1
             val = val ** (1.0 / 26)
             val = 1 - val
@@ -122,7 +121,7 @@ def extract_results_from_files(prefix, max_timeout=default_timeout):
             if mod54:
                 lns = f.readlines()
                 for line in lns:
-                    content += filename + line
+                    content.append(filename + line)
             else:
                 content += f.readlines()
     extract_results(content, max_timeout)
