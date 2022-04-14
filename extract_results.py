@@ -122,7 +122,8 @@ def extract_results_from_files(prefix, max_timeout=default_timeout):
     for filename in files:
         with open(filename) as f:
             if mod54:
-                for line in f.readlines():
+                lns = f.readlines()
+                for line in lns:
                     content += filename + line
                     print(filename + line)
             else:
