@@ -73,11 +73,13 @@ def extract_results(content, max_timeout=default_timeout):
     if num_finished > 0:
         print('geomean_gatecount =', gate_product ** (1 / num_finished))
     print('tot_time =', tot_time)
-    for k, v in natsorted(result.items()):  # easy paste to google doc
+    print('[', end='')
+    for k, v in natsorted(result.items()):  # easy paste to Python script to plot
         if v.isnumeric():
-            print(v)
+            print(v, end=', ')
         else:
-            print(v.split(' ')[0])
+            print(v.split(' ')[0], end=', ')
+    print('],')
     if len(result_timestamps[0]) == 26:
         result_timestamps_geomean_reduction = []
         result_timestamps_reduction = {}
@@ -94,8 +96,8 @@ def extract_results(content, max_timeout=default_timeout):
             val = val ** (1.0 / 26)
             val = 1 - val
             result_timestamps_geomean_reduction.append(val)
-        print(result_timestamps_geomean_reduction)
-        print(result_timestamps_reduction)
+        print(result_timestamps_geomean_reduction, ',')
+        print(result_timestamps_reduction, ',')
 
 
 def extract_results_from_file(filename):
