@@ -97,7 +97,7 @@ def extract_results(content, max_timeout=default_timeout):
                     result_timestamps_reduction[k] = []
                 result_timestamps_reduction[k].append(1 - v / (63 if mod54 else original_val[cnt]))
                 cnt += 1
-            val = val ** (1.0 / 26)
+            val = val ** (1.0 / len(result_timestamps[i]))
             val = 1 - val
             result_timestamps_geomean_reduction.append(val)
         print(result_timestamps_geomean_reduction, ',')
