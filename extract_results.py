@@ -124,6 +124,7 @@ def extract_results_from_files(prefix, max_timeout=default_timeout):
             if mod54:
                 for line in f.readlines():
                     content += filename + line
+                    print(filename + line)
             else:
                 content += f.readlines()
     extract_results(content, max_timeout)
