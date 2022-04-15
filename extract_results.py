@@ -121,8 +121,8 @@ def extract_results(content, max_timeout=default_timeout, output_filename=None):
         print(result_timestamps_geomean_reduction, ',')
         print(result_timestamps_reduction, ',')
     if not mod54:
-        with open('plot-scripts/' + output_filename + '_iterations.log') as f:
-            f.print(iters_data)
+        with open('plot-scripts/' + output_filename + '_iterations.log', 'w') as f:
+            f.write(iters_data)
 
 
 def extract_results_from_file(filename):
