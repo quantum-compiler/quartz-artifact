@@ -23,7 +23,7 @@ default_timeout = 86400
 mod54 = False
 
 
-def extract_results(content, max_timeout=default_timeout):
+def extract_results(content, max_timeout=default_timeout, output_filename=None):
     flag = False
     tot_time = 0
     tot_gate = 0
@@ -121,13 +121,14 @@ def extract_results(content, max_timeout=default_timeout):
         print(result_timestamps_geomean_reduction, ',')
         print(result_timestamps_reduction, ',')
     if not mod54:
-        print(iters_data)
+        with open('plot-scripts/' + output_filename + '_iterations.log') as f:
+            f.print(iters_data)
 
 
 def extract_results_from_file(filename):
     with open(filename) as f:
         content = f.readlines()
-    extract_results(content)
+    extract_results(content, output_filename=filename)
 
 
 def extract_results_from_files(prefix, max_timeout=default_timeout):
@@ -144,7 +145,7 @@ def extract_results_from_files(prefix, max_timeout=default_timeout):
                     content.append(filename + line)
             else:
                 content += f.readlines()
-    extract_results(content, max_timeout)
+    extract_results(content, max_timeout, output_filename=prefix)
 
 
 if __name__ == '__main__':
