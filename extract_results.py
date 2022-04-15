@@ -3,7 +3,15 @@ import os
 from natsort import natsorted
 
 
+verbose = True
+
+
 original_val = [900, 58, 114, 170, 450, 170, 420, 225, 347, 495, 669, 883, 1095, 1347, 63, 119, 278, 521, 443, 884, 200, 45, 75, 105, 255, 150]
+circuit_names = ['adder_8', 'barenco_tof_3', 'barenco_tof_4', 'barenco_tof_5', 'barenco_tof_10', 'csla_mux_3', 'csum_mux_9', 'gf2^4_mult', 'gf2^5_mult', 'gf2^6_mult', 'gf2^7_mult', 'gf2^8_mult', 'gf2^9_mult', 'gf2^10_mult', 'mod5_4', 'mod_mult_55', 'mod_red_21', 'qcla_adder_10', 'qcla_com_7', 'qcla_mod_7', 'rc_adder_6', 'tof_3', 'tof_4', 'tof_5', 'tof_10', 'vbe_adder_3']
+circuit_name_map = {}
+for i in range(26):
+    circuit_name_map[circuit_names[i]] = i
+
 original_product = 1
 for val in original_val:
     original_product *= val
@@ -24,6 +32,7 @@ def extract_results(content, max_timeout=default_timeout):
     key = ''
     result = {}
     result_timestamps = [{} for _ in range(num_timestamps)]
+    iters_data = {}
     for line in content:
         line = line.strip()
         data = line.split()
@@ -31,16 +40,23 @@ def extract_results(content, max_timeout=default_timeout):
             if float(data[-2]) > max_timeout:
                 continue
             key = data[0].split('.')[0]
+            val_float = float(data[1].split('.')[0][9:])
             val = data[1].split('.')[0][9:] + ' (at ' + data[-2] + ' seconds)'
+            if not mod54:
+                val_reduction = 1 - val_float / original_val[circuit_name_map[key]]
+            else:
+                val_reduction = None
             result[key] = val
             if key not in result_timestamps[0]:  # first time
                 for i in range(num_timestamps):
-                    result_timestamps[i][key] = float(data[1].split('.')[0][9:])
+                    result_timestamps[i][key] = val_float
+                iters_data[key] = [val_reduction]
             else:
                 for i in range(num_timestamps - 1, -1, -1):
                     if timestamps[i] < float(data[-2]):
                         break
-                    result_timestamps[i][key] = float(data[1].split('.')[0][9:])
+                    result_timestamps[i][key] = val_float
+                iters_data[key].append(val_reduction)
         if mod54:
             continue
         if flag:
@@ -77,6 +93,8 @@ def extract_results(content, max_timeout=default_timeout):
     if num_finished > 0:
         print('geomean_gatecount =', gate_product ** (1 / num_finished))
     print('tot_time =', tot_time)
+    if not verbose:
+        return
     print('[', end='')
     for k, v in natsorted(result.items()):  # easy paste to Python script to plot
         if v.isnumeric():
@@ -102,6 +120,8 @@ def extract_results(content, max_timeout=default_timeout):
             result_timestamps_geomean_reduction.append(val)
         print(result_timestamps_geomean_reduction, ',')
         print(result_timestamps_reduction, ',')
+    if not mod54:
+        print(iters_data)
 
 
 def extract_results_from_file(filename):
