@@ -45,7 +45,7 @@ def extract_results(content, max_timeout=default_timeout, output_filename=None):
             if not mod54:
                 val_reduction = 1 - val_float / original_val[circuit_name_map[key]]
             else:
-                val_reduction = None
+                val_reduction = 1 - val_float / 63
             result[key] = val
             if key not in result_timestamps[0]:  # first time
                 for i in range(num_timestamps):
@@ -120,7 +120,6 @@ def extract_results(content, max_timeout=default_timeout, output_filename=None):
             result_timestamps_geomean_reduction.append(val)
         print(result_timestamps_geomean_reduction, ',')
         print(result_timestamps_reduction, ',')
-    if not mod54:
         with open('plot-scripts/' + output_filename + '_iterations.log', 'w') as f:
             print(iters_data, file=f)
         print('Wrote iteration data to the file plot-scripts/' + output_filename + '_iterations.log')
