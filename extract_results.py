@@ -122,7 +122,7 @@ def extract_results(content, max_timeout=default_timeout, output_filename=None):
         print(result_timestamps_reduction, ',')
     if not mod54:
         with open('plot-scripts/' + output_filename + '_iterations.log', 'w') as f:
-            f.write(iters_data)
+            print(iters_data, file=f)
 
 
 def extract_results_from_file(filename):
