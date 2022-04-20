@@ -53,20 +53,22 @@ void gen_ecc_set(const std::vector<GateType> &supported_gates,
   equiv_set.save_json(file_prefix + "complete_ECC_set.json");
   auto end = std::chrono::steady_clock::now();
 
-  std::cout << file_prefix.substr(0, file_prefix.size() - 1)
-            << " generated. Running Time (s): "
+  std::cout << "*** Total Time (s) of "
+            << file_prefix.substr(0, file_prefix.size() - 1) << " = "
             << (double)std::chrono::duration_cast<std::chrono::milliseconds>(
                 end - start)
                 .count() /
                 1000.0
             << std::endl;
-  std::cout << "Pruning Time (s): "
+  std::cout << "Pruning Time (s) of "
+            << file_prefix.substr(0, file_prefix.size() - 1) << " = "
             << (double)std::chrono::duration_cast<std::chrono::milliseconds>(
                 end2 - start2)
                 .count() /
                 1000.0
             << std::endl;
-  std::cout << "Verification Time (s): "
+  std::cout << "*** Verification Time (s) of "
+            << file_prefix.substr(0, file_prefix.size() - 1) << " = "
             << (double)std::chrono::duration_cast<std::chrono::milliseconds>(
                 verification_time)
                 .count() /
