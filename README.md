@@ -102,6 +102,52 @@ If you installed from source, in order to run the experiments related to externa
   ```
   Our evaluation uses pyquil 3.0.1.
 
+## Table 5: Metrics for Quartz’s generator
+
+**This script also generates ECC sets for following sections.**
+
+To reproduce the numbers in Table 5 (and Table 8 in extended version) and to generate the ECC sets, run the following script:
+
+```shell
+bash gen_ecc_set.sh > eccset.log
+python show_eccset_results.py
+```
+
+This script runs for about 13 hours. After about 4 hours, the script is generating the ECC sets for scalability analysis
+(see the "Scalability Analysis on the Nam gate set" section of this README file).
+If you do not want to run the scalability analysis and do not want to reproduce the data for the (7,3)-complete ECC set
+for the Nam gate set, you can terminate the script after about 4 hours.
+
+You can run the Python script while the shell script is running to see some intermediate results.
+After running the shell script for about 1 minute, running the Python script should show the following result
+(the running times can differ each time):
+```
+*** Number of transformations (|T|) of Rigetti_2_3 = 66
+*** Number of transformations (|T|) of Rigetti_3_3 = 66
+*** Size of resulting representative set (|Rn|) of Rigetti_2_3 = 361
+*** Size of resulting representative set (|Rn|) of Rigetti_3_3 = 3143
+*** Total Time (s) of Rigetti_2_3 = 1.773
+*** Total Time (s) of Rigetti_3_3 = 5.955
+*** Verification Time (s) of Rigetti_2_3 = 1.669
+*** Verification Time (s) of Rigetti_3_3 = 5.156
+*** ch(Rigetti,q=3) = 30
+```
+
+In the output, `*** ch(...) = ...` denotes the characteristics for each gate set.
+
+The other rows correspond to cells in Table 5.
+
+The generated ECC sets are stored in Json files with file name formatted like
+this: `{Gate set name}_{number of gates}_{number_of qubits}_complete_ECC_set.json`.
+
+##### On Windows
+
+Run the following command:
+```batch
+build\Debug\gen_ecc_set.exe > eccset.log
+python show_eccset_results.py
+```
+
 ## Table 2: Evaluating the Quartz Generator and the Pruning Techniques
 
 To reproduce the numbers in Table 2, run the following script:
@@ -156,47 +202,6 @@ Run the following command:
 ```batch
 build\Debug\test_pruning.exe > table2.log
 python show_table2_results.py
-```
-
-## Characteristics and the Number of Transformations for the Three Gate Sets
-
-To reproduce the characteristics at the end of Section 4 in the submission and to generate the ECC sets, run the following script:
-
-```shell
-bash gen_ecc_set.sh > eccset.log
-python show_eccset_results.py
-```
-
-This script runs for about 10 hours. After about 1.5 hours, the script is generating the ECC sets for scalability analysis
-(see the "Scalability Analysis on the Nam gate set" section of this README file).
-If you do not want to run the scalability analysis, you can terminate the script after about 1.5 hours.
-
-You can run the Python script while the shell script is running to see some intermediate results.
-After running the shell script for about 1.5 hours, running the Python script should show the following result:
-```
-*** Number of transformations of IBM_4_3 = 16748
-*** Number of transformations of Nam_6_3 = 56152
-*** Number of transformations of Rigetti_6_3 = 346
-*** ch(IBM,q=3) = 1362
-*** ch(Nam,q=3) = 27
-*** ch(Rigetti,q=3) = 36
-```
-
-In the output, `*** ch(...) = ...` denotes the characteristics for each gate set. We expect the result of the IBM gate set
-to differ from the number in the submission because we added the U3 gate back (which was removed in the submission) and increased `q` from 2 to 3.
-
-`*** Number of transformations of ... = ...` denotes the number of transformations for each gate set. We expect the
-numbers of transformations to differ from the numbers in the submission due to floating-point errors, bug fixes, and changes of `n` and `q` after the submission.
-
-The generated ECC sets are stored in Json files with file name formatted like
-this: `{Gate set name}_{number of gates}_{number_of qubits}_complete_ECC_set.json`.
-
-##### On Windows
-
-Run the following command:
-```batch
-build\Debug\gen_ecc_set.exe > eccset.log
-python show_eccset_results.py
 ```
 
 ## Table 3: Comparing Quartz with existing quantum circuit optimizers on Nam's gate set {𝑅𝑧(𝜆),𝑋,𝐻,𝐶𝑁𝑂𝑇}
