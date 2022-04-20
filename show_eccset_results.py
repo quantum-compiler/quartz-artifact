@@ -11,9 +11,8 @@ def extract_results(filename):
             data = line.split()
             if data[1].startswith('ch') and data[1][-2] == '3':
                 records.add(line)
-            elif data[1] == 'Number':
-                if data[5] in ['IBM_4_3', 'Nam_6_3', 'Rigetti_6_3']:
-                    records.add(line)
+            elif data[1] == 'Number' or data[1] == 'Size':
+                records.add(line)
     for record in sorted(records):
         print(record)
 

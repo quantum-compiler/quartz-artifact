@@ -35,7 +35,7 @@ void gen_ecc_set(const std::vector<GateType> &supported_gates,
                max_num_param_gates, &dataset1, /*verify_equivalences=*/
                true, &equiv_set, unique_parameters,             /*verbose=*/
                true, &verification_time);
-  dataset1.remove_singletons(&ctx);
+  int num_singletons = dataset1.remove_singletons(&ctx);
   dataset1.save_json(&ctx, file_prefix + "pruning_unverified.json");
 
   auto start2 = std::chrono::steady_clock::now();
@@ -75,7 +75,12 @@ void gen_ecc_set(const std::vector<GateType> &supported_gates,
             << ", num_equivalence_classes = "
             << equiv_set.num_equivalence_classes() << std::endl;
 
-  std::cout << "*** Number of transformations of "
+  std::cout << "*** Size of resulting representative set (|Rn|) of "
+            << file_prefix.substr(0, file_prefix.size() - 1) << " = "
+            << num_singletons + equiv_set.num_equivalence_classes()
+            << std::endl;
+
+  std::cout << "*** Number of transformations (|T|) of "
             << file_prefix.substr(0, file_prefix.size() - 1) << " = "
             << (equiv_set.num_total_dags() -
                 equiv_set.num_equivalence_classes()) *
