@@ -93,6 +93,14 @@ void gen_ecc_set(const std::vector<GateType> &supported_gates,
 
 int main() {
   for (int n = 2; n <= 6; n++) {
+      std::string file_prefix = "Nam_";
+      file_prefix += std::to_string(n);
+      file_prefix += "_3_";
+      gen_ecc_set(
+          {GateType::rz, GateType::h, GateType::cx, GateType::x, GateType::add},
+          file_prefix, true, 3, 2, n);
+  }
+  for (int n = 2; n <= 6; n++) {
     std::string file_prefix = "Rigetti_";
     file_prefix += std::to_string(n);
     file_prefix += "_3_";
@@ -115,6 +123,8 @@ int main() {
               "IBM_4_3_", true, 3, 4, 4);
   for (int n = 1; n <= 7/*8*/; n++) {
     for (int q = 1; q <= 4 - (n >= 7); q++) {
+      if (q == 3 && (n >= 2 && n <= 7))
+        continue;
       std::string file_prefix = "Nam_";
       file_prefix += std::to_string(n);
       file_prefix += "_";

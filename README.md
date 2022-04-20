@@ -120,7 +120,7 @@ for the Nam gate set, you can terminate the script after about 4 hours.
 
 You can run the Python script while the shell script is running to see some intermediate results.
 After running the shell script for about 1 minute, running the Python script should show the following result
-(the running times can differ each time):
+(the running times may vary each time):
 ```
 *** Number of transformations (|T|) of Rigetti_2_3 = 66
 *** Number of transformations (|T|) of Rigetti_3_3 = 66
