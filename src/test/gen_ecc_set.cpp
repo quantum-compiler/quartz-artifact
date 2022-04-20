@@ -46,6 +46,7 @@ void gen_ecc_set(const std::vector<GateType> &supported_gates,
   verification_time += end2 - start2;
   equiv_set.clear();  // this is necessary
   equiv_set.load_json(&ctx, file_prefix + "pruning.json");
+  auto rn = num_singletons + equiv_set.num_equivalence_classes();
   start2 = std::chrono::steady_clock::now();
   equiv_set.simplify(&ctx);
   end2 = std::chrono::steady_clock::now();
@@ -54,19 +55,19 @@ void gen_ecc_set(const std::vector<GateType> &supported_gates,
 
   std::cout << file_prefix.substr(0, file_prefix.size() - 1)
             << " generated. Running Time (s): "
-            << (double) std::chrono::duration_cast<std::chrono::milliseconds>(
+            << (double)std::chrono::duration_cast<std::chrono::milliseconds>(
                 end - start)
                 .count() /
                 1000.0
             << std::endl;
   std::cout << "Pruning Time (s): "
-            << (double) std::chrono::duration_cast<std::chrono::milliseconds>(
+            << (double)std::chrono::duration_cast<std::chrono::milliseconds>(
                 end2 - start2)
                 .count() /
                 1000.0
             << std::endl;
   std::cout << "Verification Time (s): "
-            << (double) std::chrono::duration_cast<std::chrono::milliseconds>(
+            << (double)std::chrono::duration_cast<std::chrono::milliseconds>(
                 verification_time)
                 .count() /
                 1000.0
@@ -77,7 +78,7 @@ void gen_ecc_set(const std::vector<GateType> &supported_gates,
 
   std::cout << "*** Size of resulting representative set (|Rn|) of "
             << file_prefix.substr(0, file_prefix.size() - 1) << " = "
-            << num_singletons + equiv_set.num_equivalence_classes()
+            << rn
             << std::endl;
 
   std::cout << "*** Number of transformations (|T|) of "
