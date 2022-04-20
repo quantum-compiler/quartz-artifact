@@ -84,11 +84,8 @@ void gen_ecc_set(const std::vector<GateType> &supported_gates,
 }
 
 int main() {
-  gen_ecc_set({GateType::u1, GateType::rz, GateType::add},
-              "U1_RZ_2", true, 1, 2, 2);
-  return 0;
-  for (int n = 2; n <= 2; n++) {
-    std::string file_prefix = "Rigetti_const_";
+  for (int n = 2; n <= 6; n++) {
+    std::string file_prefix = "Rigetti_";
     file_prefix += std::to_string(n);
     file_prefix += "_3_";
     gen_ecc_set({GateType::rx1, GateType::x, GateType::rx3, GateType::rz, GateType::cz, GateType::add},
@@ -98,13 +95,13 @@ int main() {
                GateType::add},
               "IBM_3_3_", true, 3, 4, 3);
   gen_ecc_set({GateType::h, GateType::cz}, "H_CZ_2_2_", false, 2, 0, 2);
-  for (int n = 5; n <= 8; n++) {
-    std::string file_prefix = "Rigetti_";
-    file_prefix += std::to_string(n);
-    file_prefix += "_3_";
-    gen_ecc_set({GateType::rx, GateType::rz, GateType::cz, GateType::add},
-                file_prefix, true, 3, 2, n);
-  }
+//  for (int n = 5; n <= 8; n++) {
+//    std::string file_prefix = "Rigetti_old_";
+//    file_prefix += std::to_string(n);
+//    file_prefix += "_3_";
+//    gen_ecc_set({GateType::rx, GateType::rz, GateType::cz, GateType::add},
+//                file_prefix, true, 3, 2, n);
+//  }
   gen_ecc_set({GateType::u1, GateType::u2, GateType::u3, GateType::cx,
                GateType::add},
               "IBM_4_3_", true, 3, 4, 4);
