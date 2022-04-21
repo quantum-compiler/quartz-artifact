@@ -97,7 +97,7 @@ def extract_results(filename):
 if __name__ == '__main__':
     fn = None
     if len(sys.argv) != 2:
-        fn = 'table2.log'
+        fn = 'table6.log'
     else:
         fn = sys.argv[1]
     extract_results(fn)

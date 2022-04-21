@@ -16,7 +16,7 @@ See [code structure](doc/CODE_STRUCTURE.md) for more information about the organ
 
 ### Hardware Requirements
 
-We recommend (and have only tested) an m6i.32xlarge AWS instance with Ubuntu 20.04 to run our artifact. If other instances are used, we require at least 256 GB DRAM and disk space, and it may take longer than the reported times to run.
+We recommend (and have only thoroughly tested) an m6i.32xlarge AWS instance with Ubuntu 20.04 to run our artifact. If other instances are used, we require at least 256 GB DRAM and disk space, and it may take longer than the reported times to run.
 
 ### Installation
 
@@ -140,6 +140,10 @@ The other rows correspond to cells in Table 5.
 The generated ECC sets are stored in Json files with file name formatted like
 this: `{Gate set name}_{number of gates}_{number_of qubits}_complete_ECC_set.json`.
 
+On another Ubuntu machine with 12 CPU cores and 32 GB memory, we are able to generate
+up to (6,3)-complete ECC sets for Nam gate set, up to (3,3)-complete ECC sets for IBM gate set,
+and up to (6,3)-complete ECC sets for Rigetti gate set within 80 minutes in total.
+
 ##### On Windows
 
 Run the following command:
@@ -148,16 +152,16 @@ build\Debug\gen_ecc_set.exe > eccset.log
 python show_eccset_results.py
 ```
 
-## Table 2: Evaluating the Quartz Generator and the Pruning Techniques
+## Table 6: Evaluating the Quartz Generator and the Pruning Techniques
 
-To reproduce the numbers in Table 2, run the following script:
+To reproduce the numbers in Table 6, run the following script:
 
 ```shell
-bash run_table2.sh > table2.log
-python show_table2_results.py
+bash run_table6.sh > table6.log
+python show_table6_results.py
 ```
 
-We present Table 2 in a different way in the camera-ready version than in the submission version of the paper.
+We present Table 6 in a different way in the camera-ready version than in the submission version of the paper.
 We removed the "ECC Simplification" column and added some other columns. This script outputs the numbers
 corresponding to the camera-ready version, but the column titles match the submission version for artifact evaluation.
 We will modify the script to make the column titles match the camera-ready version when linking the artifact to the
