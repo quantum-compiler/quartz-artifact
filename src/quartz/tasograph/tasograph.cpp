@@ -1321,14 +1321,14 @@ Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
       }
       fprintf(fout,
               "%s: bestCost(%.2f) currentCost(%.2f) candidates(%zu) after "
-              "%.4lf seconds, ",
+              "%.4lf seconds\n",
               circuit_name.c_str(), bestCost, subGraph->total_cost(),
               candidates.size(),
               (double)std::chrono::duration_cast<std::chrono::milliseconds>(
                   end - start)
                       .count() /
                   1000.0);
-      fprintf(fout, "iter %d: hash %zu\n", counter, subGraph->hash());
+      // fprintf(fout, "iter %d: hash %zu\n", counter, subGraph->hash());
       fflush(fout);
 
       //   std::vector<Graph *> new_candidates;
@@ -1339,7 +1339,7 @@ Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
                   2 * maxNumOps, enable_early_stop, stop_search);
         // auto front_gate_count = candidates.top()->gate_count();
         for (auto &candidate : new_candidates) {
-          fprintf(fout, "iter %d: push %zu\n", counter, candidate->hash());
+          //fprintf(fout, "iter %d: push %zu\n", counter, candidate->hash());
           candidates.push(candidate);
         }
         // auto new_front_gate_count = candidates.top()->gate_count();

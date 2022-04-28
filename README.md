@@ -547,11 +547,11 @@ To use different random seeds to run the circuit `mod5_4`, please make the follo
   ```
 - At line 119 of `src/quartz/tasograph/tasograph.cpp`, change
   ```c++
-  /*, random_value_(rand())*/
+  /*: random_value_(rand())*/
   ```
   to
   ```c++
-  , random_value_(rand())
+  : random_value_(rand())
   ```
 - At line 1109 of `src/quartz/tasograph/tasograph.cpp`, change
   ```c++
