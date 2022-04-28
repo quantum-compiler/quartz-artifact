@@ -65,4 +65,7 @@ In `src/test/`
 * `test_nam.cpp`: a file to run benchmarks on the Nam gate set
 * `test_ibmq.cpp`: a file to run benchmarks on the IBM gate set
 * `test_rigetti.cpp`: a file to run benchmarks on the Rigetti gate set
-* `test_pruning.cpp`: a file to run experiments for Table 2 and Table 3
+* `test_pruning.cpp`: a file to run experiments for Table 6
+
+In `/`
+* `H_CZ_2_2_complete_ECC_set_modified.json`: a file to implement the adjacent H and CZ pairs cancellation for the Rigetti gate set (see Section 7.1 in the paper)
