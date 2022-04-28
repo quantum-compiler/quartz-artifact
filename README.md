@@ -633,8 +633,9 @@ python extract_results.py ibm_without_u3.txt
 The results should be slightly worse than the results in the paper, but it will run
 much faster (in about 1 hour).
 
-To generate a (4,3)-complete ECC set with 2 input parameters for the Rigetti gate set
-but without the constraint that each input parameter is used at most once in a circuit,
+To generate a (4,3)-complete ECC set with 2 input parameters for a gate set similar to Rigetti gate set
+but allowing any `Rx` gates (instead of only allowing `Rx(k * pi / 2)` where `k` is an integer) and
+without the constraint that each input parameter is used at most once in a circuit,
 you can change the main function in `src/test/gen_ecc_set.cpp` to the following:
 
 ```c++
