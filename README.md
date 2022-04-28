@@ -163,6 +163,10 @@ python plot-scripts/table6_possible_circuits.py IBM
 python plot-scripts/table6_possible_circuits.py Rigetti
 ```
 
+##### On Windows
+
+The script is the same on Windows.
+
 ### Other Columns
 
 To reproduce the other numbers in Table 6, run the following script:
@@ -182,31 +186,21 @@ You should be able to see the following intermediate results by running the Pyth
     - Column "+ Common Subcircuit": 50
 ...
 ```
-The 5 rows with "`- Column`" correspond to 5 cells of the row "n = 3" of "Nam Gate Set" in Table 2.
-- `Column "Original"` corresponds to the column `Original` in the submission, and column `Brute Force` in the camera-ready version.
-- `Algorithm 1 with only singleton removal` corresponds to the column `RepGen` in the camera-ready version.
-- `Column "Representative"` corresponds to the column `Representative` in the submission, and column `+ ECC Simplification` in the camera-ready version.
-- `Column "Common Subcircuit"` corresponds to the column `Common Subcircuit` in the submission, and column `+ Common Subcircuit Pruning` in the camera-ready version.
-- `Column "Overall Reduction"` corresponds to the column `Overall Reduction` in both versions.
-- `|Rn|` corresponds to the column `|Rn|` in Table 3 of the camera-ready version.
-- `Verification time (s)` corresponds to the column `Verification time (s)` in Table 3 of the camera-ready version.
-- `Column "Running Time (s)"` corresponds to the column `Running Time (s)` in the submission, and column `Total Time (s)` in Table 3 of the camera-ready version.
+The 3 rows with "`- Column`" correspond to 3 cells of the row "n = 2" of "Nam Gate Set" in Table 6.
 
-This script runs for about 10 hours. To only reproduce the running time for the generator and verifier with all pruning
-techniques faster (in 1.5 hours), you can modify the fourth last argument for each invocation of `test_pruning` in `src/test/test_pruning.cpp`
-from `true` to `false` and comment out the invocations of `Nam_7_` and `IBM_5_`, and then run `bash run_table2.sh`.
+The numbers inside the parentheses in Table 6 can be computed by dividing the number of possible circuits by the numbers here.
+
+This script runs for about 7 hours.
 
 ##### On Windows
 
 Run the following command:
 ```batch
-build\Debug\test_pruning.exe > table2.log
-python show_table2_results.py
+build\Debug\test_pruning.exe > table6.log
+python show_table6_results.py
 ```
 
-## Table 3: Comparing Quartz with existing quantum circuit optimizers on Nam's gate set {𝑅𝑧(𝜆),𝑋,𝐻,𝐶𝑁𝑂𝑇}
-
-This corresponds to Table 4 in the camera-ready version.
+## Table 2: Comparing Quartz with existing quantum circuit optimizers on Nam's gate set {𝑅𝑧(𝜆),𝑋,𝐻,𝐶𝑁𝑂𝑇}
 
 ### The results of Qiskit
 
@@ -301,9 +295,7 @@ To run the experiments for different circuits separately, for example, to run th
 Debug\test_nam.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm
 ```
 
-## Table 4: Comparing Quartz with existing circuit optimizers on the IBM gate set
-
-This corresponds to Table 5 in the camera-ready version.
+## Table 3: Comparing Quartz with existing circuit optimizers on the IBM gate set
 
 ### The results of Qiskit
 
@@ -398,9 +390,7 @@ To run the experiments for different circuits separately, for example, to run th
 Debug\test_ibmq.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm
 ```
 
-## Table 5: Comparing Quartz with Quilc and t|ket⟩ on the Rigetti gate set (𝑅𝑥 (𝑘𝜋/2)(𝑘 ∈Z),𝑅𝑧(𝜆),𝐶𝑍)
-
-This corresponds to Table 6 in the camera-ready version.
+## Table 4: Comparing Quartz with Quilc and t|ket⟩ on the Rigetti gate set (𝑅𝑥 (𝑘𝜋/2)(𝑘 ∈Z),𝑅𝑧(𝜆),𝐶𝑍)
 
 ### The results of Quilc
 
