@@ -483,10 +483,9 @@ To run the experiments for different circuits separately, for example, to run th
 Debug\test_rigetti.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm
 ```
 
-## Scalability Analysis on the Nam gate set
+## Section 7.5: Analyzing Quartz’s Circuit Optimizer
 
-This is not included in the paper submission, but we would like to include it for completeness because it appears in the camera-ready version (Figure 10).
-To reproduce the scalability analysis results, run the following script after generating the ECC sets:
+To reproduce the results in Section 7.5 of the paper, run the following script after generating the ECC sets:
 
 ``` shell
 bash run_scalability.sh
@@ -497,6 +496,16 @@ The results are stored in `scalability_{n}{q}.txt` where `n` ranges from 1 to 7,
 You can run `python extract_results.py scalability_{n}{q}.txt` to see the final results,
 or run `python extract_results.py Nam_{n}_{q}` to see the intermediate results.
 
+You can run `python plot-scripts/scalability_plot.py` to plot Figure 7 in the paper and Figure 9-34 (left) in the extended version.
+You can also copy the corresponding part of the output of `python extract_results.py Nam_{n}_{q}` for each `n` and `q`
+into line 13-60 of `plot-scripts/scalability_plot.py`
+and then run `python plot-scripts/scalability_plot.py` to plot the results.
+
+You can run `python plot-scripts/time_plot.py` to plot Figure 8 in the paper and Figure 9-34 (right) in the extended version.
+You can also copy the corresponding part of the output of `python extract_results.py Nam_{n}_3` for each `n`
+into line 13-18 of `plot-scripts/time_plot.py`
+and then run `python plot-scripts/time_plot.py` to plot the results.
+
 ##### On Windows
 
 To run the experiments for different ECC sets and circuits separately, for example, to run the experiment for `barenco_tof_3` with a (3,2)-complete ECC set (`n=3, q=2`)
@@ -504,6 +513,100 @@ To run the experiments for different ECC sets and circuits separately, for examp
 ```batch
 Debug\test_nam.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm --eqset ..\Nam_3_2_complete_ECC_set.json
 ```
+
+## For `mod5_4`
+
+To use different random seeds to run the circuit `mod5_4`, please make the following changes in the code:
+- At line 64-66 of `src/quartz/tasograph/substitution.h`, change
+  ```c++
+    /*if (lc == rc) {
+      return lhs->random_value_ < rhs->random_value_;
+    }*/
+  ```
+  to
+  ```c++
+    if (lc == rc) {
+      return lhs->random_value_ < rhs->random_value_;
+    }
+  ```
+- At line 246 of `src/quartz/tasograph/tasograph.h`, change
+  ```c++
+  // int random_value_;
+  ```
+  to
+  ```c++
+  int random_value_;
+  ```
+- At line 30 of `src/quartz/tasograph/tasograph.cpp`, change
+  ```c++
+  /*, random_value_(rand())*/
+  ```
+  to
+  ```c++
+  , random_value_(rand())
+  ```
+- At line 32 of `src/quartz/tasograph/tasograph.cpp`, change
+  ```c++
+  /*, random_value_(rand())*/
+  ```
+  to
+  ```c++
+  , random_value_(rand())
+  ```
+- At line 119 of `src/quartz/tasograph/tasograph.cpp`, change
+  ```c++
+  /*, random_value_(rand())*/
+  ```
+  to
+  ```c++
+  , random_value_(rand())
+  ```
+- At line 1109 of `src/quartz/tasograph/tasograph.cpp`, change
+  ```c++
+  // srand(0);
+  ```
+  to
+  ```c++
+  srand({seed});
+  ```
+  where `{seed}` is the random seed you want to run
+- At line 1113 of `src/quartz/tasograph/tasograph.cpp`, change
+  ```c++
+  ".log";
+  ```
+  to
+  ```c++
+  "_rand{seed}.log";
+  ```
+  where `{seed}` is the random seed you want to run
+- At line 1117 of `src/quartz/tasograph/tasograph.cpp`, change
+  ```c++
+  ".err";
+  ```
+  to
+  ```c++
+  "_rand{seed}.err";
+  ```
+  where `{seed}` is the random seed you want to run
+
+After all these changes, run the following script:
+```shell
+bash run_nam_mod5_4.sh
+```
+
+Then use the following script to see the results:
+```shell
+python extract_results.py Nam_3_3_mod5_4_rand
+python extract_results.py Nam_4_3_mod5_4_rand
+python extract_results.py Nam_5_3_mod5_4_rand
+python extract_results.py Nam_6_3_mod5_4_rand
+python extract_results.py Nam_7_3_mod5_4_rand
+```
+
+You can run `python plot-scripts/mod54_plot.py` to plot Figure 35 in the extended version of the paper.
+You can also copy the corresponding part of the output of `python extract_results.py Nam_{n}_3_mod5_4_rand` for each `n`
+into line 14-18 and line 22-26 of `plot-scripts/mod54_plot.py`
+and then run `python plot-scripts/mod54_plot.py` to plot the results.
 
 ## Test other ECC sets
 
