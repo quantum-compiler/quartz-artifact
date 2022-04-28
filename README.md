@@ -516,6 +516,8 @@ Debug\test_nam.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm --eqset ..\Nam_3
 
 ## For `mod5_4`
 
+We provide an optimization result example of 25 gates at `circuit/example-circuits/mod5_4_optimized_result.qasm`.
+
 To use different random seeds to run the circuit `mod5_4`, please make the following changes in the code:
 - At line 64-66 of `src/quartz/tasograph/substitution.h`, change
   ```c++
