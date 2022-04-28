@@ -20,14 +20,6 @@ We recommend (and have only thoroughly tested) an m6i.32xlarge AWS instance with
 
 ### Installation
 
-We provide the following two approaches to install the artifact.
-
-#### 1. Install from AMI
-
-To facilitate the artifact evaluation of our submission, we provide an Amazon Machine Image (AMI) of Quartz with all dependencies pre-installed. Our AMI instance ID is ami-0fb5ae3c79d123cf1. To log in to the instance, the username and password are both `pldi22ae`.
-
-#### 2. Install from source code
-
 We have only tested all commands on Ubuntu 20.04, but they should also work on other operating systems such as Windows (see the "On Windows" paragraph below).
 
 - Make sure you have CMake (https://cmake.org/) with version >= 3.16.
