@@ -69,7 +69,7 @@ def extract_results(filename):
         for n in sorted(ibm_n):
             print(f'  - Row "n = {n}":')
             for k, v in sorted(records.items()):
-                if k[0] == 'Nam' and k[1] == n:
+                if k[0] == 'IBM' and k[1] == n:
                     if 1 <= k[2] <= 3:
                         print(f'    - {message[k[2]]}: {v[0]}')
     if len(rigetti_n) > 0:
@@ -77,7 +77,7 @@ def extract_results(filename):
         for n in sorted(rigetti_n):
             print(f'  - Row "n = {n}":')
             for k, v in sorted(records.items()):
-                if k[0] == 'Nam' and k[1] == n:
+                if k[0] == 'Rigetti' and k[1] == n:
                     if 1 <= k[2] <= 3:
                         print(f'    - {message[k[2]]}: {v[0]}')
 

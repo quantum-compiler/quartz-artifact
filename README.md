@@ -172,30 +172,15 @@ bash run_table6.sh > table6.log
 python show_table6_results.py
 ```
 
-We present Table 6 in a different way in the camera-ready version than in the submission version of the paper.
-We removed the "ECC Simplification" column and added some other columns. This script outputs the numbers
-corresponding to the camera-ready version, but the column titles match the submission version for artifact evaluation.
-We will modify the script to make the column titles match the camera-ready version when linking the artifact to the
-camera-ready version of the paper.
-
-We expect the numbers to differ from the numbers in the submission due to floating-point errors and bug fixes after the
-paper submission.
-
 You can run the Python script while the shell script is running to see some intermediate results (a part of the table).
 You should be able to see the following intermediate results by running the Python script after running the shell script 1 minute:
 ```
 - Nam Gate Set:
-  - Row "n = 3":
-    - Column "Original": 11404 (4179)
-    - Algorithm 1 with only singleton removal (not shown in the submission): 1180 (566)
-    - Column "Representative": 231 (99)
-    - Column "Common Subcircuit": 164 (66)
-    - Column "Overall Reduction": 98.56% (98.42%)
-    - |Rn| (not shown in the submission): 4179
-    - Verification time (s) (not shown in the submission): 2.575
-    - Column "Running Time (s)": 3.721
-  - Row "n = 4":
-    - ...
+  - Row "n = 2":
+    - Column "RepGen": 400
+    - Column "+ ECC Simplification": 50
+    - Column "+ Common Subcircuit": 50
+...
 ```
 The 5 rows with "`- Column`" correspond to 5 cells of the row "n = 3" of "Nam Gate Set" in Table 2.
 - `Column "Original"` corresponds to the column `Original` in the submission, and column `Brute Force` in the camera-ready version.
