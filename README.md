@@ -603,6 +603,19 @@ You can also copy the corresponding part of the output of `python extract_result
 into line 14-18 and line 22-26 of `plot-scripts/mod54_plot.py`
 and then run `python plot-scripts/mod54_plot.py` to plot the results.
 
+##### On Windows
+Instead of running `bash run_nam_mod5_4.sh`, you can follow these steps:
+- Open `build\Quartz.sln` in Visual Studio 2019, and click Build -> Build Solution.
+- Run the following commands (assuming you are currently in the `build\` directory):
+  ```batch
+  mkdir "../circuit/nam-benchmarks/output_files/mod54"
+  Debug\test_nam.exe "../circuit/nam-benchmarks/mod5_4.qasm" --output "../circuit/nam-benchmarks/output_files/mod54/mod5_4.qasm.output.33.nam" --eqset "../Nam_3_3_complete_ECC_set.json"
+  Debug\test_nam.exe "../circuit/nam-benchmarks/mod5_4.qasm" --output "../circuit/nam-benchmarks/output_files/mod54/mod5_4.qasm.output.43.nam" --eqset "../Nam_4_3_complete_ECC_set.json"
+  Debug\test_nam.exe "../circuit/nam-benchmarks/mod5_4.qasm" --output "../circuit/nam-benchmarks/output_files/mod54/mod5_4.qasm.output.53.nam" --eqset "../Nam_5_3_complete_ECC_set.json"
+  Debug\test_nam.exe "../circuit/nam-benchmarks/mod5_4.qasm" --output "../circuit/nam-benchmarks/output_files/mod54/mod5_4.qasm.output.63.nam" --eqset "../Nam_6_3_complete_ECC_set.json"
+  Debug\test_nam.exe "../circuit/nam-benchmarks/mod5_4.qasm" --output "../circuit/nam-benchmarks/output_files/mod54/mod5_4.qasm.output.73.nam" --eqset "../Nam_7_3_complete_ECC_set.json"
+  ```
+
 ## Test other ECC sets
 
 You can also test other ECC sets not shown above in this artifact.

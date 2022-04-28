@@ -1298,8 +1298,8 @@ Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
         bestGraph->constant_and_rotation_elimination();
         bestGraph->to_qasm(output_fn + std::to_string(bestCost), false, false);
       }
-      subGraph->constant_and_rotation_elimination();
-      subGraph->to_qasm(output_fn + "_" + std::to_string(subGraph->total_cost()) + "_" + std::to_string(subGraph->hash()), false, false);
+      //subGraph->constant_and_rotation_elimination();
+      //subGraph->to_qasm(output_fn + "_" + std::to_string(subGraph->total_cost()) + "_" + std::to_string(subGraph->hash()), false, false);
       if (alpha >= 1 && subGraph->total_cost() > bestCost * alpha + 7) {
         break;
       }
