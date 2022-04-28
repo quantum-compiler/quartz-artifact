@@ -2,6 +2,7 @@
 from math import factorial, prod
 from collections import  defaultdict
 from itertools import product
+import sys
 
 def n_parameter_expressions(m, p):
     """
@@ -53,9 +54,9 @@ Rigetti = [
     (2, 0), # CZ
 ]
 
-gate_set = IBM
+gate_set = eval(sys.argv[1])
 q = 3 # number of qubits
-m = 4 # number of parameters
+m = 4 if gate_set == IBM else 2 # number of parameters
 
 
 n_gates_by_arity = defaultdict(int)
@@ -79,6 +80,6 @@ for n in range(10):
     circuits_by_n.append(int(C))
 
 print(circuits_by_n)
-print('\n\nn number of circuits with at most n gates:')
+print('\n\nn Number of circuits with at most n gates:')
 for i in range(len(circuits_by_n)):
     print(f'{i} {sum(circuits_by_n[:i + 1]):,}')

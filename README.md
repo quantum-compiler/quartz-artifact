@@ -154,7 +154,18 @@ python show_eccset_results.py
 
 ## Table 6: Evaluating the Quartz Generator and the Pruning Techniques
 
-To reproduce the numbers in Table 6, run the following script:
+### Number of Possible Circuits
+
+To reproduce the number of possible circuits in Table 6, run the following script (this script requires Python 3.8+):
+```shell
+python plot-scripts/table6_possible_circuits.py Nam
+python plot-scripts/table6_possible_circuits.py IBM
+python plot-scripts/table6_possible_circuits.py Rigetti
+```
+
+### Other Columns
+
+To reproduce the other numbers in Table 6, run the following script:
 
 ```shell
 bash run_table6.sh > table6.log

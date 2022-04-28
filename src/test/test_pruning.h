@@ -113,7 +113,7 @@ void test_pruning(const std::vector<GateType> &supported_gates,
         << " seconds." << std::endl;
 
     std::cout << "*** " << file_prefix.substr(0, file_prefix.size() - 1)
-              << " ReGen: "
+              << " RepGen: "
               << equiv_set.num_total_dags() << " ("
               << equiv_set.num_equivalence_classes() << ")" << std::endl;
 
@@ -136,7 +136,7 @@ void test_pruning(const std::vector<GateType> &supported_gates,
         << " seconds." << std::endl;
 
     std::cout << "*** " << file_prefix.substr(0, file_prefix.size() - 1)
-              << " ReGen + ECC Simplification: "
+              << " RepGen + ECC Simplification: "
               << equiv_set.num_total_dags() << " ("
               << equiv_set.num_equivalence_classes() << ")" << std::endl;
 
@@ -159,7 +159,7 @@ void test_pruning(const std::vector<GateType> &supported_gates,
         << " seconds." << std::endl;
 
     std::cout << "*** " << file_prefix.substr(0, file_prefix.size() - 1)
-              << " ReGen + All Pruning: "
+              << " RepGen + All Pruning: "
               << equiv_set.num_total_dags() << " ("
               << equiv_set.num_equivalence_classes() << ")" << std::endl;
 
