@@ -595,6 +595,9 @@ python extract_results.py Nam_6_3_mod5_4_rand
 python extract_results.py Nam_7_3_mod5_4_rand
 ```
 
+You can change the `{seed}` above multiple times and then run `run_nam_mod5_4.sh` and `extract_results.py`
+to show the results of multiple runs together.
+
 You can run `python plot-scripts/mod54_plot.py` to plot Figure 35 in the extended version of the paper.
 You can also copy the corresponding part of the output of `python extract_results.py Nam_{n}_3_mod5_4_rand` for each `n`
 into line 14-18 and line 22-26 of `plot-scripts/mod54_plot.py`
