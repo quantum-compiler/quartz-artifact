@@ -66,9 +66,7 @@ Note that the experiment results may differ slightly on Windows.
 
 ### Install External Packages
 
-Note that you do not need to install external packages if you install from AMI because we have already pre-installed them for you.
-
-If you installed from source, in order to run the experiments related to external packages, you need to install them:
+In order to run the experiments related to external packages, you need to install the following external packages:
 
 - Qiskit (https://qiskit.org/):
   ```shell
