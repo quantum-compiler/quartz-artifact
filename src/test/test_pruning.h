@@ -46,7 +46,7 @@ void test_pruning(const std::vector<GateType> &supported_gates,
                    max_num_quantum_gates, max_num_param_gates,
                    &dataset1,        /*verify_equivalences=*/
                    true, &equiv_set, unique_parameters, /*verbose=*/
-                   true, &verification_time);
+                   true, &verification_time, /*tmp_file_prefix=*/"tmp_table6");
       end = std::chrono::steady_clock::now();
       running_time_with_all_pruning_techniques += end - start;
       std::cout << std::dec

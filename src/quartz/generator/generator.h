@@ -51,7 +51,8 @@ namespace quartz {
                       bool unique_parameters,
                       bool verbose = false,
                       decltype(std::chrono::steady_clock::now()
-                          - std::chrono::steady_clock::now()) *record_verification_time = nullptr);
+                          - std::chrono::steady_clock::now()) *record_verification_time = nullptr,
+                      std::string tmp_file_prefix = "tmp");
 
 	private:
 		void dfs(int gate_idx, int max_num_gates, int max_remaining_param_gates,

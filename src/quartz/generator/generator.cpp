@@ -27,7 +27,8 @@ namespace quartz {
 	                         Dataset *dataset, bool verify_equivalences,
                              EquivalenceSet *equiv_set, bool unique_parameters,
                              bool verbose, decltype(std::chrono::steady_clock::now()
-        - std::chrono::steady_clock::now()) *record_verification_time) {
+        - std::chrono::steady_clock::now()) *record_verification_time,
+                             std::string tmp_file_prefix) {
 		auto empty_dag =
 		    std::make_unique< DAG >(num_qubits, num_input_parameters);
 		// Generate all possible parameter gates at the beginning.
@@ -77,7 +78,7 @@ namespace quartz {
 					break;
 				}
 				bool ret =
-				    dataset->save_json(context, "tmp_before_verify.json");
+				    dataset->save_json(context, tmp_file_prefix + "_before_verify.json");
 				assert(ret);
 
 				decltype(std::chrono::steady_clock::now()) start;
@@ -85,15 +86,15 @@ namespace quartz {
 				  start = std::chrono::steady_clock::now();
 				}
 				// Assume working directory is cmake-build-debug/ here.
-				system("python src/python/verifier/verify_equivalences.py "
-				       "tmp_before_verify.json tmp_after_verify.json");
+				system((std::string("python src/python/verifier/verify_equivalences.py ") + tmp_file_prefix
+				+ "_before_verify.json " + tmp_file_prefix + "_after_verify.json").c_str());
                 if (record_verification_time) {
                   auto end = std::chrono::steady_clock::now();
                   *record_verification_time += end - start;
                 }
 
 				dags_to_search.clear();
-				ret = equiv_set->load_json(context, "tmp_after_verify.json",
+				ret = equiv_set->load_json(context, tmp_file_prefix + "_after_verify.json",
 				                           &dags_to_search);
 				assert(ret);
 				for (auto &dag : dags_to_search) {
