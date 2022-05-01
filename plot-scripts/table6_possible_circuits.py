@@ -54,7 +54,7 @@ Rigetti = [
     (2, 0), # CZ
 ]
 
-if sys.argc != 2 or sys.argv[1] not in ['Nam', 'IBM', 'Rigetti']:
+if len(sys.argv) != 2 or sys.argv[1] not in ['Nam', 'IBM', 'Rigetti']:
     print('Usage: python table6_possible_circuits.py [Nam/IBM/Rigetti]')
     exit()
 
