@@ -102,7 +102,7 @@ def extract_results(content, max_timeout=default_timeout, output_filename=None):
         else:
             print(v.split(' ')[0], end=', ')
     print('],')
-    if len(result_timestamps[0]) == 26 or mod54 and not output_filename.startswith('Rigetti'):
+    if (len(result_timestamps[0]) == 26 or mod54) and not output_filename.startswith('Rigetti'):
         result_timestamps_geomean_reduction = []
         result_timestamps_reduction = {}
         for i in range(num_timestamps):
