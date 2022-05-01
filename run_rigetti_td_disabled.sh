@@ -1,3 +1,4 @@
+#!/usr/bin/sh
 cd build
 make test_rigetti_td_disabled
 ./test_rigetti_td_disabled ../circuit/nam-benchmarks/adder_8.qasm --output ../circuit/nam-benchmarks/output_files/rigetti/adder_8.qasm.output.rigetti &

@@ -20,7 +20,11 @@ We recommend (and have only thoroughly tested) an m6i.32xlarge AWS instance with
 
 We have only tested all commands on Ubuntu 20.04, but they should also work on other operating systems such as Windows (see the "On Windows" paragraph below).
 
-- Make sure you have CMake (https://cmake.org/) with version >= 3.16.
+- Make sure you have CMake (https://cmake.org/) with version >= 3.16 and pip3. If not, you can install them:
+  ```shell
+  sudo apt install python3-pip
+  sudo apt install cmake
+  ```
 
 - Make sure `python` points to `python3`. If not, you can install `python-is-python3`:
   ```shell
@@ -40,7 +44,7 @@ We have only tested all commands on Ubuntu 20.04, but they should also work on o
 
 - Run CMake:
   ```shell
-  bash run_cmake.sh
+  ./run_cmake.sh
   ```
 
 Note that it is not necessary to install Quartz beforehand to run the artifact.
@@ -97,7 +101,7 @@ In order to run the experiments related to external packages, you need to instal
 To reproduce the numbers in Table 5 (and Table 8 in extended version) and to generate the ECC sets, run the following script:
 
 ```shell
-bash gen_ecc_set.sh > eccset.log
+./gen_ecc_set.sh > eccset.log
 python show_eccset_results.py
 ```
 
@@ -160,7 +164,7 @@ The script is the same on Windows.
 To reproduce the other numbers in Table 6, run the following script:
 
 ```shell
-bash run_table6.sh > table6.log
+./run_table6.sh > table6.log
 python show_table6_results.py
 ```
 
@@ -232,7 +236,7 @@ To reproduce the "Quartz Preprocess" column in the camera-ready version (not sho
 run the following script:
 
 ```shell
-bash run_nam_disable_search.sh > nam_disable_search.log
+./run_nam_disable_search.sh > nam_disable_search.log
 ```
 
 This script runs for about 7 seconds. After that, use the following command to show the results:
@@ -333,7 +337,7 @@ To reproduce the "Quartz Preprocess" column in the camera-ready version (not sho
 run the following script:
 
 ```shell
-bash run_ibmq_disable_search.sh > ibm_disable_search.log
+./run_ibmq_disable_search.sh > ibm_disable_search.log
 ```
 
 This script runs for about 10 seconds. After that, use the following command to show the results:
@@ -432,7 +436,7 @@ To reproduce the "Quartz Preprocess" column in the camera-ready version (not sho
 run the following script:
 
 ```shell
-bash run_rigetti_disable_search.sh > rigetti_disable_search.log
+./run_rigetti_disable_search.sh > rigetti_disable_search.log
 ```
 
 This script runs for about 1 minute. After that, use the following command to show the results:
@@ -493,8 +497,8 @@ Debug\test_rigetti.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm
 
 To reproduce the results in Section 7.5 of the paper, run the following script after generating the ECC sets:
 
-``` shell
-bash run_scalability.sh
+```shell
+./run_scalability.sh
 ```
 
 This script runs for about 100 hours (On machines with 512 threads, you can run all commands in the script in parallel, so it will only take 24 hours plus a few minutes.).
@@ -599,7 +603,7 @@ To use different random seeds to run the circuit `mod5_4`, please make the follo
 
 After all these changes, run the following script:
 ```shell
-bash run_nam_mod5_4.sh
+./run_nam_mod5_4.sh
 ```
 
 This script runs for 24 hours plus a few minutes. You can use the following commands to see the results
@@ -621,7 +625,7 @@ into line 14-18 and line 22-26 of `plot-scripts/mod54_plot.py`
 and then run `python plot-scripts/mod54_plot.py` to plot the results.
 
 ##### On Windows
-Instead of running `bash run_nam_mod5_4.sh`, you can follow these steps:
+Instead of running `./run_nam_mod5_4.sh`, you can follow these steps:
 - Open `build\Quartz.sln` in Visual Studio 2019, and click Build -> Build Solution.
 - Run the following commands (assuming you are currently in the `build\` directory):
   ```batch
