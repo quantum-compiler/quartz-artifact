@@ -255,13 +255,14 @@ Debug\test_nam.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm --disable_search
 
 ### The results of Quartz
 
-To reproduce the results of Quartz on Nam's gate set, run the following script:
+To reproduce the results of Quartz on Nam's gate set, run the following script (after generating `Nam_6_3_complete_ECC_set.json` using `./gen_ecc_set.sh`):
 
-``` shell
+```shell
 ./run_nam.sh > nam.log
 ```
 
-This script runs for 24 hours plus a few minutes. After that, use the following command to show the results:
+This script runs in background for 24 hours plus a few minutes, using 26 cores.
+After that, use the following command to show the results:
 
 ```shell
 python extract_results.py nam.log
@@ -355,13 +356,14 @@ Debug\test_ibmq.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm --disable_searc
 
 ### The results of Quartz
 
-To reproduce the results of Quartz on IBMQ gate set, run the following script:
+To reproduce the results of Quartz on IBMQ gate set, run the following script (after generating `IBM_4_3_complete_ECC_set.json` using `./gen_ecc_set.sh`):
 
-``` shell
+```shell
 ./run_ibmq.sh > ibm.log
 ```
 
-This script runs for 24 hours plus a few minutes. After that, use the following command to show the results:
+This script runs in background for 24 hours plus a few minutes, using 26 cores.
+After that, use the following command to show the results:
 
 ```shell
 python extract_results.py ibm.log
@@ -453,13 +455,14 @@ Debug\test_rigetti.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm --disable_se
 
 ### The results of Quartz
 
-To reproduce the results of Quartz on Rigetti gate set, run the following script:
+To reproduce the results of Quartz on Rigetti gate set, run the following script (after generating `Rigetti_6_3_complete_ECC_set.json` using `./gen_ecc_set.sh`):
 
-``` shell
+```shell
 ./run_rigetti.sh > rigetti.log
 ```
 
-This script runs for 24 hours plus a few minutes. After that, use the following command to show the results:
+This script runs in background for 24 hours plus a few minutes, using 26 cores.
+After that, use the following command to show the results:
 
 ```shell
 python extract_results.py rigetti.log
