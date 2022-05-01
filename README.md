@@ -233,10 +233,13 @@ run the following script:
 
 ```shell
 bash run_nam_disable_search.sh > nam_disable_search.log
-python extract_results.py nam_disable_search.log
 ```
 
-This script runs for about 7 seconds.
+This script runs for about 7 seconds. After that, use the following command to show the results:
+
+```shell
+python extract_results.py nam_disable_search.log
+```
 
 ##### On Windows
 
@@ -252,10 +255,13 @@ To reproduce the results of Quartz on Nam's gate set, run the following script:
 
 ``` shell
 ./run_nam.sh > nam.log
-python extract_results.py nam.log
 ```
 
-This script runs for 24 hours plus a few minutes.
+This script runs for 24 hours plus a few minutes. After that, use the following command to show the results:
+
+```shell
+python extract_results.py nam.log
+```
 
 You can run the Python script `python extract_results.py Nam_6_3` while the shell script is running to see some intermediate results.
 Following shows an example excerpt of the output of the Python script:
@@ -328,10 +334,13 @@ run the following script:
 
 ```shell
 bash run_ibmq_disable_search.sh > ibm_disable_search.log
-python extract_results.py ibm_disable_search.log
 ```
 
-This script runs for about 10 seconds.
+This script runs for about 10 seconds. After that, use the following command to show the results:
+
+```shell
+python extract_results.py ibm_disable_search.log
+```
 
 ##### On Windows
 
@@ -347,10 +356,13 @@ To reproduce the results of Quartz on IBMQ gate set, run the following script:
 
 ``` shell
 ./run_ibmq.sh > ibm.log
-python extract_results.py ibm.log
 ```
 
-This script runs for 24 hours plus a few minutes.
+This script runs for 24 hours plus a few minutes. After that, use the following command to show the results:
+
+```shell
+python extract_results.py ibm.log
+```
 
 You can run the Python script `python extract_results.py IBM_4_3` while the shell script is running to see some intermediate results.
 Following shows an example excerpt of the output of the Python script:
@@ -421,10 +433,13 @@ run the following script:
 
 ```shell
 bash run_rigetti_disable_search.sh > rigetti_disable_search.log
-python extract_results.py rigetti_disable_search.log
 ```
 
-This script runs for about 1 minute.
+This script runs for about 1 minute. After that, use the following command to show the results:
+
+```shell
+python extract_results.py rigetti_disable_search.log
+```
 
 ##### On Windows
 
@@ -440,10 +455,13 @@ To reproduce the results of Quartz on Rigetti gate set, run the following script
 
 ``` shell
 ./run_rigetti.sh > rigetti.log
-python extract_results.py rigetti.log
 ```
 
-This script runs for 24 hours plus a few minutes.
+This script runs for 24 hours plus a few minutes. After that, use the following command to show the results:
+
+```shell
+python extract_results.py rigetti.log
+```
 
 You can run the Python script `python extract_results.py Rigetti_6_3` while the shell script is running to see some intermediate results.
 Following shows an example excerpt of the output of the Python script:
@@ -584,7 +602,8 @@ After all these changes, run the following script:
 bash run_nam_mod5_4.sh
 ```
 
-Then use the following script to see the results:
+This script runs for 24 hours plus a few minutes. You can use the following commands to see the results
+(before 24 hours, they will show intermediate results):
 ```shell
 python extract_results.py Nam_3_3_mod5_4_rand
 python extract_results.py Nam_4_3_mod5_4_rand
@@ -633,11 +652,14 @@ And then run the following commands:
 ```shell
 ./gen_ecc_set.sh
 ./run_ibmq.sh ../IBM_without_U3_3_3_complete_ECC_set.json > ibm_without_u3.txt
-python extract_results.py ibm_without_u3.txt
 ```
 
 The results should be slightly worse than the results in the paper, but it will run
-much faster (in about 1 hour).
+much faster (in about 1 hour). After that, you can use the following command to see the results:
+
+```shell
+python extract_results.py ibm_without_u3.txt
+```
 
 To generate a (4,3)-complete ECC set with 2 input parameters for a gate set similar to Rigetti gate set
 but allowing any `Rx` gates (instead of only allowing `Rx(k * pi / 2)` where `k` is an integer) and
@@ -655,5 +677,11 @@ And then run the following commands:
 ```shell
 ./gen_ecc_set.sh
 ./run_rigetti.sh ../Rigetti_modified_4_3_complete_ECC_set.json > rigetti_modified.txt
+```
+
+This script may run for 24 hours plus a few minutes.
+After that, you can use the following command to see the results:
+
+```shell
 python extract_results.py rigetti_modified.txt
 ```
