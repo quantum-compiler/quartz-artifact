@@ -233,8 +233,7 @@ The results will be shown in the console. The figure below shows part of the res
 
 ### The results of Quartz Preprocessing
 
-To reproduce the "Quartz Preprocess" column in the camera-ready version (not shown in the submission version),
-run the following script:
+To reproduce the "Quartz Preprocess" column in Table 2, run the following script:
 
 ```shell
 ./run_nam_disable_search.sh > nam_disable_search.log
@@ -334,8 +333,7 @@ The results will be shown in the console. The figure below shows part of the res
 
 ### The results of Quartz Preprocessing
 
-To reproduce the "Quartz Preprocess" column in the camera-ready version (not shown in the submission version),
-run the following script:
+To reproduce the "Quartz Preprocess" column in Table 3, run the following script:
 
 ```shell
 ./run_ibmq_disable_search.sh > ibm_disable_search.log
@@ -433,8 +431,7 @@ The results will be shown in the console. The figure below shows part of the res
 
 ### The results of Quartz Preprocessing
 
-To reproduce the "Quartz Preprocess" column in the camera-ready version (not shown in the submission version),
-run the following script:
+To reproduce the "Quartz Preprocess" column in Table 4, run the following script:
 
 ```shell
 ./run_rigetti_disable_search.sh > rigetti_disable_search.log
