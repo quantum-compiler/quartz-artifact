@@ -122,7 +122,7 @@ In order to run the experiments related to external packages, you need to instal
 
 ## Table 5: Metrics for Quartz’s generator
 
-**This script also generates ECC sets for following sections.**
+**This script also generates ECC sets for following sections.** You can also download the ECC sets from [Zenodo](https://zenodo.org/record/6508992).
 
 To reproduce the numbers in Table 5 (and Table 8 in extended version) and to generate the ECC sets, run the following script:
 
@@ -307,6 +307,8 @@ barenco_tof_10  326 (at 0.0010 seconds)
 
 You can also run the Python script `python extract_results.py Nam_6_3` after the script `run_nam.sh` finished to see detailed results.
 
+The log files are also available on [Zenodo](https://zenodo.org/record/6508992).
+
 If you would like to run the experiments for different circuits separately, you can use the following script (assuming you are currently in the `build/` directory):
 
 ``` shell
@@ -409,6 +411,8 @@ barenco_tof_10  324 (at 54.0790 seconds)
 
 You can also run the Python script `python extract_results.py IBM_4_3` after the script `run_ibmq.sh` finished to see detailed results.
 
+The log files are also available on [Zenodo](https://zenodo.org/record/6508992).
+
 If you would like to run the experiments for different circuits separately, you can use the following script (assuming you are currently in the `build/` directory):
 
 ``` shell
@@ -509,6 +513,8 @@ barenco_tof_10  1058 (at 46.4950 seconds)
 
 You can also run the Python script `python extract_results.py Rigetti_3_3` after the script `run_rigetti.sh` finished to see detailed results.
 
+The log files are also available on [Zenodo](https://zenodo.org/record/6508992).
+
 If you would like to run the experiments for different circuits separately, you can use the following script (assuming you are currently in the `build/` directory):
 
 ``` shell
@@ -535,6 +541,8 @@ This script runs for about 100 hours (On machines with 512 threads, you can run 
 The results are stored in `scalability_{n}{q}.txt` where `n` ranges from 1 to 7, and `q` ranges from 1 to 4 (if `n` is 7, then the upper bound of `q` is 3).
 You can run `python extract_results.py scalability_{n}{q}.txt` to see the final results,
 or run `python extract_results.py Nam_{n}_{q}` to see the intermediate results.
+
+The log files are also available on [Zenodo](https://zenodo.org/record/6508992).
 
 You can run `python plot-scripts/scalability_plot.py` to plot Figure 7 in the paper and Figure 9-34 (left) in the extended version.
 You can also copy the corresponding part of the output of `python extract_results.py Nam_{n}_{q}` for each `n` and `q`
@@ -648,6 +656,9 @@ python extract_results.py Nam_7_3_mod5_4_rand
 
 You can change the `{seed}` above multiple times and then run `run_nam_mod5_4.sh` and `extract_results.py`
 to show the results of multiple runs together.
+
+The log files for 6 different random seeds and one run not using `srand` (so 7 runs in total for each `n`)
+are also available on [Zenodo](https://zenodo.org/record/6508992).
 
 You can run `python plot-scripts/mod54_plot.py` to plot Figure 35 in the extended version of the paper.
 You can also copy the corresponding part of the output of `python extract_results.py Nam_{n}_3_mod5_4_rand` for each `n`
