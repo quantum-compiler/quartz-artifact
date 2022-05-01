@@ -294,17 +294,18 @@ After that, use the following command to show the results:
 python extract_results.py nam.log
 ```
 
-You can run the Python script `python extract_results.py Nam_6_3` while the shell script is running to see some intermediate results.
+You can run the Python script `python extract_results.py Nam_6_3` while the shell script is running to see the most up-to-date intermediate results.
+For the results of the first `{t}` seconds, you can run `python extract_results.py Nam_6_3 {t}`.
 Following shows an example excerpt of the output of the Python script:
 ```
-barenco_tof_3   38
-barenco_tof_4   68
-barenco_tof_5   98
+adder_8         732 (at 0.0040 seconds)
+barenco_tof_3   44 (at 32.4400 seconds)
+barenco_tof_4   86 (at 0.0000 seconds)
+barenco_tof_5   126 (at 0.0000 seconds)
+barenco_tof_10  326 (at 0.0010 seconds)
 ```
 
-The figure below shows part of the results in `nam.log` as an example:
-
-![](figures/quartz_nam_example.png)
+You can also run the Python script `python extract_results.py Nam_6_3` after the script `run_nam.sh` finished to see detailed results.
 
 If you would like to run the experiments for different circuits separately, you can use the following script (assuming you are currently in the `build/` directory):
 
@@ -395,17 +396,18 @@ After that, use the following command to show the results:
 python extract_results.py ibm.log
 ```
 
-You can run the Python script `python extract_results.py IBM_4_3` while the shell script is running to see some intermediate results.
+You can run the Python script `python extract_results.py IBM_4_3` while the shell script is running to see the most up-to-date intermediate results.
+For the results of the first `{t}` seconds, you can run `python extract_results.py IBM_4_3 {t}`.
 Following shows an example excerpt of the output of the Python script:
 ```
-barenco_tof_3   36
-barenco_tof_4   69
-barenco_tof_5   102
+adder_8         736 (at 0.0020 seconds)
+barenco_tof_3   36 (at 59.6340 seconds)
+barenco_tof_4   69 (at 58.9980 seconds)
+barenco_tof_5   109 (at 56.2830 seconds)
+barenco_tof_10  324 (at 54.0790 seconds)
 ```
 
-The figure below shows part of the results in `ibm.log` as an example:
-
-![](figures/quartz_ibmq_example.png)
+You can also run the Python script `python extract_results.py IBM_4_3` after the script `run_ibmq.sh` finished to see detailed results.
 
 If you would like to run the experiments for different circuits separately, you can use the following script (assuming you are currently in the `build/` directory):
 
@@ -494,17 +496,18 @@ After that, use the following command to show the results:
 python extract_results.py rigetti.log
 ```
 
-You can run the Python script `python extract_results.py Rigetti_6_3` while the shell script is running to see some intermediate results.
+You can run the Python script `python extract_results.py Rigetti_3_3` while the shell script is running to see the most up-to-date intermediate results.
+For the results of the first `{t}` seconds, you can run `python extract_results.py Rigetti_3_3 {t}`.
 Following shows an example excerpt of the output of the Python script:
 ```
-barenco_tof_3   148
-barenco_tof_4   272
-barenco_tof_5   388
+adder_8         2788 (at 0.0100 seconds)
+barenco_tof_3   148 (at 59.9830 seconds)
+barenco_tof_4   272 (at 59.5070 seconds)
+barenco_tof_5   410 (at 59.5290 seconds)
+barenco_tof_10  1058 (at 46.4950 seconds)
 ```
 
-The figure below shows part of the results in `rigetti.log` as an example:
-
-![](figures/quartz_rigetti_example.png)
+You can also run the Python script `python extract_results.py Rigetti_3_3` after the script `run_rigetti.sh` finished to see detailed results.
 
 If you would like to run the experiments for different circuits separately, you can use the following script (assuming you are currently in the `build/` directory):
 
