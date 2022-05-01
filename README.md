@@ -219,7 +219,7 @@ build\Debug\test_pruning.exe > table6.log
 python show_table6_results.py
 ```
 
-## Table 2: Comparing Quartz with existing quantum circuit optimizers on Nam's gate set {𝑅𝑧(𝜆),𝑋,𝐻,𝐶𝑁𝑂𝑇}
+## Table 2: Comparing Quartz with existing quantum circuit optimizers on the Nam gate set {𝑅𝑧(𝜆),𝑋,𝐻,𝐶𝑁𝑂𝑇}
 
 ### The results of Qiskit
 
@@ -423,7 +423,7 @@ To run the experiments for different circuits separately, for example, to run th
 Debug\test_ibmq.exe ..\circuit\nam-benchmarks\barenco_tof_3.qasm
 ```
 
-## Table 4: Comparing Quartz with Quilc and t|ket⟩ on the Rigetti gate set (𝑅𝑥 (𝑘𝜋/2)(𝑘 ∈Z),𝑅𝑧(𝜆),𝐶𝑍)
+## Table 4: Comparing Quartz with Quilc and t|ket⟩ on the Rigetti gate set
 
 ### The results of Quilc
 
