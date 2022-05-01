@@ -131,7 +131,8 @@ To reproduce the numbers in Table 5 (and Table 8 in extended version) and to gen
 python show_eccset_results.py
 ```
 
-This script runs for about 13 hours. After about 4 hours, the script is generating the ECC sets for scalability analysis
+This script runs for about 13 hours. The script generates the ECC sets for the Rigetti gate set first, then the Nam gate set, then the IBM gate set, in about 4 hours.
+After these ~4 hours, the script is generating the ECC sets for scalability analysis
 (see the "Scalability Analysis on the Nam gate set" section of this README file).
 If you do not want to run the scalability analysis and do not want to reproduce the data for the (7,3)-complete ECC set
 for the Nam gate set, you can terminate the script after about 4 hours.
