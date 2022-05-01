@@ -54,7 +54,11 @@ Rigetti = [
     (2, 0), # CZ
 ]
 
-gate_set = eval(sys.argv[1])
+if sys.argc != 2 or sys.argv[1] not in ['Nam', 'IBM', 'Rigetti']:
+    print('Usage: python table6_possible_circuits.py [Nam/IBM/Rigetti]')
+    exit()
+
+gate_set = Nam if sys.argv[1] == 'Nam' else IBM if sys.argv[1] == 'IBM' else 'Rigetti'
 q = 3 # number of qubits
 m = 4 if gate_set == IBM else 2 # number of parameters
 
