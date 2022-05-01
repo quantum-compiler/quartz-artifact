@@ -467,7 +467,7 @@ To reproduce the "Quartz Preprocess" column in Table 4, run the following script
 ./run_rigetti_disable_search.sh > rigetti_disable_search.log
 ```
 
-This script runs for about 1 minute. After that, use the following command to show the results:
+This script runs in background for about 1 minute. After that, use the following command to show the results:
 
 ```shell
 python extract_results.py rigetti_disable_search.log
