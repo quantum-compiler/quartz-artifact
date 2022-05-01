@@ -58,7 +58,7 @@ if len(sys.argv) != 2 or sys.argv[1] not in ['Nam', 'IBM', 'Rigetti']:
     print('Usage: python table6_possible_circuits.py [Nam/IBM/Rigetti]')
     exit()
 
-gate_set = Nam if sys.argv[1] == 'Nam' else IBM if sys.argv[1] == 'IBM' else 'Rigetti'
+gate_set = Nam if sys.argv[1] == 'Nam' else IBM if sys.argv[1] == 'IBM' else Rigetti
 q = 3 # number of qubits
 m = 4 if gate_set == IBM else 2 # number of parameters
 
