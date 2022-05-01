@@ -1,3 +1,4 @@
+#!/usr/bin/sh
 cd build
 make test_ibmq
 if [ $# -eq 0 ]

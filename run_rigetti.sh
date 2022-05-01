@@ -1,3 +1,4 @@
+#!/usr/bin/sh
 cd build
 make test_rigetti
 if [ $# -eq 0 ]

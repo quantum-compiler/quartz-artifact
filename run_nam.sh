@@ -1,3 +1,4 @@
+#!/usr/bin/sh
 cd build
 make test_nam
 if [ $# -eq 0 ]

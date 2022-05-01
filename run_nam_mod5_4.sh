@@ -1,3 +1,4 @@
+#!/usr/bin/sh
 cd build
 make test_nam
 mkdir -p ../circuit/nam-benchmarks/output_files/mod54
