@@ -46,6 +46,7 @@ We have only tested all commands on Ubuntu 20.04, but they should also work on o
   ```shell
   ./run_cmake.sh
   ```
+    - If you see `-bash: ./run_cmake.sh: Permission denied`, please run `chmod +x *.sh`.
 
 Note that it is not necessary to install Quartz beforehand to run the artifact.
 
