@@ -74,7 +74,31 @@ In order to run the experiments related to external packages, you need to instal
   ```
   Our evaluation uses Qiskit 0.34.2.
 
-- pyvoqc (please follow the instructions on https://github.com/inQWIRE/pyvoqc).
+- pyvoqc (for details, please refer to the instructions on https://github.com/inQWIRE/pyvoqc).
+
+    To install `pyvoqc`, you should first install [opam](https://opam.ocaml.org/doc/Install.html).
+
+    After `opam` is installed, you can use the following scripts to install the OCaml version of `VOQC` which is a prerequisite of `pyvoqc`.
+
+    ```
+    # environment setup
+    opam init
+    eval $(opam env)
+
+    # install the OCaml version of VOQC
+    opam pin voqc https://github.com/inQWIRE/mlvoqc.git#mapping
+    ```
+
+    Then, you can clone the [pyvoqc](https://github.com/inQWIRE/pyvoqc#installation) repo and build the `VOQC` library and install it to python with the following script:
+
+    ```
+    git clone https://github.com/inQWIRE/pyvoqc.git
+    cd pyvoqc
+    ./install.sh # sudo may required
+    ```
+
+    To check that installation worked, open a Python shell and try `from pyvoqc.voqc import VOQCCircuit`.
+
 
 - t|ket⟩ (https://github.com/CQCL/tket):
 
