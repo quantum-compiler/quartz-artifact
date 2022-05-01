@@ -2,9 +2,10 @@
 
 [![DOI](https://zenodo.org/badge/464661620.svg)](https://zenodo.org/badge/latestdoi/464661620)
 
-
 Quartz is a quantum circuit optimizer that automatically generates and verifies circuit transformations for an arbitrary quantum gate set. To optimize an input quantum circuit, Quartz uses these auto-generated circuit transformations to construct a search space of functionally equivalent quantum circuits.
 Quartz uses a cost-based search algorithm to explore the space and discovers highly optimized quantum circuits.
+
+See more details in the PLDI paper ([DOI](https://doi.org/10.1145/3519939.3523433)) or the extended version ([arXiv](https://arxiv.org/abs/2204.09033)).
 
 ## Repository Organization
 
