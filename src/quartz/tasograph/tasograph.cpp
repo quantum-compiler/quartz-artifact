@@ -27,9 +27,11 @@ Op::Op(void) : guid(GUID_INVALID), ptr(NULL) {}
 
 const Op Op::INVALID_OP = Op();
 
-Graph::Graph(Context *ctx) : context(ctx), special_op_guid(0)/*, random_value_(rand())*/ {}
+Graph::Graph(Context *ctx)
+    : context(ctx), special_op_guid(0) /*, random_value_(rand())*/ {}
 
-Graph::Graph(Context *ctx, const DAG *dag) : context(ctx), special_op_guid(0)/*, random_value_(rand())*/ {
+Graph::Graph(Context *ctx, const DAG *dag)
+    : context(ctx), special_op_guid(0) /*, random_value_(rand())*/ {
   // Guid for input qubit and input parameter nodes
   int num_input_qubits = dag->get_num_qubits();
   int num_input_params = dag->get_num_input_parameters();
@@ -116,7 +118,7 @@ Graph::Graph(Context *ctx, const DAG *dag) : context(ctx), special_op_guid(0)/*,
   }
 }
 
-Graph::Graph(const Graph &graph)/*: random_value_(rand())*/ {
+Graph::Graph(const Graph &graph) /*: random_value_(rand())*/ {
   context = graph.context;
   constant_param_values = graph.constant_param_values;
   special_op_guid = graph.special_op_guid;
@@ -312,6 +314,8 @@ std::shared_ptr<Graph> Graph::context_shift(Context *src_ctx, Context *dst_ctx,
 }
 
 float Graph::total_cost(void) const {
+  // Uncomment to use circuit depth as the cost
+  // return circuit_depth();
   size_t cnt = 0;
   for (const auto &it : inEdges) {
     if (it.first.ptr->is_quantum_gate())
@@ -328,6 +332,60 @@ int Graph::gate_count() const {
       cnt++;
   }
   return cnt;
+}
+
+int Graph::specific_gate_count(GateType gate_type) const {
+  int cnt = 0;
+  for (const auto &it : inEdges) {
+    if (it.first.ptr->tp == gate_type)
+      cnt++;
+  }
+  return cnt;
+}
+
+int Graph::circuit_depth() const {
+  std::unordered_map<Op, std::vector<int>, OpHash> op_2_qubit_idx;
+  std::vector<int> depth(get_num_qubits(), 0);
+  std::queue<Op> gates;
+  std::unordered_map<Op, int, OpHash> gate_indegree;
+  for (const auto &it : outEdges) {
+    if (it.first.ptr->tp == GateType::input_qubit) {
+      auto idx = qubit_2_idx.find(it.first);
+      op_2_qubit_idx[it.first] = std::vector<int>(1, idx->second);
+      gates.push(it.first);
+    }
+  }
+  while (!gates.empty()) {
+    const auto &gate = gates.front();
+    gates.pop();
+    if (outEdges.count(gate) == 0) {
+      continue;
+    }
+    for (auto &edge : outEdges.find(gate)->second) {
+      if (gate_indegree.count(edge.dstOp) == 0) {
+        gate_indegree[edge.dstOp] = edge.dstOp.ptr->num_qubits;
+        op_2_qubit_idx[edge.dstOp] =
+            std::vector<int>(edge.dstOp.ptr->num_qubits, 0);
+      }
+      gate_indegree[edge.dstOp]--;
+      op_2_qubit_idx[edge.dstOp][edge.dstIdx] =
+          op_2_qubit_idx[edge.srcOp][edge.srcIdx];
+      if (!gate_indegree[edge.dstOp]) {
+        // Append the gate
+        int max_previous_depth = 0;
+        for (auto &idx : op_2_qubit_idx[edge.dstOp]) {
+          max_previous_depth = std::max(max_previous_depth, depth[idx]);
+        }
+        // Update the depth
+        for (auto &idx : op_2_qubit_idx[edge.dstOp]) {
+          depth[idx] = max_previous_depth + 1;
+        }
+        gates.push(edge.dstOp);
+      }
+    }
+  }
+  int max_depth = *std::max_element(depth.begin(), depth.end());
+  return max_depth;
 }
 
 void Graph::remove_node(Op oldOp) {
@@ -1298,8 +1356,10 @@ Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
         bestGraph->constant_and_rotation_elimination();
         bestGraph->to_qasm(output_fn + std::to_string(bestCost), false, false);
       }
-      //subGraph->constant_and_rotation_elimination();
-      //subGraph->to_qasm(output_fn + "_" + std::to_string(subGraph->total_cost()) + "_" + std::to_string(subGraph->hash()), false, false);
+      // subGraph->constant_and_rotation_elimination();
+      // subGraph->to_qasm(output_fn + "_" +
+      // std::to_string(subGraph->total_cost()) + "_" +
+      // std::to_string(subGraph->hash()), false, false);
       if (alpha >= 1 && subGraph->total_cost() > bestCost * alpha + 7) {
         break;
       }
@@ -1339,7 +1399,7 @@ Graph::optimize(float alpha, int budget, bool print_subst, Context *ctx,
                   2 * maxNumOps, enable_early_stop, stop_search);
         // auto front_gate_count = candidates.top()->gate_count();
         for (auto &candidate : new_candidates) {
-          //fprintf(fout, "iter %d: push %zu\n", counter, candidate->hash());
+          // fprintf(fout, "iter %d: push %zu\n", counter, candidate->hash());
           candidates.push(candidate);
         }
         // auto new_front_gate_count = candidates.top()->gate_count();

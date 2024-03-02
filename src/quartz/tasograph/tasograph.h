@@ -177,6 +177,8 @@ public:
   bool check_correctness();
   float total_cost() const;
   int gate_count() const;
+  [[nodiscard]] int specific_gate_count(GateType gate_type) const;
+  [[nodiscard]] int circuit_depth() const;
   size_t get_next_special_op_guid();
   size_t get_special_op_guid();
   void set_special_op_guid(size_t _special_op_guid);
@@ -189,8 +191,7 @@ public:
            const std::string &equiv_file_name, bool use_simulated_annealing,
            bool enable_early_stop, bool use_rotation_merging_in_searching,
            GateType target_rotation, std::string circuit_name = "",
-           std::string output_fn = "",
-           int timeout = 86400/*1 day*/);
+           std::string output_fn = "", int timeout = 86400 /*1 day*/);
   void constant_and_rotation_elimination();
   void rotation_merging(GateType target_rotation);
   void to_qasm(const std::string &save_filename, bool print_result,

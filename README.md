@@ -579,7 +579,7 @@ To use different random seeds to run the circuit `mod5_4`, please make the follo
       return lhs->random_value_ < rhs->random_value_;
     }
   ```
-- At line 246 of `src/quartz/tasograph/tasograph.h`, change
+- At line 247 of `src/quartz/tasograph/tasograph.h`, change
   ```c++
   // int random_value_;
   ```
@@ -611,7 +611,7 @@ To use different random seeds to run the circuit `mod5_4`, please make the follo
   ```c++
   : random_value_(rand())
   ```
-- At line 1109 of `src/quartz/tasograph/tasograph.cpp`, change
+- At line 1167 of `src/quartz/tasograph/tasograph.cpp`, change
   ```c++
   // srand(0);
   ```
@@ -620,7 +620,7 @@ To use different random seeds to run the circuit `mod5_4`, please make the follo
   srand({seed});
   ```
   where `{seed}` is the random seed you want to run
-- At line 1113 of `src/quartz/tasograph/tasograph.cpp`, change
+- At line 1171 of `src/quartz/tasograph/tasograph.cpp`, change
   ```c++
   ".log";
   ```
@@ -629,7 +629,7 @@ To use different random seeds to run the circuit `mod5_4`, please make the follo
   "_rand{seed}.log";
   ```
   where `{seed}` is the random seed you want to run
-- At line 1117 of `src/quartz/tasograph/tasograph.cpp`, change
+- At line 1175 of `src/quartz/tasograph/tasograph.cpp`, change
   ```c++
   ".err";
   ```
@@ -729,4 +729,32 @@ After that, you can use the following command to see the results:
 
 ```shell
 python extract_results.py rigetti_modified.txt
+```
+
+## Test other cost functions
+
+Quartz also supports other cost functions than the gate count.
+Note that the RepGen algorithm is designed for gate count, so there is space for improvement on other cost functions.
+Please also check https://github.com/quantum-compiler/quartz for a continuously maintained version of Quartz.
+
+### Circuit depth
+
+To set the cost function to be the circuit depth, please uncomment line 318 of `src/quartz/tasograph/tasograph.cpp`:
+
+```C++
+  // return circuit_depth();
+```
+
+### T count
+
+To set the cost function to be the total number of T and Tdg gates, please change line 318 of `src/quartz/tasograph/tasograph.cpp` from
+
+```C++
+  // return circuit_depth();
+```
+
+to the following:
+
+```C++
+  return specific_gate_count(GateType::t) + specific_gate_count(GateType::tdg);
 ```
